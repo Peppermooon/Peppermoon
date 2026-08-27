@@ -115,6 +115,88 @@ tr:hover td{background:rgba(255,255,255,.018)}
 .preview-content blockquote{padding:12px 16px;border-left:3px solid var(--pink);background:rgba(255,79,120,.06);margin:1.3em 0}
 @media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}}
 @media(max-width:560px){.top{padding:12px}.userbar span{display:none}.shell{width:min(100% - 18px,1240px)}.stats{grid-template-columns:1fr 1fr}.dashboard-head{align-items:flex-start;flex-direction:column}.preview-body{padding:24px 18px}}
+
+/* Force readable text inside the dark rich-text editor.
+   This also overrides dark inline colors pasted from other websites. */
+.rich-editor,
+.rich-editor p,
+.rich-editor div,
+.rich-editor span,
+.rich-editor li,
+.rich-editor ul,
+.rich-editor ol,
+.rich-editor figcaption {
+  color:#d7dbe5 !important;
+}
+
+.rich-editor h1,
+.rich-editor h2,
+.rich-editor h3,
+.rich-editor h4,
+.rich-editor h5,
+.rich-editor h6,
+.rich-editor strong,
+.rich-editor b {
+  color:#ffffff !important;
+}
+
+.rich-editor em,
+.rich-editor i {
+  color:#e8eaf0 !important;
+}
+
+.rich-editor blockquote,
+.rich-editor blockquote * {
+  color:#e2e4eb !important;
+}
+
+.rich-editor a,
+.rich-editor a * {
+  color:#9fb0ff !important;
+}
+
+.rich-editor [style*="color"],
+.rich-editor font[color] {
+  color:inherit !important;
+}
+
+
+/* FORCE READABLE TEXT IN DARK EDITOR */
+.rich-editor,
+.rich-editor p,
+.rich-editor div,
+.rich-editor span,
+.rich-editor li,
+.rich-editor ul,
+.rich-editor ol,
+.rich-editor blockquote,
+.rich-editor figcaption {
+  color:#eef1f7 !important;
+}
+
+.rich-editor h1,
+.rich-editor h2,
+.rich-editor h3,
+.rich-editor h4,
+.rich-editor h5,
+.rich-editor h6,
+.rich-editor strong,
+.rich-editor b {
+  color:#ffffff !important;
+}
+
+.rich-editor figcaption {
+  color:#9ca4b5 !important;
+}
+
+.rich-editor a {
+  color:#9eb0ff !important;
+}
+
+.rich-editor * {
+  background-color:transparent !important;
+}
+
 </style>
 </head>
 <body>
@@ -660,6 +742,19 @@ $('deleteArticleBtn').addEventListener('click',async()=>{
 
   await loadArticles();
   $('articleModal').classList.add('hidden');
+});
+
+
+/* Clean problematic formatting when text is pasted into the editor. */
+$('richEditor').addEventListener('paste', () => {
+  setTimeout(() => {
+    $('richEditor').querySelectorAll('[style]').forEach(el => {
+      el.style.removeProperty('color');
+      el.style.removeProperty('background-color');
+      el.style.removeProperty('background');
+    });
+    $('richEditor').querySelectorAll('font[color]').forEach(el => el.removeAttribute('color'));
+  }, 0);
 });
 
 init();
