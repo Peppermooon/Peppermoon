@@ -81,7 +81,7 @@ tr:hover td{background:rgba(255,255,255,.018)}
 
 /* Rich editor */
 .rich-wrap{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0e1118}
-.toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:9px;border-bottom:1px solid var(--line);background:#11151e;position:sticky;top:59px;z-index:3}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px;border-bottom:1px solid var(--line);background:#11151e;position:relative;top:auto;z-index:1}
 .tool{min-width:36px;height:34px;padding:0 10px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.045);color:white;cursor:pointer;font-weight:800}
 .tool:hover{background:rgba(255,255,255,.09)}
 .tool.select{height:34px;padding:0 8px}
@@ -195,6 +195,27 @@ tr:hover td{background:rgba(255,255,255,.018)}
 
 .rich-editor * {
   background-color:transparent !important;
+}
+
+
+/* FIX EDITOR TOOLBAR OVERLAP */
+.editor-head{
+  top:0 !important;
+  z-index:10 !important;
+}
+.editor-body{
+  padding-top:22px !important;
+}
+.rich-wrap{
+  scroll-margin-top:90px;
+}
+.toolbar{
+  position:relative !important;
+  top:auto !important;
+  z-index:1 !important;
+}
+.rich-editor{
+  padding-top:24px !important;
 }
 
 </style>
