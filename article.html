@@ -1,1 +1,94 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Article | Peppermoon</title><link rel="icon" type="image/png" href="favicon.png"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>:root{--bg:#07080c;--text:#f6f7fb;--muted:#a9afbe;--line:rgba(255,255,255,.09)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--text);background:radial-gradient(circle at 10% -10%,rgba(123,97,255,.18),transparent 30%),radial-gradient(circle at 95% 0%,rgba(255,79,120,.14),transparent 24%),var(--bg)}a{color:inherit;text-decoration:none}header{position:sticky;top:0;background:rgba(7,8,12,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.nav{width:min(1150px,calc(100% - 30px));margin:auto;min-height:72px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.4rem}.brand img{width:36px;height:36px;border-radius:50%}.links{display:flex;gap:18px;font-weight:700;color:#d7dbe5}main{width:min(1000px,calc(100% - 30px));margin:55px auto 70px}.meta{color:#9299aa;font-size:.85rem}h1{font-size:clamp(2.6rem,6vw,5rem);line-height:.96;letter-spacing:-.06em;margin:12px 0 18px}.summary{font-size:1.12rem;line-height:1.7;color:#c8cdd8}.cover{width:100%;max-height:560px;object-fit:cover;border-radius:23px;margin:30px 0;border:1px solid var(--line)}.content{font-size:1.05rem;line-height:1.85;color:#d0d5df}.content p{margin:0 0 1.4em}.error{padding:18px;border:1px solid rgba(255,79,120,.25);border-radius:14px;background:rgba(255,79,120,.08)}@media(max-width:700px){.links{display:none}}</style></head><body><header><div class="nav"><a class="brand" href="index.html"><img src="favicon.png" alt=""><span>Peppermoon</span></a><nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="trending.html">Trending</a></nav></div></header><main id="wrap"><div class="meta">Loading article…</div></main><script>const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const paras=t=>String(t||'').split(/\n\s*\n/).filter(Boolean).map(p=>'<p>'+esc(p).replace(/\n/g,'<br>')+'</p>').join('');(async()=>{const slug=new URLSearchParams(location.search).get('slug');if(!slug){$('wrap').innerHTML='<div class="error">Article not specified.</div>';return}const{data,error}=await sb.from('articles').select('*').eq('slug',slug).eq('status','published').single();if(error||!data){document.getElementById('wrap').innerHTML='<div class="error">Article not found or not published.</div>';return}document.title=data.title+' | Peppermoon';document.getElementById('wrap').innerHTML=`<div class="meta">${esc(data.category)} · ${esc(data.author||'Peppermoon')}${data.published_at?' · '+new Date(data.published_at).toLocaleDateString():''}</div><h1>${esc(data.title)}</h1>${data.summary?`<div class="summary">${esc(data.summary)}</div>`:''}${data.featured_image?`<img class="cover" src="${data.featured_image}" alt="${esc(data.title)}">`:''}<article class="content">${paras(data.content)}</article>`})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#08090d">
+<title>Article | Peppermoon</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#07080c;--panel:#11141d;--text:#f6f7fb;--muted:#a9afbe;--line:rgba(255,255,255,.09);--pink:#ff4f78;--violet:#7b61ff;--max:1000px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:
+radial-gradient(circle at 10% -8%,rgba(123,97,255,.18),transparent 30%),
+radial-gradient(circle at 96% 3%,rgba(255,79,120,.13),transparent 24%),var(--bg);min-height:100vh}
+a{color:inherit;text-decoration:none}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,8,12,.78);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{width:min(calc(100% - 30px),1150px);margin:auto;min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-weight:900;font-size:1.4rem;display:flex;gap:10px;align-items:center}
+.brand img{width:36px;height:36px;border-radius:50%}
+.links{display:flex;gap:18px;color:#d9dde7;font-weight:700;font-size:.9rem}
+.wrap{width:min(calc(100% - 30px),var(--max));margin:55px auto 70px}
+.meta{color:#9ba2b2;font-size:.84rem;margin-bottom:12px}
+h1{font-size:clamp(2.5rem,6vw,5rem);line-height:.96;letter-spacing:-.06em;margin:10px 0 18px}
+.summary{font-size:1.1rem;color:#c6cbd6;line-height:1.7;max-width:780px}
+.cover{width:100%;max-height:560px;object-fit:cover;border-radius:24px;margin:30px 0;border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.32)}
+.content{font-size:1.05rem;line-height:1.85;color:#d1d5df}
+.content p{margin:0 0 1.4em}
+.content h2{font-size:2rem;line-height:1.2;letter-spacing:-.03em;margin:1.6em 0 .6em;color:#fff}
+.content h3{font-size:1.45rem;line-height:1.25;margin:1.4em 0 .5em;color:#fff}
+.content ul,.content ol{padding-left:1.5rem;margin:0 0 1.4em}
+.content li{margin:.35em 0}
+.content blockquote{padding:14px 18px;border-left:3px solid var(--pink);background:rgba(255,79,120,.06);border-radius:0 12px 12px 0;margin:1.5em 0;color:#e0dfe6}
+.content a{color:#9eb0ff;text-decoration:underline}
+.content img{max-width:100%;height:auto;display:block;margin:28px auto 8px;border-radius:18px;border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 42px rgba(0,0,0,.25)}
+.content figure{margin:32px 0;text-align:center}
+.content figure img{margin-bottom:8px}
+.content figcaption{font-size:.84rem;color:#929bad;line-height:1.5}
+.error{padding:18px;border:1px solid rgba(255,79,120,.28);background:rgba(255,79,120,.08);border-radius:15px;color:#ffd3dc}
+@media(max-width:700px){.links{display:none}.wrap{margin-top:35px}.content{font-size:1rem}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="nav">
+    <a class="brand" href="index.html"><img src="favicon.png" alt=""><span>Peppermoon</span></a>
+    <nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="trending.html">Trending</a></nav>
+  </div>
+</header>
+
+<main class="wrap" id="articleWrap"><div class="meta">Loading article…</div></main>
+
+<script>
+const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function legacyToHtml(text) {
+  if(!text) return '';
+  if(/<[a-z][\s\S]*>/i.test(text)) return text;
+  return String(text).split(/\n\s*\n/).filter(Boolean).map(p=>'<p>'+esc(p).replace(/\n/g,'<br>')+'</p>').join('');
+}
+
+(async()=>{
+  const slug=new URLSearchParams(location.search).get('slug');
+
+  if(!slug) {
+    document.getElementById('articleWrap').innerHTML='<div class="error">Article not specified.</div>';
+    return;
+  }
+
+  const {data,error}=await sb.from('articles')
+    .select('*')
+    .eq('slug',slug)
+    .eq('status','published')
+    .single();
+
+  if(error||!data) {
+    document.getElementById('articleWrap').innerHTML='<div class="error">This article could not be found or is not published.</div>';
+    return;
+  }
+
+  document.title=data.title+' | Peppermoon';
+
+  document.getElementById('articleWrap').innerHTML=`
+    <div class="meta">${esc(data.category)} · ${esc(data.author||'Peppermoon')}${data.published_at?' · '+new Date(data.published_at).toLocaleDateString():''}</div>
+    <h1>${esc(data.title)}</h1>
+    ${data.summary?`<div class="summary">${esc(data.summary)}</div>`:''}
+    ${data.featured_image?`<img class="cover" src="${data.featured_image}" alt="${esc(data.title)}">`:''}
+    <article class="content">${legacyToHtml(data.content)}</article>
+  `;
+})();
+</script>
+</body>
+</html>

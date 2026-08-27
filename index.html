@@ -417,5 +417,52 @@ document.querySelectorAll("form[data-demo-form]").forEach(form=>{
 </script>
 
 <script>(function(){const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const cls=c=>c==='Gaming'?'art-game':c==='Movies'?'art-movie':c==='TV Series'?'art-tv':'art-feature';const ico=c=>c==='Gaming'?'🎮':c==='Movies'?'🎬':c==='TV Series'?'📺':'🌙';const card=a=>`<a class="card" data-search="${esc((a.title||'')+' '+(a.summary||''))}" href="article.html?slug=${encodeURIComponent(a.slug)}"><div class="card-art ${cls(a.category)}" ${a.featured_image?`style="background-image:linear-gradient(to top,rgba(5,5,10,.72),rgba(5,5,10,.08)),url('${a.featured_image}');background-size:cover;background-position:center"`:''}><span class="tag">${esc(a.category)}</span>${a.featured_image?'':ico(a.category)}</div><div class="card-body"><div class="meta">${esc(a.author||'Peppermoon')} <span class="dot"></span> ${a.published_at?new Date(a.published_at).toLocaleDateString():''}</div><h3>${esc(a.title)}</h3><p>${esc(a.summary||'')}</p></div></a>`;async function run(){const p=location.pathname.split('/').pop()||'index.html';let q=sb.from('articles').select('*').eq('status','published').order('published_at',{ascending:false});if(p==='index.html'||p==='')q=q.eq('show_on_homepage',true);else if(p==='gaming.html')q=q.eq('category','Gaming');else if(p==='movies.html')q=q.eq('category','Movies');else if(p==='tv.html')q=q.eq('category','TV Series');else if(p==='trending.html')q=q.eq('category','Trending');else return;const{data,error}=await q.limit(p==='index.html'||p===''?8:24);if(error||!data||!data.length)return;const grids=[...document.querySelectorAll('.grid-4,.grid-3')];if(!grids.length)return;const target=(p==='index.html'||p==='')?grids[grids.length-1]:grids[0];target.innerHTML=data.map(card).join('')}run()})();</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function() {
+  const sb = window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co", "sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");
+  const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const artClass=c=>c==='Gaming'?'art-game':c==='Movies'?'art-movie':c==='TV Series'?'art-tv':'art-feature';
+  const icon=c=>c==='Gaming'?'🎮':c==='Movies'?'🎬':c==='TV Series'?'📺':'🌙';
+
+  function card(a) {
+    return `<a class="card" data-search="${esc((a.title||'')+' '+(a.summary||'')+' '+(a.category||''))}" href="article.html?slug=${encodeURIComponent(a.slug)}">
+      <div class="card-art ${artClass(a.category)}" ${a.featured_image?`style="background-image:linear-gradient(to top,rgba(5,5,10,.70),rgba(5,5,10,.06)),url('${a.featured_image}');background-size:cover;background-position:center"`:''}>
+        <span class="tag">${esc(a.category)}</span>${a.featured_image?'':icon(a.category)}
+      </div>
+      <div class="card-body">
+        <div class="meta">${esc(a.author||'Peppermoon')} <span class="dot"></span> ${a.published_at?new Date(a.published_at).toLocaleDateString():''}</div>
+        <h3>${esc(a.title)}</h3>
+        <p>${esc(a.summary||'')}</p>
+      </div>
+    </a>`;
+  }
+
+  async function load() {
+    const path=location.pathname.split('/').pop()||'index.html';
+    let q=sb.from('articles').select('*').eq('status','published').order('published_at',{ascending:false});
+
+    if(path==='index.html'||path==='') q=q.eq('show_on_homepage',true);
+    else if(path==='gaming.html') q=q.eq('category','Gaming');
+    else if(path==='movies.html') q=q.eq('category','Movies');
+    else if(path==='tv.html') q=q.eq('category','TV Series');
+    else if(path==='trending.html') q=q.eq('category','Trending');
+    else return;
+
+    const {data,error}=await q.limit(path==='index.html'||path===''?8:24);
+    if(error||!data||!data.length) return;
+
+    const grids=[...document.querySelectorAll('.grid-4,.grid-3')];
+    if(!grids.length) return;
+
+    const target=(path==='index.html'||path==='') ? grids[grids.length-1] : grids[0];
+    target.innerHTML=data.map(card).join('');
+  }
+
+  load();
+})();
+</script>
+
 </body>
 </html>

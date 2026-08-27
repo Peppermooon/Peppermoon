@@ -1,5 +1,668 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Peppermoon Admin</title><link rel="icon" type="image/png" href="favicon.png"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-:root{--bg:#07080c;--panel:#11141d;--text:#f6f7fb;--muted:#a9afbe;--line:rgba(255,255,255,.09);--pink:#ff4f78;--violet:#7b61ff;--green:#35d07f;--red:#ff6474}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 10% -10%,rgba(123,97,255,.2),transparent 30%),radial-gradient(circle at 95% 0%,rgba(255,79,120,.14),transparent 25%),var(--bg);color:var(--text);min-height:100vh}button,input,textarea,select{font:inherit}a{color:inherit;text-decoration:none}.hidden{display:none!important}header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:14px 22px;background:rgba(7,8,12,.84);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.25rem}.brand img{width:34px;height:34px;border-radius:50%}.user{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:.85rem}.wrap{width:min(1220px,calc(100% - 28px));margin:28px auto 60px}.login{min-height:72vh;display:grid;place-items:center}.card{width:min(430px,100%);padding:28px;border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.035);box-shadow:0 25px 70px rgba(0,0,0,.35)}h1{letter-spacing:-.04em}.field{display:grid;gap:7px;margin:13px 0}label{font-size:.84rem;font-weight:800}input,textarea,select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:#0e1118;color:#fff;outline:none}textarea{min-height:170px;resize:vertical;line-height:1.55}.btn{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:rgba(255,255,255,.06);color:#fff;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--pink),#ff7b60);border:0}.danger{color:#ffadb5;border-color:rgba(255,100,116,.3);background:rgba(255,100,116,.1)}.small{padding:7px 10px;font-size:.8rem}.head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:20px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:17px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.03)}.stat b{display:block;font-size:1.7rem}.stat span{color:var(--muted);font-size:.82rem}.panel{border:1px solid var(--line);border-radius:19px;background:rgba(255,255,255,.025);overflow:hidden}.panelhead{padding:15px;display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}.filters{display:flex;gap:8px}.filters input,.filters select{width:auto;min-width:150px;padding:8px 9px}table{width:100%;border-collapse:collapse;min-width:780px}th,td{padding:13px 15px;border-bottom:1px solid var(--line);text-align:left}th{font-size:.74rem;color:#9299aa;text-transform:uppercase}.tablewrap{overflow:auto}.badge{padding:5px 8px;border-radius:999px;font-size:.7rem;font-weight:900;text-transform:uppercase}.pub{background:rgba(53,208,127,.11);color:#91efbb}.draft{background:rgba(255,179,71,.1);color:#ffd39a}.modal{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:16px}.editor{width:min(980px,100%);max-height:94vh;overflow:auto;background:#0b0e14;border:1px solid var(--line);border-radius:22px}.editorhead{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:15px 18px;background:rgba(11,14,20,.96);border-bottom:1px solid var(--line)}.editorbody{padding:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.span2{grid-column:1/-1}.checks{display:flex;gap:18px;flex-wrap:wrap}.checks input{width:auto}.preview{width:230px;max-width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:13px;border:1px solid var(--line);margin-top:8px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.msg{margin-top:12px;padding:10px;border-radius:10px;display:none}.msg.ok{display:block;background:rgba(53,208,127,.1);color:#a8efc7}.msg.err{display:block;background:rgba(255,100,116,.1);color:#ffc0c6}@media(max-width:800px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.span2{grid-column:auto}.head{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.user span{display:none}.panelhead{align-items:flex-start;flex-direction:column}.filters{width:100%;flex-direction:column}.filters input,.filters select{width:100%}}
-</style></head><body><header><div class="brand"><img src="favicon.png" alt=""><span>Peppermoon Admin</span></div><div class="user hidden" id="userBar"><span id="userEmail"></span><a class="btn small" href="index.html" target="_blank">View Site</a><button class="btn small danger" id="logout">Logout</button></div></header><main class="wrap"><section class="login" id="loginView"><form class="card" id="loginForm"><h1>Admin Login</h1><p style="color:var(--muted);line-height:1.6">Use the Supabase account you created. There is no sign-up option here.</p><div class="field"><label>Email</label><input id="email" type="email" required></div><div class="field"><label>Password</label><input id="password" type="password" required></div><button class="btn primary" style="width:100%">Login</button><div class="msg" id="loginMsg"></div></form></section><section class="hidden" id="dash"><div class="head"><div><h1>Content Dashboard</h1><p style="color:var(--muted)">Create, edit, publish and delete Peppermoon articles.</p></div><button class="btn primary" id="newBtn">+ New Article</button></div><div class="stats"><div class="stat"><b id="sAll">0</b><span>All articles</span></div><div class="stat"><b id="sPub">0</b><span>Published</span></div><div class="stat"><b id="sDraft">0</b><span>Drafts</span></div><div class="stat"><b id="sFeat">0</b><span>Featured</span></div></div><section class="panel"><div class="panelhead"><strong>Articles</strong><div class="filters"><input id="search" placeholder="Search"><select id="filter"><option value="">All categories</option><option>Gaming</option><option>Movies</option><option>TV Series</option><option>Trending</option></select></div></div><div class="tablewrap"><table><thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Homepage</th><th>Actions</th></tr></thead><tbody id="rows"></tbody></table></div></section></section></main><div class="modal hidden" id="modal"><div class="editor"><div class="editorhead"><h2 id="editorTitle">New Article</h2><button class="btn small" type="button" id="close">Close</button></div><form class="editorbody" id="articleForm"><input type="hidden" id="id"><input type="hidden" id="oldImage"><div class="grid"><div class="field span2"><label>Title</label><input id="title" required></div><div class="field"><label>Slug / URL name</label><input id="slug" required></div><div class="field"><label>Category</label><select id="category" required><option value="">Select</option><option>Gaming</option><option>Movies</option><option>TV Series</option><option>Trending</option></select></div><div class="field"><label>Author</label><input id="author" value="Peppermoon"></div><div class="field"><label>Status</label><select id="status"><option value="draft">Draft</option><option value="published">Published</option></select></div><div class="field span2"><label>Short Summary</label><textarea id="summary" style="min-height:90px"></textarea></div><div class="field span2"><label>Featured Image</label><input id="image" type="file" accept="image/*"><img class="preview hidden" id="preview"></div><div class="field span2"><label>Article Content</label><textarea id="content" required placeholder="Write the full article here. Use blank lines between paragraphs."></textarea></div><div class="checks span2"><label><input id="featured" type="checkbox"> Featured</label><label><input id="homepage" type="checkbox"> Show on homepage</label></div></div><div class="msg" id="editorMsg"></div><div class="actions"><button type="button" class="btn danger hidden" id="deleteBtn">Delete</button><button type="button" class="btn" id="draftBtn">Save Draft</button><button type="submit" class="btn primary">Save / Publish</button></div></form></div></div><script>
-const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");const BUCKET="article-images";let articles=[];let autoSlug=true;const $=x=>document.getElementById(x);const slugify=s=>s.toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function msg(el,t,ok=false){el.className='msg '+(ok?'ok':'err');el.textContent=t}function clear(el){el.className='msg';el.textContent=''}async function sessionView(s){if(s){$('loginView').classList.add('hidden');$('dash').classList.remove('hidden');$('userBar').classList.remove('hidden');$('userEmail').textContent=s.user.email||'';await load()}else{$('loginView').classList.remove('hidden');$('dash').classList.add('hidden');$('userBar').classList.add('hidden')}};(async()=>{const{data:{session}}=await sb.auth.getSession();sessionView(session);sb.auth.onAuthStateChange((e,s)=>sessionView(s))})();$('loginForm').onsubmit=async e=>{e.preventDefault();clear($('loginMsg'));const{error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)msg($('loginMsg'),error.message)};$('logout').onclick=()=>sb.auth.signOut();async function load(){const{data,error}=await sb.from('articles').select('*').order('created_at',{ascending:false});if(error){alert(error.message);return}articles=data||[];render()}function render(){const q=$('search').value.toLowerCase(),f=$('filter').value;const list=articles.filter(a=>(!q||(a.title+' '+(a.summary||'')).toLowerCase().includes(q))&&(!f||a.category===f));$('rows').innerHTML=list.map(a=>`<tr><td><strong>${esc(a.title)}</strong><br><small style="color:#8f97a8">${esc(a.slug)}</small></td><td>${esc(a.category)}</td><td><span class="badge ${a.status==='published'?'pub':'draft'}">${esc(a.status)}</span></td><td>${a.show_on_homepage?'Yes':'—'}${a.featured?' · Featured':''}</td><td><button class="btn small" onclick="editArticle('${a.id}')">Edit</button></td></tr>`).join('');$('sAll').textContent=articles.length;$('sPub').textContent=articles.filter(a=>a.status==='published').length;$('sDraft').textContent=articles.filter(a=>a.status!=='published').length;$('sFeat').textContent=articles.filter(a=>a.featured).length}$('search').oninput=render;$('filter').onchange=render;function openNew(){$('articleForm').reset();$('id').value='';$('oldImage').value='';$('author').value='Peppermoon';$('status').value='draft';$('preview').classList.add('hidden');$('deleteBtn').classList.add('hidden');$('editorTitle').textContent='New Article';autoSlug=true;clear($('editorMsg'));$('modal').classList.remove('hidden')}$('newBtn').onclick=openNew;$('close').onclick=()=>$('modal').classList.add('hidden');$('title').oninput=()=>{if(autoSlug)$('slug').value=slugify($('title').value)};$('slug').oninput=()=>{autoSlug=false;$('slug').value=slugify($('slug').value)};$('image').onchange=()=>{const f=$('image').files[0];if(f){$('preview').src=URL.createObjectURL(f);$('preview').classList.remove('hidden')}};window.editArticle=id=>{const a=articles.find(x=>String(x.id)===String(id));if(!a)return;$('id').value=a.id;$('title').value=a.title||'';$('slug').value=a.slug||'';$('category').value=a.category||'';$('author').value=a.author||'Peppermoon';$('status').value=a.status||'draft';$('summary').value=a.summary||'';$('content').value=a.content||'';$('featured').checked=!!a.featured;$('homepage').checked=!!a.show_on_homepage;$('oldImage').value=a.featured_image||'';$('image').value='';if(a.featured_image){$('preview').src=a.featured_image;$('preview').classList.remove('hidden')}else $('preview').classList.add('hidden');$('deleteBtn').classList.remove('hidden');$('editorTitle').textContent='Edit Article';autoSlug=false;clear($('editorMsg'));$('modal').classList.remove('hidden')};async function upload(file,slug){if(!file)return $('oldImage').value||null;const ext=(file.name.split('.').pop()||'jpg').toLowerCase();const path=`${slug}-${Date.now()}.${ext}`;const{error}=await sb.storage.from(BUCKET).upload(path,file,{upsert:false});if(error)throw error;return sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}async function save(forceDraft=false){clear($('editorMsg'));const title=$('title').value.trim(),slug=slugify($('slug').value||title),category=$('category').value,content=$('content').value.trim();if(!title||!slug||!category||!content){msg($('editorMsg'),'Please complete title, slug, category and content.');return}try{const image=await upload($('image').files[0],slug);const status=forceDraft?'draft':$('status').value;const now=new Date().toISOString();const payload={title,slug,category,summary:$('summary').value.trim()||null,content,featured_image:image,author:$('author').value.trim()||'Peppermoon',status,featured:$('featured').checked,show_on_homepage:$('homepage').checked,updated_at:now,published_at:status==='published'?now:null};let r;if($('id').value)r=await sb.from('articles').update(payload).eq('id',$('id').value);else r=await sb.from('articles').insert(payload);if(r.error)throw r.error;msg($('editorMsg'),forceDraft?'Draft saved.':'Article saved. ',true);await load();setTimeout(()=>$('modal').classList.add('hidden'),600)}catch(e){msg($('editorMsg'),e.message||String(e))}}$('articleForm').onsubmit=e=>{e.preventDefault();save(false)};$('draftBtn').onclick=()=>save(true);$('deleteBtn').onclick=async()=>{if(!confirm('Delete this article permanently?'))return;const{error}=await sb.from('articles').delete().eq('id',$('id').value);if(error){msg($('editorMsg'),error.message);return}await load();$('modal').classList.add('hidden')};
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#08090d">
+<title>Peppermoon Admin</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg:#07080c; --panel:#11141d; --panel2:#171b27; --text:#f6f7fb; --muted:#9ca4b5;
+  --line:rgba(255,255,255,.09); --pink:#ff4f78; --violet:#7b61ff; --cyan:#19d3c5;
+  --danger:#ff5f6d; --success:#35d07f; --shadow:0 22px 70px rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:
+radial-gradient(circle at 10% -10%,rgba(123,97,255,.19),transparent 30%),
+radial-gradient(circle at 95% 0%,rgba(255,79,120,.14),transparent 25%),var(--bg);min-height:100vh}
+button,input,textarea,select{font:inherit} a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 22px;background:rgba(7,8,12,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:900}
+.brand img{width:34px;height:34px;border-radius:50%}
+.userbar{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:.88rem}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;cursor:pointer;color:#fff;background:rgba(255,255,255,.07);border:1px solid var(--line)}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--pink),#ff7b60);border:0}
+.btn.secondary{background:rgba(123,97,255,.14);border-color:rgba(123,97,255,.28)}
+.btn.danger{background:rgba(255,95,109,.12);border-color:rgba(255,95,109,.3);color:#ff9ca6}
+.btn.small{padding:8px 10px;font-size:.82rem}
+.shell{width:min(1240px,calc(100% - 28px));margin:26px auto 60px}
+.login-wrap{min-height:75vh;display:grid;place-items:center}
+.login-card{width:min(430px,100%);padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));box-shadow:var(--shadow)}
+.login-card h1{margin:12px 0 8px;font-size:2rem;letter-spacing:-.04em}
+.login-card p{color:var(--muted);line-height:1.6}
+.field{display:grid;gap:7px;margin-bottom:14px}
+label{font-size:.84rem;font-weight:800;color:#dfe3ec}
+input,textarea,select{width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:#0e1118;color:#fff;outline:none}
+input:focus,textarea:focus,select:focus{border-color:rgba(255,79,120,.55);box-shadow:0 0 0 4px rgba(255,79,120,.07)}
+.msg{margin-top:12px;padding:11px 12px;border-radius:10px;font-size:.88rem;display:none}
+.msg.error{display:block;background:rgba(255,95,109,.1);border:1px solid rgba(255,95,109,.25);color:#ffb4bb}
+.msg.ok{display:block;background:rgba(53,208,127,.1);border:1px solid rgba(53,208,127,.25);color:#aaf0c8}
+.dashboard-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin:8px 0 22px}
+.dashboard-head h1{font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-.05em;margin:0}
+.dashboard-head p{margin:7px 0 0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}
+.stat b{display:block;font-size:1.7rem;margin-bottom:4px}
+.stat span{color:var(--muted);font-size:.84rem}
+.panel{border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.025);overflow:hidden}
+.panel-head{padding:17px 18px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;justify-content:space-between}
+.panel-head h2{margin:0;font-size:1.15rem}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters input,.filters select{width:auto;min-width:150px;padding:9px 10px}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:800px}
+th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:#9098aa}
+td{font-size:.9rem}
+tr:hover td{background:rgba(255,255,255,.018)}
+.badge{display:inline-flex;padding:6px 8px;border-radius:999px;font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.badge.published{background:rgba(53,208,127,.11);color:#8ceeb6;border:1px solid rgba(53,208,127,.23)}
+.badge.draft{background:rgba(255,179,71,.10);color:#ffd398;border:1px solid rgba(255,179,71,.22)}
+.actions{display:flex;gap:7px}
+.empty{padding:34px;text-align:center;color:var(--muted)}
+
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:18px}
+.editor{width:min(1040px,100%);max-height:95vh;overflow:auto;border:1px solid var(--line);border-radius:22px;background:#0c0f15;box-shadow:var(--shadow)}
+.editor-head{position:sticky;top:0;z-index:4;padding:16px 18px;background:rgba(12,15,21,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.editor-head h2{margin:0}
+.editor-body{padding:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.span-2{grid-column:1/-1}
+.checkrow{display:flex;gap:18px;flex-wrap:wrap;padding:6px 0 12px}
+.checkrow label{display:flex;gap:8px;align-items:center;color:#dbe0e9}
+.checkrow input{width:auto}
+.img-preview{width:260px;max-width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid var(--line);background:#0b0d13;margin-top:8px}
+.editor-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.help{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* Rich editor */
+.rich-wrap{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0e1118}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:9px;border-bottom:1px solid var(--line);background:#11151e;position:sticky;top:59px;z-index:3}
+.tool{min-width:36px;height:34px;padding:0 10px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.045);color:white;cursor:pointer;font-weight:800}
+.tool:hover{background:rgba(255,255,255,.09)}
+.tool.select{height:34px;padding:0 8px}
+.rich-editor{
+  min-height:360px;padding:22px;outline:none;line-height:1.75;color:#eef1f7;background:#0d1017;
+}
+.rich-editor:empty:before{content:attr(data-placeholder);color:#6f7788}
+.rich-editor h2{font-size:1.8rem;margin:1.4em 0 .5em;letter-spacing:-.03em}
+.rich-editor h3{font-size:1.35rem;margin:1.2em 0 .45em}
+.rich-editor p{margin:0 0 1em}
+.rich-editor blockquote{margin:1.2em 0;padding:12px 16px;border-left:3px solid var(--pink);background:rgba(255,79,120,.06);color:#d9dce5;border-radius:0 10px 10px 0}
+.rich-editor img{max-width:100%;height:auto;border-radius:14px;margin:18px auto 8px;display:block}
+.rich-editor figure{margin:24px 0;text-align:center}
+.rich-editor figcaption{font-size:.82rem;color:#9098aa;margin-top:8px}
+.rich-editor a{color:#8ea2ff;text-decoration:underline}
+.rich-editor ul,.rich-editor ol{padding-left:1.5rem}
+.editor-status{padding:9px 12px;font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);background:#0b0e14}
+.uploading{color:#ffd398}
+
+.preview-modal{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.82);padding:18px;overflow:auto}
+.preview-card{width:min(1000px,100%);margin:20px auto;background:#090c12;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.preview-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(9,12,18,.97);z-index:3}
+.preview-body{padding:36px;max-width:900px;margin:auto}
+.preview-body h1{font-size:clamp(2.5rem,6vw,4.7rem);line-height:.98;letter-spacing:-.06em;margin:10px 0 18px}
+.preview-body .summary{font-size:1.08rem;color:#bec5d1;line-height:1.7}
+.preview-cover{width:100%;max-height:520px;object-fit:cover;border-radius:20px;margin:28px 0;border:1px solid var(--line)}
+.preview-content{line-height:1.82;color:#d0d5df}
+.preview-content img{max-width:100%;height:auto;border-radius:16px;display:block;margin:24px auto 8px}
+.preview-content figure{text-align:center;margin:28px 0}
+.preview-content figcaption{font-size:.84rem;color:#929bad;margin-top:8px}
+.preview-content blockquote{padding:12px 16px;border-left:3px solid var(--pink);background:rgba(255,79,120,.06);margin:1.3em 0}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}}
+@media(max-width:560px){.top{padding:12px}.userbar span{display:none}.shell{width:min(100% - 18px,1240px)}.stats{grid-template-columns:1fr 1fr}.dashboard-head{align-items:flex-start;flex-direction:column}.preview-body{padding:24px 18px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img src="favicon.png" alt=""><span>Peppermoon Admin</span></div>
+  <div class="userbar hidden" id="userBar"><span id="userEmail"></span><a class="btn small" href="index.html" target="_blank">View Site</a><button class="btn small danger" id="logoutBtn">Logout</button></div>
+</header>
+
+<main class="shell">
+  <section class="login-wrap" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div style="font-size:2rem">🌙</div>
+      <h1>Admin Login</h1>
+      <p>Use the Supabase account you created. There is no public sign-up on this page.</p>
+      <div class="field"><label>Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+      <button class="btn primary" style="width:100%" type="submit">Login</button>
+      <div class="msg" id="loginMsg"></div>
+    </form>
+  </section>
+
+  <section id="dashboardView" class="hidden">
+    <div class="dashboard-head">
+      <div><h1>Content Dashboard</h1><p>Create, edit, preview and publish Peppermoon articles.</p></div>
+      <button class="btn primary" id="newArticleBtn">+ New Article</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="statAll">0</b><span>All articles</span></div>
+      <div class="stat"><b id="statPublished">0</b><span>Published</span></div>
+      <div class="stat"><b id="statDraft">0</b><span>Drafts</span></div>
+      <div class="stat"><b id="statFeatured">0</b><span>Featured</span></div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Articles</h2>
+        <div class="filters">
+          <input id="searchArticles" type="search" placeholder="Search...">
+          <select id="categoryFilter"><option value="">All categories</option><option>Gaming</option><option>Movies</option><option>TV Series</option><option>Trending</option></select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Homepage</th><th>Updated</th><th>Actions</th></tr></thead>
+          <tbody id="articleRows"></tbody>
+        </table>
+        <div class="empty hidden" id="emptyState">No articles found.</div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div class="modal hidden" id="articleModal">
+  <div class="editor">
+    <div class="editor-head">
+      <h2 id="editorTitle">New Article</h2>
+      <div style="display:flex;gap:8px">
+        <button class="btn small secondary" id="previewBtn" type="button">Preview</button>
+        <button class="btn small" id="closeEditor" type="button">Close</button>
+      </div>
+    </div>
+
+    <form class="editor-body" id="articleForm">
+      <input type="hidden" id="articleId">
+      <input type="hidden" id="existingImageUrl">
+
+      <div class="form-grid">
+        <div class="field span-2"><label>Article title</label><input id="articleTitle" required placeholder="Example: Ghost Recon Wildlands vs Breakpoint"></div>
+
+        <div class="field">
+          <label>Slug / URL name</label>
+          <input id="articleSlug" required placeholder="ghost-recon-wildlands-vs-breakpoint">
+          <div class="help">Generated automatically from the title.</div>
+        </div>
+
+        <div class="field">
+          <label>Category</label>
+          <select id="articleCategory" required>
+            <option value="">Select category</option>
+            <option>Gaming</option>
+            <option>Movies</option>
+            <option>TV Series</option>
+            <option>Trending</option>
+          </select>
+        </div>
+
+        <div class="field"><label>Author</label><input id="articleAuthor" value="Peppermoon"></div>
+        <div class="field"><label>Status</label><select id="articleStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+
+        <div class="field span-2">
+          <label>Short summary</label>
+          <textarea id="articleSummary" style="min-height:95px" placeholder="Short description used on cards and search results."></textarea>
+        </div>
+
+        <div class="field span-2">
+          <label>Featured image</label>
+          <input id="articleImage" type="file" accept="image/*">
+          <div class="help">Used on homepage/category cards and at the top of the article.</div>
+          <img id="imagePreview" class="img-preview hidden" alt="Preview">
+        </div>
+
+        <div class="field span-2">
+          <label>Article content</label>
+          <div class="rich-wrap">
+            <div class="toolbar">
+              <select class="tool select" id="blockFormat" title="Text style">
+                <option value="p">Paragraph</option>
+                <option value="h2">Heading 2</option>
+                <option value="h3">Heading 3</option>
+                <option value="blockquote">Quote</option>
+              </select>
+              <button class="tool" type="button" data-cmd="bold" title="Bold"><b>B</b></button>
+              <button class="tool" type="button" data-cmd="italic" title="Italic"><i>I</i></button>
+              <button class="tool" type="button" data-cmd="underline" title="Underline"><u>U</u></button>
+              <button class="tool" type="button" data-cmd="insertUnorderedList" title="Bullet list">• List</button>
+              <button class="tool" type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+              <button class="tool" type="button" id="linkBtn" title="Insert link">🔗 Link</button>
+              <button class="tool" type="button" id="inlineImageBtn" title="Insert image">🖼 Image</button>
+              <button class="tool" type="button" data-cmd="removeFormat" title="Clear formatting">Clear</button>
+            </div>
+            <div id="richEditor" class="rich-editor" contenteditable="true" data-placeholder="Write your article here..."></div>
+            <div class="editor-status" id="richStatus">Tip: click “Image” to upload images directly inside the article.</div>
+          </div>
+          <input id="inlineImageInput" class="hidden" type="file" accept="image/*">
+        </div>
+
+        <div class="span-2 checkrow">
+          <label><input id="articleFeatured" type="checkbox"> Featured article</label>
+          <label><input id="articleHomepage" type="checkbox"> Show on homepage</label>
+        </div>
+      </div>
+
+      <div class="msg" id="editorMsg"></div>
+
+      <div class="editor-actions">
+        <button type="button" class="btn danger hidden" id="deleteArticleBtn">Delete</button>
+        <button type="button" class="btn" id="saveDraftBtn">Save Draft</button>
+        <button type="button" class="btn secondary" id="previewBottomBtn">Preview</button>
+        <button type="submit" class="btn primary">Save / Publish</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="preview-modal hidden" id="previewModal">
+  <div class="preview-card">
+    <div class="preview-top">
+      <strong>Article Preview</strong>
+      <button class="btn small" id="closePreview">Close Preview</button>
+    </div>
+    <div class="preview-body" id="previewBody"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://bgzlqvbvmstebdsnzmqv.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-";
+const BUCKET = "article-images";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let allArticles = [];
+let autoSlug = true;
+let savedRange = null;
+
+const $ = id => document.getElementById(id);
+
+function showMsg(el, text, type='error') {
+  el.className = 'msg ' + (type === 'ok' ? 'ok' : 'error');
+  el.textContent = text;
+}
+function clearMsg(el) { el.className='msg'; el.textContent=''; }
+
+function slugify(text) {
+  return text.toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g,'')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-|-$/g,'');
+}
+
+function fmtDate(v) {
+  if(!v) return '—';
+  try { return new Date(v).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
+  catch { return '—'; }
+}
+
+function escapeHtml(v='') {
+  return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  setSession(session);
+  sb.auth.onAuthStateChange((_event, session) => setSession(session));
+}
+
+async function setSession(session) {
+  if(session) {
+    $('loginView').classList.add('hidden');
+    $('dashboardView').classList.remove('hidden');
+    $('userBar').classList.remove('hidden');
+    $('userEmail').textContent = session.user.email || '';
+    await loadArticles();
+  } else {
+    $('loginView').classList.remove('hidden');
+    $('dashboardView').classList.add('hidden');
+    $('userBar').classList.add('hidden');
+  }
+}
+
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMsg($('loginMsg'));
+  const { error } = await sb.auth.signInWithPassword({
+    email:$('loginEmail').value.trim(),
+    password:$('loginPassword').value
+  });
+  if(error) showMsg($('loginMsg'), error.message);
+});
+
+$('logoutBtn').addEventListener('click',()=>sb.auth.signOut());
+
+async function loadArticles() {
+  const { data, error } = await sb.from('articles').select('*').order('created_at',{ascending:false});
+  if(error) { alert('Could not load articles: '+error.message); return; }
+  allArticles = data || [];
+  renderArticles();
+}
+
+function renderArticles() {
+  const q = $('searchArticles').value.trim().toLowerCase();
+  const cat = $('categoryFilter').value;
+  const items = allArticles.filter(a =>
+    (!q || (a.title+' '+(a.summary||'')).toLowerCase().includes(q)) &&
+    (!cat || a.category===cat)
+  );
+
+  $('articleRows').innerHTML = items.map(a=>`
+    <tr>
+      <td><strong>${escapeHtml(a.title)}</strong><br><span style="color:#8f97a8;font-size:.78rem">${escapeHtml(a.slug)}</span></td>
+      <td>${escapeHtml(a.category)}</td>
+      <td><span class="badge ${a.status==='published'?'published':'draft'}">${escapeHtml(a.status||'draft')}</span></td>
+      <td>${a.show_on_homepage?'Yes':'—'}${a.featured?' · Featured':''}</td>
+      <td>${fmtDate(a.updated_at || a.created_at)}</td>
+      <td><div class="actions"><button class="btn small secondary" onclick="editArticle('${a.id}')">Edit</button></div></td>
+    </tr>`).join('');
+
+  $('emptyState').classList.toggle('hidden', items.length>0);
+  $('statAll').textContent = allArticles.length;
+  $('statPublished').textContent = allArticles.filter(a=>a.status==='published').length;
+  $('statDraft').textContent = allArticles.filter(a=>a.status!=='published').length;
+  $('statFeatured').textContent = allArticles.filter(a=>a.featured).length;
+}
+
+$('searchArticles').addEventListener('input',renderArticles);
+$('categoryFilter').addEventListener('change',renderArticles);
+
+function setEditorHtml(html='') {
+  const editor = $('richEditor');
+  // Backward compatibility: old plain-text articles become paragraphs.
+  if(html && !/<[a-z][\s\S]*>/i.test(html)) {
+    editor.innerHTML = html.split(/\n\s*\n/).filter(Boolean).map(p=>`<p>${escapeHtml(p).replace(/\n/g,'<br>')}</p>`).join('');
+  } else {
+    editor.innerHTML = html || '';
+  }
+}
+
+function openNewArticle() {
+  $('articleForm').reset();
+  $('articleId').value='';
+  $('existingImageUrl').value='';
+  $('articleAuthor').value='Peppermoon';
+  $('articleStatus').value='draft';
+  $('imagePreview').classList.add('hidden');
+  $('deleteArticleBtn').classList.add('hidden');
+  $('editorTitle').textContent='New Article';
+  setEditorHtml('');
+  clearMsg($('editorMsg'));
+  autoSlug=true;
+  $('articleModal').classList.remove('hidden');
+}
+
+$('newArticleBtn').addEventListener('click',openNewArticle);
+$('closeEditor').addEventListener('click',()=>$('articleModal').classList.add('hidden'));
+$('articleModal').addEventListener('click',e=>{ if(e.target===$('articleModal')) $('articleModal').classList.add('hidden'); });
+
+$('articleTitle').addEventListener('input',()=>{ if(autoSlug) $('articleSlug').value=slugify($('articleTitle').value); });
+$('articleSlug').addEventListener('input',()=>{ autoSlug=false; $('articleSlug').value=slugify($('articleSlug').value); });
+
+$('articleImage').addEventListener('change',()=>{
+  const f=$('articleImage').files[0];
+  if(f) {
+    $('imagePreview').src=URL.createObjectURL(f);
+    $('imagePreview').classList.remove('hidden');
+  }
+});
+
+window.editArticle = id => {
+  const a=allArticles.find(x=>String(x.id)===String(id));
+  if(!a) return;
+
+  $('articleId').value=a.id;
+  $('articleTitle').value=a.title||'';
+  $('articleSlug').value=a.slug||'';
+  $('articleCategory').value=a.category||'';
+  $('articleAuthor').value=a.author||'Peppermoon';
+  $('articleStatus').value=a.status||'draft';
+  $('articleSummary').value=a.summary||'';
+  setEditorHtml(a.content||'');
+  $('articleFeatured').checked=!!a.featured;
+  $('articleHomepage').checked=!!a.show_on_homepage;
+  $('existingImageUrl').value=a.featured_image||'';
+  $('articleImage').value='';
+
+  if(a.featured_image) {
+    $('imagePreview').src=a.featured_image;
+    $('imagePreview').classList.remove('hidden');
+  } else {
+    $('imagePreview').classList.add('hidden');
+  }
+
+  $('deleteArticleBtn').classList.remove('hidden');
+  $('editorTitle').textContent='Edit Article';
+  clearMsg($('editorMsg'));
+  autoSlug=false;
+  $('articleModal').classList.remove('hidden');
+};
+
+async function uploadImage(file, slug, prefix='image') {
+  if(!file) return null;
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  const safeExt=['jpg','jpeg','png','webp','gif'].includes(ext)?ext:'jpg';
+  const clean=slugify(slug||'article') || 'article';
+  const path=`${clean}/${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,7)}.${safeExt}`;
+
+  const { error }=await sb.storage.from(BUCKET).upload(path,file,{
+    cacheControl:'3600',
+    upsert:false
+  });
+  if(error) throw error;
+
+  const { data }=sb.storage.from(BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
+
+/* Rich editor toolbar */
+function saveSelection() {
+  const sel=window.getSelection();
+  if(sel && sel.rangeCount) {
+    const range=sel.getRangeAt(0);
+    if($('richEditor').contains(range.commonAncestorContainer)) savedRange=range.cloneRange();
+  }
+}
+function restoreSelection() {
+  if(!savedRange) return;
+  const sel=window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(savedRange);
+}
+$('richEditor').addEventListener('keyup',saveSelection);
+$('richEditor').addEventListener('mouseup',saveSelection);
+$('richEditor').addEventListener('focus',saveSelection);
+
+document.querySelectorAll('[data-cmd]').forEach(btn=>{
+  btn.addEventListener('mousedown',e=>e.preventDefault());
+  btn.addEventListener('click',()=>{
+    restoreSelection();
+    document.execCommand(btn.dataset.cmd,false,null);
+    $('richEditor').focus();
+    saveSelection();
+  });
+});
+
+$('blockFormat').addEventListener('change',e=>{
+  restoreSelection();
+  document.execCommand('formatBlock',false,e.target.value);
+  $('richEditor').focus();
+  saveSelection();
+});
+
+$('linkBtn').addEventListener('mousedown',e=>e.preventDefault());
+$('linkBtn').addEventListener('click',()=>{
+  restoreSelection();
+  const url=prompt('Enter the full link (for example https://example.com)');
+  if(!url) return;
+  document.execCommand('createLink',false,url);
+  $('richEditor').focus();
+  saveSelection();
+});
+
+$('inlineImageBtn').addEventListener('mousedown',e=>e.preventDefault());
+$('inlineImageBtn').addEventListener('click',()=>{
+  saveSelection();
+  $('inlineImageInput').click();
+});
+
+$('inlineImageInput').addEventListener('change',async()=>{
+  const file=$('inlineImageInput').files[0];
+  if(!file) return;
+  const slug=$('articleSlug').value || $('articleTitle').value || 'article';
+  $('richStatus').textContent='Uploading image…';
+  $('richStatus').classList.add('uploading');
+
+  try {
+    const url=await uploadImage(file,slug,'inline');
+    const caption=prompt('Optional image caption:') || '';
+    restoreSelection();
+    $('richEditor').focus();
+
+    const figure=document.createElement('figure');
+    const img=document.createElement('img');
+    img.src=url;
+    img.alt=caption || $('articleTitle').value || 'Article image';
+    figure.appendChild(img);
+
+    if(caption) {
+      const cap=document.createElement('figcaption');
+      cap.textContent=caption;
+      figure.appendChild(cap);
+    }
+
+    const sel=window.getSelection();
+    if(sel.rangeCount) {
+      const range=sel.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(figure);
+      range.setStartAfter(figure);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      $('richEditor').appendChild(figure);
+    }
+
+    const p=document.createElement('p');
+    p.innerHTML='<br>';
+    figure.after(p);
+
+    $('richStatus').textContent='Image inserted into the article.';
+    $('richStatus').classList.remove('uploading');
+    saveSelection();
+  } catch(err) {
+    $('richStatus').textContent='Image upload failed: '+(err.message||err);
+    $('richStatus').classList.remove('uploading');
+  } finally {
+    $('inlineImageInput').value='';
+  }
+});
+
+function getArticleHtml() {
+  return $('richEditor').innerHTML.trim();
+}
+
+function openPreview() {
+  const title=$('articleTitle').value.trim() || 'Untitled Article';
+  const category=$('articleCategory').value || 'Article';
+  const author=$('articleAuthor').value.trim() || 'Peppermoon';
+  const summary=$('articleSummary').value.trim();
+  const featureSrc=$('imagePreview').classList.contains('hidden') ? '' : $('imagePreview').src;
+  const html=getArticleHtml() || '<p style="color:#8790a0">No article content yet.</p>';
+
+  $('previewBody').innerHTML=`
+    <div class="meta">${escapeHtml(category)} · ${escapeHtml(author)} · Preview</div>
+    <h1>${escapeHtml(title)}</h1>
+    ${summary?`<div class="summary">${escapeHtml(summary)}</div>`:''}
+    ${featureSrc?`<img class="preview-cover" src="${featureSrc}" alt="">`:''}
+    <article class="preview-content">${html}</article>
+  `;
+  $('previewModal').classList.remove('hidden');
+}
+$('previewBtn').addEventListener('click',openPreview);
+$('previewBottomBtn').addEventListener('click',openPreview);
+$('closePreview').addEventListener('click',()=>$('previewModal').classList.add('hidden'));
+$('previewModal').addEventListener('click',e=>{if(e.target===$('previewModal'))$('previewModal').classList.add('hidden')});
+
+async function saveArticle(forceDraft=false) {
+  clearMsg($('editorMsg'));
+
+  const title=$('articleTitle').value.trim();
+  const slug=slugify($('articleSlug').value.trim() || title);
+  const category=$('articleCategory').value;
+  const content=getArticleHtml();
+
+  if(!title || !slug || !category || !content || content==='<br>') {
+    showMsg($('editorMsg'),'Please complete title, slug, category and article content.');
+    return;
+  }
+
+  try {
+    let imageUrl=$('existingImageUrl').value || null;
+    const featuredFile=$('articleImage').files[0];
+    if(featuredFile) {
+      imageUrl=await uploadImage(featuredFile,slug,'featured');
+    }
+
+    const status=forceDraft?'draft':$('articleStatus').value;
+    const now=new Date().toISOString();
+
+    const payload={
+      title,
+      slug,
+      category,
+      summary:$('articleSummary').value.trim() || null,
+      content,
+      featured_image:imageUrl,
+      author:$('articleAuthor').value.trim() || 'Peppermoon',
+      status,
+      featured:$('articleFeatured').checked,
+      show_on_homepage:$('articleHomepage').checked,
+      updated_at:now,
+      published_at: status==='published' ? now : null
+    };
+
+    const id=$('articleId').value;
+    let result;
+    if(id) result=await sb.from('articles').update(payload).eq('id',id);
+    else result=await sb.from('articles').insert(payload);
+
+    if(result.error) throw result.error;
+
+    showMsg($('editorMsg'),forceDraft?'Draft saved.':'Article saved successfully.','ok');
+    await loadArticles();
+    setTimeout(()=>$('articleModal').classList.add('hidden'),650);
+  } catch(err) {
+    showMsg($('editorMsg'),err.message||String(err));
+  }
+}
+
+$('articleForm').addEventListener('submit',e=>{e.preventDefault();saveArticle(false)});
+$('saveDraftBtn').addEventListener('click',()=>saveArticle(true));
+
+$('deleteArticleBtn').addEventListener('click',async()=>{
+  const id=$('articleId').value;
+  if(!id) return;
+  if(!confirm('Delete this article permanently?')) return;
+
+  const { error }=await sb.from('articles').delete().eq('id',id);
+  if(error) {
+    showMsg($('editorMsg'),error.message);
+    return;
+  }
+
+  await loadArticles();
+  $('articleModal').classList.add('hidden');
+});
+
+init();
+</script>
+</body>
+</html>
