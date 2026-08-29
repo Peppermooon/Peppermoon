@@ -416,17 +416,39 @@ async function init() {
 }
 
 async function setSession(session) {
-  if(session) {
-    $('loginView').classList.add('hidden');
-    $('dashboardView').classList.remove('hidden');
-    $('userBar').classList.remove('hidden');
-    $('userEmail').textContent = session.user.email || '';
-    await loadArticles();
-  } else {
+  if (!session || !session.user) {
     $('loginView').classList.remove('hidden');
     $('dashboardView').classList.add('hidden');
     $('userBar').classList.add('hidden');
+    return;
   }
+
+  const { data: profile, error: profileError } = await sb
+    .from('profiles')
+    .select('username, display_name, role')
+    .eq('id', session.user.id)
+    .maybeSingle();
+
+  if (profileError || !profile || profile.role !== 'admin') {
+    await sb.auth.signOut();
+    $('loginView').classList.remove('hidden');
+    $('dashboardView').classList.add('hidden');
+    $('userBar').classList.add('hidden');
+    showMsg(
+      $('loginMsg'),
+      'This account is not authorized to access Peppermoon Admin.',
+      'error'
+    );
+    return;
+  }
+
+  $('loginView').classList.add('hidden');
+  $('dashboardView').classList.remove('hidden');
+  $('userBar').classList.remove('hidden');
+  $('userEmail').textContent =
+    profile.display_name || profile.username || session.user.email || 'Admin';
+
+  await loadArticles();
 }
 
 $('loginForm').addEventListener('submit', async e => {

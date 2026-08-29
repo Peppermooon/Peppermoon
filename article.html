@@ -204,18 +204,32 @@ function setMsg(el,t,type){el.textContent=t;el.className='pm-auth-msg show '+typ
 async function ensureProfile(user){
  let r=await sbAuth.from('profiles').select('*').eq('id',user.id).maybeSingle();
  if(r.data)return r.data;
+
  const m=user.user_metadata||{};
- let u=(m.username||('user_'+user.id.slice(0,8))).toLowerCase().replace(/[^a-z0-9_]/g,'_').slice(0,24);
- let p={id:user.id,username:u,display_name:m.display_name||u};
+ const chosen=(m.username||'').toLowerCase().replace(/[^a-z0-9_]/g,'_').slice(0,24);
+
+ if(!chosen){
+   return null;
+ }
+
+ const p={id:user.id,username:chosen,display_name:m.display_name||chosen};
  let i=await sbAuth.from('profiles').insert(p).select().maybeSingle();
+
  if(i.data)return i.data;
- p.username=(u.slice(0,15)+'_'+user.id.slice(0,6)).slice(0,24);
- i=await sbAuth.from('profiles').insert(p).select().maybeSingle();
- return i.data||p;
+ return null;
 }
 async function render(session){
  if(!session||!session.user){$('pmOpenAuth').style.display='';$('pmUserMenu').style.display='none';return}
- const p=await ensureProfile(session.user);const n=(p&&(p.display_name||p.username))||session.user.email||'User';
+ const p=await ensureProfile(session.user);
+ if(!p){
+   $('pmOpenAuth').style.display='none';
+   $('pmUserMenu').style.display='block';
+   $('pmUserName').textContent='Profile setup required';
+   $('pmAvatar').textContent='!';
+   $('pmProfileLink').href='profile.html';
+   return;
+ }
+ const n=(p.display_name||p.username)||session.user.email||'User';
  $('pmOpenAuth').style.display='none';$('pmUserMenu').style.display='block';$('pmUserName').textContent=n;$('pmAvatar').textContent=n.slice(0,1).toUpperCase();
  if(p&&p.avatar_url){$('pmAvatar').style.backgroundImage='url("'+p.avatar_url+'")';$('pmAvatar').textContent=''}
  $('pmProfileLink').href='profile.html?id='+encodeURIComponent(session.user.id);
