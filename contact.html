@@ -309,6 +309,36 @@ button,input,textarea{font:inherit}
   .article{padding:24px}
   .sidebar{grid-template-columns:1fr}
 }
+
+/* PEPPERMOON PUBLIC AUTH */
+.pm-auth-area{margin-left:auto;display:flex;align-items:center;gap:10px}
+.pm-auth-btn,.pm-user-trigger{border:1px solid rgba(255,255,255,.10);background:linear-gradient(135deg,rgba(255,79,120,.16),rgba(123,97,255,.14));color:#fff;border-radius:13px;padding:10px 14px;font-weight:850;cursor:pointer}
+.pm-user-menu{position:relative}
+.pm-user-trigger{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);padding:7px 10px 7px 8px}
+.pm-avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ff4f78,#7b61ff);font-size:.78rem;font-weight:900;background-size:cover;background-position:center}
+.pm-user-dropdown{position:absolute;top:calc(100% + 9px);right:0;min-width:190px;background:#11141d;border:1px solid rgba(255,255,255,.10);border-radius:15px;padding:8px;box-shadow:0 18px 50px rgba(0,0,0,.4);display:none;z-index:150}
+.pm-user-dropdown.open{display:block}
+.pm-user-dropdown a,.pm-user-dropdown button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#e9ecf3;padding:10px 11px;border-radius:10px;cursor:pointer}
+.pm-user-dropdown a:hover,.pm-user-dropdown button:hover{background:rgba(255,255,255,.06)}
+.pm-user-dropdown .danger{color:#ff9eaa}
+.pm-auth-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.72);display:none;place-items:center;padding:18px}
+.pm-auth-modal.open{display:grid}
+.pm-auth-card{width:min(460px,100%);background:#0e1118;border:1px solid rgba(255,255,255,.10);border-radius:24px;box-shadow:0 25px 80px rgba(0,0,0,.48);overflow:hidden}
+.pm-auth-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.pm-auth-head h2{margin:0;font-size:1.35rem}.pm-auth-close{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#fff;cursor:pointer}
+.pm-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 18px 0}
+.pm-auth-tab{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#b8bfcd;border-radius:11px;padding:10px;cursor:pointer;font-weight:850}
+.pm-auth-tab.active{color:#fff;background:linear-gradient(135deg,rgba(255,79,120,.16),rgba(123,97,255,.15));border-color:rgba(255,79,120,.28)}
+.pm-auth-body{padding:18px 20px 22px}.pm-auth-form{display:none}.pm-auth-form.active{display:block}
+.pm-auth-field{display:grid;gap:7px;margin-bottom:13px}.pm-auth-field label{font-size:.82rem;font-weight:800;color:#dce1ea}
+.pm-auth-field input{width:100%;padding:12px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:#0a0d13;color:#fff;outline:none}
+.pm-auth-submit{width:100%;border:0;border-radius:12px;padding:12px 14px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(135deg,#ff4f78,#ff7b60)}
+.pm-auth-note{margin:10px 0 0;color:#8f97a8;font-size:.8rem;line-height:1.55}
+.pm-auth-msg{display:none;margin-top:12px;padding:10px 11px;border-radius:10px;font-size:.84rem}.pm-auth-msg.show{display:block}
+.pm-auth-msg.ok{background:rgba(53,208,127,.10);border:1px solid rgba(53,208,127,.22);color:#a9efc6}
+.pm-auth-msg.error{background:rgba(255,95,109,.10);border:1px solid rgba(255,95,109,.22);color:#ffb2bb}
+@media(max-width:620px){.pm-auth-btn{padding:9px 10px;font-size:.82rem}.pm-user-name{display:none}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -318,7 +348,20 @@ button,input,textarea{font:inherit}
   <div class="container nav">
     <a class="brand" href="index.html"><span class="brand-mark"></span><span>Peppermoon</span></a>
     <nav class="nav-links" id="navLinks"><a class="" href="index.html">Home</a><a class="" href="gaming.html">Gaming</a><a class="" href="movies.html">Movies</a><a class="" href="tv.html">TV Series</a><a class="" href="trending.html">Trending</a><a class="" href="about.html">About</a></nav>
-    <div class="nav-actions">
+    
+<div class="pm-auth-area" id="pmAuthArea">
+  <button class="pm-auth-btn" id="pmOpenAuth">Log in / Sign up</button>
+  <div class="pm-user-menu" id="pmUserMenu" style="display:none">
+    <button class="pm-user-trigger" id="pmUserTrigger"><span class="pm-avatar" id="pmAvatar">U</span><span class="pm-user-name" id="pmUserName">User</span><span>▾</span></button>
+    <div class="pm-user-dropdown" id="pmUserDropdown">
+      <a id="pmProfileLink" href="profile.html">My Profile</a>
+      <a href="#" id="pmCreatePostPlaceholder">Create Post</a>
+      <a href="#" id="pmSavedPlaceholder">Saved</a>
+      <button id="pmLogout" class="danger">Log out</button>
+    </div>
+  </div>
+</div>
+<div class="nav-actions">
       <button class="icon-btn" id="searchToggle" aria-label="Search">⌕</button>
       <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </div>
@@ -382,5 +425,80 @@ document.querySelectorAll("form[data-demo-form]").forEach(form=>{
 });
 </script>
 
+
+<div class="pm-auth-modal" id="pmAuthModal">
+  <div class="pm-auth-card">
+    <div class="pm-auth-head"><h2>Join Peppermoon</h2><button class="pm-auth-close" id="pmCloseAuth">✕</button></div>
+    <div class="pm-auth-tabs">
+      <button class="pm-auth-tab active" data-auth-tab="login">Log in</button>
+      <button class="pm-auth-tab" data-auth-tab="signup">Sign up</button>
+    </div>
+    <div class="pm-auth-body">
+      <form class="pm-auth-form active" id="pmLoginForm">
+        <div class="pm-auth-field"><label>Email</label><input id="pmLoginEmail" type="email" required></div>
+        <div class="pm-auth-field"><label>Password</label><input id="pmLoginPassword" type="password" required></div>
+        <button class="pm-auth-submit" type="submit">Log in</button><div class="pm-auth-msg" id="pmLoginMsg"></div>
+      </form>
+      <form class="pm-auth-form" id="pmSignupForm">
+        <div class="pm-auth-field"><label>Username</label><input id="pmSignupUsername" type="text" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required></div>
+        <div class="pm-auth-field"><label>Display name</label><input id="pmSignupDisplayName" type="text" maxlength="50"></div>
+        <div class="pm-auth-field"><label>Email</label><input id="pmSignupEmail" type="email" required></div>
+        <div class="pm-auth-field"><label>Password</label><input id="pmSignupPassword" type="password" minlength="6" required></div>
+        <button class="pm-auth-submit" type="submit">Create account</button>
+        <p class="pm-auth-note">The site stays public. An account is only needed for community actions.</p>
+        <div class="pm-auth-msg" id="pmSignupMsg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const sbAuth=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");
+const $=id=>document.getElementById(id);
+function setMsg(el,t,type){el.textContent=t;el.className='pm-auth-msg show '+type}
+async function ensureProfile(user){
+ let r=await sbAuth.from('profiles').select('*').eq('id',user.id).maybeSingle();
+ if(r.data)return r.data;
+ const m=user.user_metadata||{};
+ let u=(m.username||('user_'+user.id.slice(0,8))).toLowerCase().replace(/[^a-z0-9_]/g,'_').slice(0,24);
+ let p={id:user.id,username:u,display_name:m.display_name||u};
+ let i=await sbAuth.from('profiles').insert(p).select().maybeSingle();
+ if(i.data)return i.data;
+ p.username=(u.slice(0,15)+'_'+user.id.slice(0,6)).slice(0,24);
+ i=await sbAuth.from('profiles').insert(p).select().maybeSingle();
+ return i.data||p;
+}
+async function render(session){
+ if(!session||!session.user){$('pmOpenAuth').style.display='';$('pmUserMenu').style.display='none';return}
+ const p=await ensureProfile(session.user);const n=(p&&(p.display_name||p.username))||session.user.email||'User';
+ $('pmOpenAuth').style.display='none';$('pmUserMenu').style.display='block';$('pmUserName').textContent=n;$('pmAvatar').textContent=n.slice(0,1).toUpperCase();
+ if(p&&p.avatar_url){$('pmAvatar').style.backgroundImage='url("'+p.avatar_url+'")';$('pmAvatar').textContent=''}
+ $('pmProfileLink').href='profile.html?id='+encodeURIComponent(session.user.id);
+}
+$('pmOpenAuth').onclick=()=>$('pmAuthModal').classList.add('open');
+$('pmCloseAuth').onclick=()=>$('pmAuthModal').classList.remove('open');
+$('pmAuthModal').onclick=e=>{if(e.target===$('pmAuthModal'))$('pmAuthModal').classList.remove('open')};
+document.querySelectorAll('[data-auth-tab]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('[data-auth-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+ const login=b.dataset.authTab==='login';$('pmLoginForm').classList.toggle('active',login);$('pmSignupForm').classList.toggle('active',!login);
+});
+$('pmUserTrigger').onclick=()=>$('pmUserDropdown').classList.toggle('open');
+document.addEventListener('click',e=>{if(!$('pmUserMenu').contains(e.target))$('pmUserDropdown').classList.remove('open')});
+$('pmLoginForm').onsubmit=async e=>{e.preventDefault();const r=await sbAuth.auth.signInWithPassword({email:$('pmLoginEmail').value.trim(),password:$('pmLoginPassword').value});if(r.error)setMsg($('pmLoginMsg'),r.error.message,'error');else{setMsg($('pmLoginMsg'),'Logged in.','ok');setTimeout(()=>$('pmAuthModal').classList.remove('open'),400)}};
+$('pmSignupForm').onsubmit=async e=>{
+ e.preventDefault();const username=$('pmSignupUsername').value.trim().toLowerCase();const dn=$('pmSignupDisplayName').value.trim();
+ let chk=await sbAuth.from('profiles').select('id').eq('username',username).maybeSingle();if(chk.data){setMsg($('pmSignupMsg'),'Username already taken.','error');return}
+ let r=await sbAuth.auth.signUp({email:$('pmSignupEmail').value.trim(),password:$('pmSignupPassword').value,options:{data:{username:username,display_name:dn||username}}});
+ if(r.error){setMsg($('pmSignupMsg'),r.error.message,'error');return}
+ if(r.data.session&&r.data.user){await sbAuth.from('profiles').insert({id:r.data.user.id,username:username,display_name:dn||username});setMsg($('pmSignupMsg'),'Account created.','ok')}
+ else setMsg($('pmSignupMsg'),'Account created. Check your email to confirm it, then log in.','ok');
+};
+$('pmLogout').onclick=()=>sbAuth.auth.signOut();
+$('pmCreatePostPlaceholder').onclick=e=>{e.preventDefault();alert('Create Post is coming next.')};
+$('pmSavedPlaceholder').onclick=e=>{e.preventDefault();alert('Saved content is coming next.')};
+sbAuth.auth.getSession().then(r=>render(r.data.session));sbAuth.auth.onAuthStateChange((_e,s)=>render(s));
+})();
+</script>
 </body>
 </html>
