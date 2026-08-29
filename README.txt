@@ -16,3 +16,10 @@ After SQL:
 3. Test admin login
 4. Log out from the public site
 5. Create a new public user account and test it
+
+
+MODAL SAFETY FIX
+- Login / Sign-up no longer closes when clicking outside the dialog.
+- Admin article/new-post editor no longer closes when clicking outside the editor.
+- Data-entry dialogs now close only through their explicit close/cancel controls.
+- Successful login can still close the login dialog after login completes.

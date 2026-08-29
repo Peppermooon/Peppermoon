@@ -236,7 +236,7 @@ async function render(session){
 }
 $('pmOpenAuth').onclick=()=>$('pmAuthModal').classList.add('open');
 $('pmCloseAuth').onclick=()=>$('pmAuthModal').classList.remove('open');
-$('pmAuthModal').onclick=e=>{if(e.target===$('pmAuthModal'))$('pmAuthModal').classList.remove('open')};
+$('pmAuthModal').onclick=e=>{ /* Intentional: backdrop click does not close login/sign-up */ };
 document.querySelectorAll('[data-auth-tab]').forEach(b=>b.onclick=()=>{
  document.querySelectorAll('[data-auth-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');
  const login=b.dataset.authTab==='login';$('pmLoginForm').classList.toggle('active',login);$('pmSignupForm').classList.toggle('active',!login);

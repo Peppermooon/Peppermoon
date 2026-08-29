@@ -525,7 +525,7 @@ function openNewArticle() {
 
 $('newArticleBtn').addEventListener('click',openNewArticle);
 $('closeEditor').addEventListener('click',()=>$('articleModal').classList.add('hidden'));
-$('articleModal').addEventListener('click',e=>{ if(e.target===$('articleModal')) $('articleModal').classList.add('hidden'); });
+$('articleModal').addEventListener('click',e=>{ /* Intentional: backdrop click does not close the article editor */ });
 
 $('articleTitle').addEventListener('input',()=>{ if(autoSlug) $('articleSlug').value=slugify($('articleTitle').value); });
 $('articleSlug').addEventListener('input',()=>{ autoSlug=false; $('articleSlug').value=slugify($('articleSlug').value); });
