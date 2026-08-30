@@ -49,3 +49,14 @@ NAVIGATION CLEANUP BUILD
 - Home hero remains the original dark hero in both Dark and Light Mode.
 - Admin page remains separate and unchanged.
 - No Supabase SQL required.
+
+
+V5 POLISH
+- Hero remains the same branded dark card in both themes.
+- Original white/blush/rose/violet heading gradient preserved.
+- Hero heading descender clipping fixed, including the lower parts of "pp".
+- Profile duplicate/clashing public navigation removed.
+- Community feed mode reduced to Latest and Trending only.
+- Latest/Trending control placed immediately above the Community hero and made sticky while scrolling.
+- Explore Trending on Home now opens Community Trending.
+- No Supabase SQL required.

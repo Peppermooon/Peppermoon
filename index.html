@@ -1234,6 +1234,63 @@ html[data-theme="light"] .hero .secondary{
   }
 }
 
+
+/* =========================================================
+   V5 HERO — SAME BRANDED CARD IN LIGHT + DARK
+   ========================================================= */
+
+/* Give descenders (especially "pp" in Peppermoon) enough room. */
+.hero-card h1{
+  line-height:1.01 !important;
+  padding-bottom:.10em !important;
+  margin-bottom:10px !important;
+
+  /* Preserve the ORIGINAL Peppermoon heading gradient. */
+  background:linear-gradient(90deg,#fff 12%,#ffd7e0 42%,#ff92aa 63%,#8d79ff 100%) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+}
+
+/* Light mode must not recolour or reinterpret the branded hero. */
+html[data-theme="light"] .hero-card{
+  background:
+    linear-gradient(to top,rgba(5,5,10,.95) 0%,rgba(5,5,10,.35) 58%,rgba(5,5,10,.08) 100%),
+    radial-gradient(circle at 83% 20%,rgba(255,79,120,.50),transparent 26%),
+    radial-gradient(circle at 42% 12%,rgba(123,97,255,.48),transparent 34%),
+    radial-gradient(circle at 68% 65%,rgba(25,211,197,.18),transparent 24%),
+    linear-gradient(135deg,#121727,#211d3d 48%,#3b162c) !important;
+  color:#f6f7fb !important;
+  border-color:rgba(255,255,255,.11) !important;
+  box-shadow:0 30px 90px rgba(0,0,0,.45),0 0 80px rgba(123,97,255,.08) !important;
+}
+html[data-theme="light"] .hero-card h1{
+  background:linear-gradient(90deg,#fff 12%,#ffd7e0 42%,#ff92aa 63%,#8d79ff 100%) !important;
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+}
+html[data-theme="light"] .hero-card p{
+  color:#d0d4de !important;
+}
+html[data-theme="light"] .hero-card .eyebrow{
+  color:#fff !important;
+  background:rgba(255,79,120,.14) !important;
+  border-color:rgba(255,79,120,.28) !important;
+}
+html[data-theme="light"] .hero-card .btn-primary{
+  color:#fff !important;
+  background:linear-gradient(135deg,#ff4f78,#ff7f66) !important;
+}
+html[data-theme="light"] .hero-card .btn-secondary,
+html[data-theme="light"] .hero-card .secondary{
+  color:#fff !important;
+  background:rgba(255,255,255,.07) !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1277,7 +1334,7 @@ html[data-theme="light"] .hero .secondary{
         <h1>Welcome to Peppermoon.</h1>
         <p>Reviews, explainers, comparisons, watch orders, game guides and the stories everyone is talking about — all in one place.</p>
         <div class="btn-row">
-          <a class="btn btn-primary" href="trending.html">Explore Trending</a>
+          <a class="btn btn-primary" href="community.html#trending">Explore Trending</a>
           <a class="btn btn-secondary" href="#categories">Browse Categories</a>
         </div>
       </div>

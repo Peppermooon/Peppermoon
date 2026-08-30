@@ -441,12 +441,51 @@ html[data-theme="light"] .hero .secondary{
   }
 }
 
+
+/* V5 PROFILE NAV FIX */
+.top .nav{flex-wrap:nowrap !important}
+.top .links{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  white-space:nowrap;
+}
+.top .links a{position:relative}
+.top .links a.active{color:#fff;font-weight:850}
+.top .links a.active::after{
+  content:"";
+  position:absolute;
+  left:10%;
+  right:10%;
+  bottom:-10px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff4f78,#7b61ff);
+}
+html[data-theme="light"] .top .links a.active{color:#151925 !important}
+
+@media(max-width:760px){
+  .top .nav{flex-wrap:wrap !important}
+  .top .links{
+    order:3;
+    width:100%;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:2px;
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#11141d;
+  }
+  html[data-theme="light"] .top .links{background:#fff}
+}
+
 </style>
 </head>
 <body>
 <header class="top"><div class="nav">
 <a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-<div class="nav-links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></div>
 <nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></nav>
 <button class="theme" id="themeBtn">☀ Light</button>
 </div></header>

@@ -1001,6 +1001,59 @@ html[data-theme="light"] .community-feed-tab.active{
   border-color:rgba(255,79,120,.28);
 }
 
+
+/* =========================================================
+   V5 COMMUNITY FEED CONTROLS
+   ========================================================= */
+.community-feed-sticky{
+  position:sticky;
+  top:72px;
+  z-index:45;
+  padding:12px 0 6px;
+  background:linear-gradient(to bottom,rgba(7,8,12,.98) 70%,rgba(7,8,12,0));
+  pointer-events:none;
+}
+.community-feed-sticky .container{pointer-events:none}
+.community-feed-tabs{
+  pointer-events:auto;
+  display:flex;
+  gap:8px;
+  width:max-content;
+  max-width:100%;
+  margin:0;
+  padding:6px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  background:rgba(17,20,29,.92);
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+.community-feed-tab{
+  min-width:92px;
+  text-align:center;
+}
+.hero{
+  padding-top:12px !important;
+}
+html[data-theme="light"] .community-feed-sticky{
+  background:linear-gradient(to bottom,rgba(245,246,250,.98) 70%,rgba(245,246,250,0));
+}
+html[data-theme="light"] .community-feed-tabs{
+  background:rgba(255,255,255,.94);
+  border-color:rgba(26,35,52,.10);
+  box-shadow:0 10px 25px rgba(26,35,52,.08);
+}
+@media(max-width:800px){
+  .community-feed-sticky{
+    top:0;
+    padding-top:8px;
+  }
+  .community-feed-tabs{
+    width:max-content;
+    margin-left:0;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1025,16 +1078,14 @@ html[data-theme="light"] .community-feed-tab.active{
 
 <main>
 
-<div class="community-feed-tabs" id="communityFeedTabs">
-  <button class="community-feed-tab active" data-feed="latest">Latest</button>
-  <button class="community-feed-tab" data-feed="trending">Trending</button>
-  <button class="community-feed-tab" data-feed="reviews">Reviews</button>
-  <button class="community-feed-tab" data-feed="discussions">Discussions</button>
-  <button class="community-feed-tab" data-feed="questions">Questions</button>
-  <button class="community-feed-tab" data-feed="recommendations">Recommendations</button>
-  <button class="community-feed-tab" data-feed="news">News</button>
+<div class="community-feed-sticky">
+  <div class="container">
+    <div class="community-feed-tabs" id="communityFeedTabs">
+      <button class="community-feed-tab active" data-feed="latest">Latest</button>
+      <button class="community-feed-tab" data-feed="trending">Trending</button>
+    </div>
+  </div>
 </div>
-
 
   <section class="hero">
     <div class="container hero-grid">
@@ -1552,17 +1603,6 @@ function pmApplyFeedMode(posts){
     return arr.sort((a,b)=>pmScorePost(b)-pmScorePost(a));
   }
 
-  const typeMap={
-    reviews:'Review',
-    discussions:'Discussion',
-    questions:'Question',
-    recommendations:'Recommendation',
-    news:'News / Update'
-  };
-
-  if(typeMap[pmCommunityFeedMode]){
-    arr=arr.filter(p=>p.post_type===typeMap[pmCommunityFeedMode]);
-  }
 
   return arr.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
 }
