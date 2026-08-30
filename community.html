@@ -566,6 +566,287 @@ html[data-theme="light"] .brand-mark::after{
   box-shadow:none !important;
 }
 
+
+.like-active{color:#ff6f93 !important}
+.save-active{color:#7b61ff !important}
+.action-count{font-weight:850}
+
+/* =========================================================
+   PEPPERMOON PUBLIC UI FIX — LIGHT CARD TEXT / LOGIN / MOBILE
+   ========================================================= */
+
+/* 1) Anything sitting on the dark artwork/image area stays white in Light Mode */
+html[data-theme="light"] .card-art,
+html[data-theme="light"] .card-art *,
+html[data-theme="light"] .card-art .tag,
+html[data-theme="light"] .card-art .badge,
+html[data-theme="light"] .card-art .meta,
+html[data-theme="light"] .card-art h1,
+html[data-theme="light"] .card-art h2,
+html[data-theme="light"] .card-art h3,
+html[data-theme="light"] .card-art p,
+html[data-theme="light"] .image-card,
+html[data-theme="light"] .image-card *,
+html[data-theme="light"] .media-card__image,
+html[data-theme="light"] .media-card__image *{
+  color:#ffffff !important;
+}
+
+/* Dark artwork labels remain dark translucent pills with white text */
+html[data-theme="light"] .card-art .tag,
+html[data-theme="light"] .card-art .badge{
+  background:rgba(4,7,15,.72) !important;
+  border-color:rgba(255,255,255,.10) !important;
+  color:#ffffff !important;
+}
+
+/* 2) Public login button is intentionally strong in BOTH themes */
+.pm-auth-btn,
+html[data-theme="light"] .pm-auth-btn{
+  background:linear-gradient(135deg,#ff4f78,#ff6f86) !important;
+  color:#ffffff !important;
+  border:1px solid rgba(255,79,120,.28) !important;
+  box-shadow:0 8px 22px rgba(255,79,120,.18) !important;
+  opacity:1 !important;
+}
+.pm-auth-btn:hover,
+html[data-theme="light"] .pm-auth-btn:hover{
+  background:linear-gradient(135deg,#ff426f,#ff647f) !important;
+  color:#ffffff !important;
+  transform:translateY(-1px);
+}
+
+/* Make utility controls distinct in light mode */
+html[data-theme="light"] .pm-theme-toggle,
+html[data-theme="light"] .icon-btn,
+html[data-theme="light"] .menu-toggle{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.14) !important;
+  box-shadow:0 2px 8px rgba(26,35,52,.04);
+}
+
+/* 3) Mobile public-header layout */
+@media(max-width:760px){
+  .topbar .nav,
+  header .nav{
+    min-height:auto !important;
+    padding:10px 0 !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+  }
+
+  .brand{
+    flex:0 1 auto !important;
+    min-width:0 !important;
+    font-size:1.18rem !important;
+    gap:8px !important;
+  }
+
+  .brand-logo-img{
+    width:32px !important;
+    height:32px !important;
+    flex:0 0 32px !important;
+  }
+
+  /* Search + hamburger stay beside the brand */
+  .nav-actions{
+    margin-left:auto !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:6px !important;
+    order:2 !important;
+  }
+
+  .icon-btn,
+  .menu-toggle{
+    width:38px !important;
+    height:38px !important;
+    border-radius:12px !important;
+  }
+
+  /* Login/theme sit on a clean second row, not squeezed between logo and menu */
+  .pm-auth-area{
+    order:3 !important;
+    width:100% !important;
+    margin-left:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:8px !important;
+    padding-top:2px !important;
+  }
+
+  .pm-theme-toggle{
+    padding:9px 11px !important;
+    min-height:38px !important;
+  }
+
+  .pm-auth-btn{
+    min-height:38px !important;
+    padding:9px 14px !important;
+    font-size:.84rem !important;
+  }
+
+  .pm-user-menu{
+    margin-left:auto !important;
+  }
+
+  .pm-user-trigger{
+    min-height:38px !important;
+    padding:5px 9px 5px 6px !important;
+  }
+
+  /* Mobile menu opens below the complete two-row header */
+  .nav-links{
+    top:100% !important;
+    left:12px !important;
+    right:12px !important;
+    z-index:250 !important;
+    max-height:calc(100vh - 130px) !important;
+    overflow:auto !important;
+  }
+
+  /* Search panel becomes full-width and comfortable */
+  .search-panel{
+    padding:8px 0 12px !important;
+  }
+  .search-box{
+    border-radius:13px !important;
+  }
+
+  /* Main content spacing */
+  main{
+    overflow-x:hidden !important;
+  }
+
+  .hero-card{
+    border-radius:24px !important;
+  }
+
+  .grid-4,
+  .grid-3,
+  .cards,
+  .card-grid{
+    gap:14px !important;
+  }
+
+  .card{
+    border-radius:20px !important;
+  }
+
+  .card-body{
+    padding:16px 16px 18px !important;
+  }
+}
+
+/* Small phones */
+@media(max-width:430px){
+  .container{
+    width:min(calc(100% - 20px),var(--max,1180px)) !important;
+  }
+
+  .brand{
+    font-size:1.06rem !important;
+  }
+
+  .brand-logo-img{
+    width:30px !important;
+    height:30px !important;
+    flex-basis:30px !important;
+  }
+
+  .nav-actions{
+    gap:5px !important;
+  }
+
+  .icon-btn,
+  .menu-toggle{
+    width:36px !important;
+    height:36px !important;
+  }
+
+  .pm-auth-area{
+    justify-content:space-between !important;
+  }
+
+  .pm-theme-toggle,
+  .pm-auth-btn{
+    flex:0 0 auto !important;
+  }
+
+  .pm-auth-btn{
+    padding:9px 12px !important;
+  }
+
+  .hero-card{
+    min-height:440px !important;
+    padding:22px !important;
+  }
+
+  .hero-card h1{
+    font-size:clamp(2.25rem,12vw,3rem) !important;
+  }
+
+  .hero-card p{
+    font-size:.95rem !important;
+  }
+
+  .section-head{
+    gap:8px !important;
+  }
+}
+
+/* Community-page mobile controls use the same clear positioning */
+@media(max-width:760px){
+  .nav-right{
+    margin-left:auto !important;
+    gap:6px !important;
+    flex-wrap:wrap !important;
+    justify-content:flex-end !important;
+  }
+
+  .nav-right .pm-theme-toggle,
+  .nav-right .login-btn,
+  .nav-right .user-btn{
+    min-height:38px !important;
+  }
+
+  .hero-grid{
+    gap:16px !important;
+  }
+
+  .layout{
+    gap:16px !important;
+  }
+
+  .filters{
+    scrollbar-width:thin;
+  }
+
+  .post-actions{
+    flex-wrap:wrap !important;
+    align-items:center !important;
+  }
+
+  .owner-actions{
+    width:100% !important;
+    margin-left:0 !important;
+    justify-content:flex-end !important;
+  }
+
+  .comment-compose,
+  .reply-compose{
+    flex-direction:column !important;
+  }
+
+  .comment-submit,
+  .reply-submit{
+    width:100% !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -856,6 +1137,56 @@ async function loadComments(postId,panel,countEl){
   roots.forEach(c=>list.appendChild(renderComment(c,false)));
 }
 
+
+async function getInteractionState(postIds){
+  const likeCounts=new Map(), liked=new Set(), saved=new Set();
+  if(!postIds.length)return {likeCounts,liked,saved};
+
+  const countRes=await sb.from('post_like_counts').select('post_id,like_count').in('post_id',postIds);
+  if(!countRes.error)(countRes.data||[]).forEach(x=>likeCounts.set(x.post_id,Number(x.like_count||0)));
+
+  if(currentSession&&currentSession.user){
+    const [likesRes,savesRes]=await Promise.all([
+      sb.from('post_likes').select('post_id').eq('user_id',currentSession.user.id).in('post_id',postIds),
+      sb.from('saved_posts').select('post_id').eq('user_id',currentSession.user.id).in('post_id',postIds)
+    ]);
+    if(!likesRes.error)(likesRes.data||[]).forEach(x=>liked.add(x.post_id));
+    if(!savesRes.error)(savesRes.data||[]).forEach(x=>saved.add(x.post_id));
+  }
+  return {likeCounts,liked,saved};
+}
+
+async function toggleLike(postId,btn){
+  if(!requireLogin())return;
+  const active=btn.classList.contains('like-active');
+  let r;
+  if(active){
+    r=await sb.from('post_likes').delete().eq('post_id',postId).eq('user_id',currentSession.user.id);
+    if(!r.error)btn.classList.remove('like-active');
+  }else{
+    r=await sb.from('post_likes').insert({post_id:postId,user_id:currentSession.user.id});
+    if(!r.error)btn.classList.add('like-active');
+  }
+  if(r.error){alert(r.error.message);return}
+  const c=await sb.from('post_like_counts').select('like_count').eq('post_id',postId).maybeSingle();
+  const count=(!c.error&&c.data)?Number(c.data.like_count||0):0;
+  btn.innerHTML=(btn.classList.contains('like-active')?'♥':'♡')+' <span class="action-count">'+count+'</span> Like'+(count===1?'':'s');
+}
+
+async function toggleSave(postId,btn){
+  if(!requireLogin())return;
+  const active=btn.classList.contains('save-active');
+  let r;
+  if(active){
+    r=await sb.from('saved_posts').delete().eq('post_id',postId).eq('user_id',currentSession.user.id);
+    if(!r.error){btn.classList.remove('save-active');btn.textContent='⌑ Save'}
+  }else{
+    r=await sb.from('saved_posts').insert({post_id:postId,user_id:currentSession.user.id});
+    if(!r.error){btn.classList.add('save-active');btn.textContent='▣ Saved'}
+  }
+  if(r.error)alert(r.error.message);
+}
+
 async function loadPosts(){
   $('feed').innerHTML='<div class="feed-state">Loading community posts…</div>';
   let q=sb.from('posts')
@@ -868,6 +1199,7 @@ async function loadPosts(){
   if(r.error){$('feed').innerHTML='<div class="feed-state">Could not load community posts: '+esc(r.error.message)+'</div>';return}
   if(!r.data||!r.data.length){$('feed').innerHTML='<div class="feed-state">No posts here yet. Be the first to start a discussion.</div>';return}
 
+  const interaction=await getInteractionState(r.data.map(x=>x.id));
   $('feed').innerHTML='';
   r.data.forEach(post=>{
     const profile=post.profiles||{},name=profile.display_name||profile.username||'Peppermoon User';
@@ -892,8 +1224,12 @@ async function loadPosts(){
       ${post.image_url?`<img class="post-img" src="${esc(post.image_url)}" alt="">`:''}
       <div class="post-actions">
         <button class="action comment-action">💬 Comments</button>
-        <button class="action" data-coming="like">♡ Like</button>
-        <button class="action" data-coming="save">⌑ Save</button>
+        <button class="action like-action ${interaction.liked.has(post.id)?'like-active':''}">
+          ${interaction.liked.has(post.id)?'♥':'♡'} <span class="action-count">${interaction.likeCounts.get(post.id)||0}</span> Like${(interaction.likeCounts.get(post.id)||0)===1?'':'s'}
+        </button>
+        <button class="action save-action ${interaction.saved.has(post.id)?'save-active':''}">
+          ${interaction.saved.has(post.id)?'▣ Saved':'⌑ Save'}
+        </button>
         ${(mine||admin)?`<span class="owner-actions">${mine?'<button class="action edit-action">Edit</button>':''}<button class="action delete-action">Delete</button></span>`:''}
       </div>
       <div class="comments-panel"></div>`;
@@ -904,7 +1240,8 @@ async function loadPosts(){
       if(panel.classList.contains('open')){panel.classList.remove('open');return}
       await loadComments(post.id,panel,commentBtn);
     };
-    node.querySelectorAll('[data-coming]').forEach(b=>b.onclick=()=>alert('Likes and saves are the next community update.'));
+    node.querySelector('.like-action').onclick=()=>toggleLike(post.id,node.querySelector('.like-action'));
+    node.querySelector('.save-action').onclick=()=>toggleSave(post.id,node.querySelector('.save-action'));
     if(mine)node.querySelector('.edit-action').onclick=()=>openPost(post);
     if(mine||admin)node.querySelector('.delete-action').onclick=()=>deletePost(post.id);
     $('feed').appendChild(node);

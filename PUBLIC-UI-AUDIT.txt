@@ -1,0 +1,18 @@
+PEPPERMOON V3 PUBLIC UI AUDIT
+
+about.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+article.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+community.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+contact.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+games-to-screen.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+gaming.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+index.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+movie-watch-order.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+movies.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+open-world-games.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+profile.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+trending.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+tv-finale-explained.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+tv.html: UI-fix=OK, login-control=YES, mobile-rules=YES
+
+Problems after patch: 0

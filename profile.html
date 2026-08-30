@@ -1,474 +1,321 @@
-<!doctype html><html><head>
-
-<script>
-(function(){
-  const saved=localStorage.getItem('peppermoon-theme');
-  const theme=saved==='light'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',theme);
-})();
-</script>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Profile | Peppermoon</title><link rel="icon" type="image/png" href="favicon.png"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!doctype html>
+<html lang="en">
+<head>
+<script>(function(){const s=localStorage.getItem('peppermoon-theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark')})();</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Profile | Peppermoon</title><link rel="icon" type="image/png" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{margin:0;font-family:Inter,system-ui,sans-serif;background:#07080c;color:#f6f7fb}a{color:inherit;text-decoration:none}
-.top{border-bottom:1px solid rgba(255,255,255,.09);background:#090b10}.nav{width:min(calc(100% - 30px),1100px);margin:auto;min-height:72px;display:flex;align-items:center;justify-content:space-between}.brand{font-size:1.4rem;font-weight:900;display:flex;gap:10px;align-items:center}.brand img{width:36px;height:36px;border-radius:50%}
-.wrap{width:min(calc(100% - 30px),900px);margin:50px auto}.card{padding:28px;border:1px solid rgba(255,255,255,.09);border-radius:24px;background:rgba(255,255,255,.03)}.head{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.avatar{width:105px;height:105px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ff4f78,#7b61ff);font-size:2.2rem;font-weight:900;object-fit:cover}h1{font-size:2.6rem;margin:0 0 5px;letter-spacing:-.05em}.user{color:#9ba3b4}.bio{margin-top:22px;color:#c8ced8;line-height:1.7}.meta{margin-top:16px;color:#858e9f;font-size:.88rem}.placeholder{margin-top:26px;padding:20px;border:1px dashed rgba(255,255,255,.12);border-radius:17px;color:#8e97a8}
-
-/* PEPPERMOON THEME TOGGLE */
-html[data-theme="light"]{
-  color-scheme:light;
-  --bg:#f5f6fa !important;
-  --panel:#ffffff !important;
-  --panel2:#f0f2f7 !important;
-  --text:#151821 !important;
-  --muted:#667085 !important;
-  --line:rgba(20,24,33,.12) !important;
-}
-html[data-theme="light"] body{
-  background:#f5f6fa !important;
-  color:#151821 !important;
-}
-html[data-theme="light"] header,
-html[data-theme="light"] .top{
-  background:rgba(255,255,255,.90) !important;
-  border-color:rgba(20,24,33,.10) !important;
-}
-html[data-theme="light"] .card,
-html[data-theme="light"] .post,
-html[data-theme="light"] .filters,
-html[data-theme="light"] .profile-card,
-html[data-theme="light"] .pm-auth-card,
-html[data-theme="light"] .pm-user-dropdown,
-html[data-theme="light"] .modal-card,
-html[data-theme="light"] .auth-card{
-  background:#ffffff !important;
-  color:#151821 !important;
-  border-color:rgba(20,24,33,.10) !important;
-}
-html[data-theme="light"] .muted,
-html[data-theme="light"] .post-meta,
-html[data-theme="light"] .username,
-html[data-theme="light"] .meta,
-html[data-theme="light"] .pm-auth-note,
-html[data-theme="light"] .file-note{
-  color:#667085 !important;
-}
-html[data-theme="light"] .post-body,
-html[data-theme="light"] .bio,
-html[data-theme="light"] .hero p{
-  color:#475467 !important;
-}
-html[data-theme="light"] input,
-html[data-theme="light"] textarea,
-html[data-theme="light"] select,
-html[data-theme="light"] .rich-editor{
-  background:#ffffff !important;
-  color:#151821 !important;
-  border-color:rgba(20,24,33,.14) !important;
-}
-html[data-theme="light"] .links,
-html[data-theme="light"] .nav-links,
-html[data-theme="light"] .pm-user-dropdown a,
-html[data-theme="light"] .pm-user-dropdown button,
-html[data-theme="light"] .dropdown a,
-html[data-theme="light"] .dropdown button{
-  color:#344054 !important;
-}
-html[data-theme="light"] .pm-auth-tab,
-html[data-theme="light"] .filter-btn,
-html[data-theme="light"] .secondary,
-html[data-theme="light"] .action{
-  color:#475467 !important;
-}
-html[data-theme="light"] .pm-auth-modal,
-html[data-theme="light"] .modal,
-html[data-theme="light"] .auth-modal{
-  background:rgba(31,35,48,.40) !important;
-}
-.pm-theme-toggle{
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.05);
-  color:inherit;
-  border-radius:12px;
-  padding:9px 11px;
-  cursor:pointer;
-  font-weight:850;
-  white-space:nowrap;
-}
-html[data-theme="light"] .pm-theme-toggle{
-  border-color:rgba(20,24,33,.12);
-  background:#ffffff;
-  color:#344054;
-}
-
-
-/* PEPPERMOON UNIFIED PUBLIC LOGO */
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-weight:950;
-  letter-spacing:-.045em;
-}
-.brand-mark{
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  border-radius:50%;
-  position:relative;
-  display:inline-block;
-  background:
-    radial-gradient(circle at 31% 28%,#ffffff 0 5.5%,transparent 6.5%),
-    linear-gradient(145deg,#ff4f78,#7b61ff);
-  box-shadow:0 0 26px rgba(255,79,120,.23), inset 0 0 16px rgba(255,255,255,.09);
-}
-.brand-mark::after{
-  content:"";
-  position:absolute;
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  right:-3px;
-  bottom:4px;
-  background:#07080c;
-}
-html[data-theme="light"] .brand-mark::after{
-  background:#ffffff;
-}
-html[data-theme="light"] .brand{
-  color:#151925 !important;
-}
-
+:root{--bg:#07080c;--text:#f6f7fb;--muted:#a9afbe;--line:rgba(255,255,255,.09);--pink:#ff4f78;--violet:#7b61ff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}a{color:inherit;text-decoration:none}
+.top{border-bottom:1px solid var(--line);background:rgba(7,8,12,.9)}.nav{width:min(calc(100% - 30px),1100px);margin:auto;min-height:72px;display:flex;align-items:center;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:950}.brand img{width:38px;height:38px;object-fit:contain}
+.links{display:flex;gap:16px;color:#d3d8e3}.theme{margin-left:auto;border:1px solid var(--line);background:rgba(255,255,255,.04);color:inherit;border-radius:12px;padding:9px 11px;cursor:pointer;font-weight:850}
+.wrap{width:min(calc(100% - 30px),960px);margin:45px auto 80px}.card{padding:28px;border:1px solid var(--line);border-radius:24px;background:rgba(255,255,255,.03)}
+.head{display:flex;gap:20px;align-items:center;flex-wrap:wrap}.avatar{width:105px;height:105px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--pink),var(--violet));font-size:2.2rem;font-weight:900;background-size:cover;background-position:center}
+h1{margin:0 0 5px;font-size:2.5rem}.user,.meta{color:#8f98a8}.bio{margin-top:20px;color:#c7cdd7;line-height:1.7}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 16px}.tab{border:1px solid var(--line);background:rgba(255,255,255,.03);color:#aeb6c5;border-radius:11px;padding:10px 13px;cursor:pointer;font-weight:850}.tab.active{color:#fff;background:rgba(123,97,255,.14)}
+.feed{display:grid;gap:13px}.item{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}.item h3{margin:7px 0}.item p{margin:0;color:#c3cad5;line-height:1.55}.small{font-size:.76rem;color:#858e9e}.empty{padding:22px;border:1px dashed var(--line);border-radius:16px;color:#8c96a7;text-align:center}
+html[data-theme="light"]{--bg:#f6f7fa;--text:#161b29;--line:rgba(26,35,52,.11)}html[data-theme="light"] body{background:#f6f7fa;color:#161b29}html[data-theme="light"] .top{background:#fff}html[data-theme="light"] .links{color:#344054}html[data-theme="light"] .card,html[data-theme="light"] .item{background:#fff}html[data-theme="light"] .bio,html[data-theme="light"] .item p{color:#586780}html[data-theme="light"] .tab{background:#fff;color:#475467}html[data-theme="light"] .tab.active{background:#eef1f6;color:#151925}html[data-theme="light"] .theme{background:#fff;color:#344054}
+@media(max-width:700px){.links{display:none}}
 
 /* =========================================================
-   PEPPERMOON LIGHT MODE — FINAL PUBLIC OVERRIDES
+   PEPPERMOON PUBLIC UI FIX — LIGHT CARD TEXT / LOGIN / MOBILE
    ========================================================= */
-html[data-theme="light"]{
-  color-scheme:light;
-  --bg:#f6f7fa !important;
-  --panel:#ffffff !important;
-  --panel2:#f2f4f8 !important;
-  --text:#161b29 !important;
-  --muted:#66738c !important;
-  --line:rgba(26,35,52,.11) !important;
-}
 
-html[data-theme="light"] body{
-  background:#f6f7fa !important;
-  color:#161b29 !important;
-}
-
-/* Main header/navigation */
-html[data-theme="light"] header,
-html[data-theme="light"] .top,
-html[data-theme="light"] .topbar{
-  background:rgba(255,255,255,.94) !important;
-  border-color:rgba(26,35,52,.10) !important;
-  color:#161b29 !important;
-}
-
-html[data-theme="light"] .nav-links,
-html[data-theme="light"] .links,
-html[data-theme="light"] .nav-links a,
-html[data-theme="light"] .links a{
-  color:#344054 !important;
-}
-html[data-theme="light"] .nav-links a:hover,
-html[data-theme="light"] .nav-links a.active,
-html[data-theme="light"] .links a:hover,
-html[data-theme="light"] .links a.active{
-  color:#151925 !important;
-}
-
-/* Fix previously invisible header/search/menu icons */
-html[data-theme="light"] .icon-btn,
-html[data-theme="light"] .menu-toggle{
-  color:#344054 !important;
-  background:#ffffff !important;
-  border-color:rgba(26,35,52,.12) !important;
-}
-html[data-theme="light"] .search-panel{
-  background:#ffffff !important;
-  border-color:rgba(26,35,52,.08) !important;
-}
-html[data-theme="light"] .search-box{
-  background:#f7f8fb !important;
-  border-color:rgba(26,35,52,.11) !important;
-  color:#344054 !important;
-}
-html[data-theme="light"] .search-box input{
-  color:#1d2939 !important;
-}
-html[data-theme="light"] .search-box input::placeholder{
-  color:#8a94a8 !important;
-}
-
-/* Typography */
-html[data-theme="light"] h1,
-html[data-theme="light"] h2,
-html[data-theme="light"] h3,
-html[data-theme="light"] h4,
-html[data-theme="light"] h5,
-html[data-theme="light"] h6,
-html[data-theme="light"] .title,
-html[data-theme="light"] .section-title,
-html[data-theme="light"] .card-title,
-html[data-theme="light"] .author-name,
-html[data-theme="light"] .comment-name{
-  color:#151925 !important;
-}
-
-html[data-theme="light"] p,
-html[data-theme="light"] .lead,
-html[data-theme="light"] .description,
-html[data-theme="light"] .post-body,
-html[data-theme="light"] .comment-body,
-html[data-theme="light"] .bio,
-html[data-theme="light"] .content,
-html[data-theme="light"] .content p,
-html[data-theme="light"] .content div,
-html[data-theme="light"] .content span,
-html[data-theme="light"] .content li,
-html[data-theme="light"] .article-body,
-html[data-theme="light"] .article-body p{
-  color:#586780 !important;
-}
-
-/* Keep strong text and article titles strongly legible */
-html[data-theme="light"] strong,
-html[data-theme="light"] b,
-html[data-theme="light"] .content strong,
-html[data-theme="light"] .content b{
-  color:#1d2939 !important;
-}
-
-/* Secondary text */
-html[data-theme="light"] .muted,
-html[data-theme="light"] .meta,
-html[data-theme="light"] .post-meta,
-html[data-theme="light"] .username,
-html[data-theme="light"] .file-note,
-html[data-theme="light"] .pm-auth-note,
-html[data-theme="light"] .comment-time,
-html[data-theme="light"] .eyebrow-sub,
-html[data-theme="light"] small{
-  color:#748198 !important;
-}
-
-/* Cards/surfaces — mostly white with subtle grey separation */
-html[data-theme="light"] .card,
-html[data-theme="light"] .category-card,
-html[data-theme="light"] .feature-card,
-html[data-theme="light"] .content-card,
-html[data-theme="light"] .post,
-html[data-theme="light"] .comment-card,
-html[data-theme="light"] .profile-card,
-html[data-theme="light"] .filters,
-html[data-theme="light"] .placeholder,
-html[data-theme="light"] .panel,
-html[data-theme="light"] .surface{
-  background:#ffffff !important;
-  color:#161b29 !important;
-  border-color:rgba(26,35,52,.10) !important;
-}
-
-/* Preserve the soft tinted category-card look */
-html[data-theme="light"] .category-card,
-html[data-theme="light"] .feature-card{
-  box-shadow:0 18px 42px rgba(26,35,52,.08) !important;
-}
-
-/* Chips/badges/tags */
-html[data-theme="light"] .badge,
-html[data-theme="light"] .tag,
-html[data-theme="light"] .pill,
-html[data-theme="light"] .filter-btn{
-  color:#4a5870 !important;
-  border-color:rgba(26,35,52,.11) !important;
-}
-html[data-theme="light"] .filter-btn.active,
-html[data-theme="light"] .filter-btn:hover{
-  color:#151925 !important;
-  background:#eef1f6 !important;
-}
-
-/* Inputs/editors */
-html[data-theme="light"] input,
-html[data-theme="light"] textarea,
-html[data-theme="light"] select,
-html[data-theme="light"] .rich-editor,
-html[data-theme="light"] .comment-compose textarea,
-html[data-theme="light"] .reply-compose textarea{
-  background:#ffffff !important;
-  color:#1d2939 !important;
-  border-color:rgba(26,35,52,.14) !important;
-}
-html[data-theme="light"] input::placeholder,
-html[data-theme="light"] textarea::placeholder{
-  color:#98a2b3 !important;
-}
-
-/* User/auth menus */
-html[data-theme="light"] .pm-user-trigger,
-html[data-theme="light"] .user-btn{
-  color:#344054 !important;
-  background:#ffffff !important;
-  border-color:rgba(26,35,52,.12) !important;
-}
-html[data-theme="light"] .pm-user-dropdown,
-html[data-theme="light"] .dropdown,
-html[data-theme="light"] .pm-auth-card,
-html[data-theme="light"] .modal-card,
-html[data-theme="light"] .auth-card{
-  background:#ffffff !important;
-  color:#161b29 !important;
-  border-color:rgba(26,35,52,.11) !important;
-}
-html[data-theme="light"] .pm-user-dropdown a,
-html[data-theme="light"] .pm-user-dropdown button,
-html[data-theme="light"] .dropdown a,
-html[data-theme="light"] .dropdown button{
-  color:#344054 !important;
-}
-
-/* Neutral buttons need visible text in light mode */
-html[data-theme="light"] .secondary,
-html[data-theme="light"] .action,
-html[data-theme="light"] .pm-auth-tab{
-  color:#475467 !important;
-  background:#ffffff !important;
-  border-color:rgba(26,35,52,.12) !important;
-}
-html[data-theme="light"] .pm-auth-tab.active{
-  color:#151925 !important;
-  background:#f1f3f7 !important;
-}
-
-/* Accent buttons intentionally remain white-on-colour */
-html[data-theme="light"] .primary,
-html[data-theme="light"] .create-btn,
-html[data-theme="light"] .pm-auth-submit,
-html[data-theme="light"] .comment-submit,
-html[data-theme="light"] .reply-submit{
+/* 1) Anything sitting on the dark artwork/image area stays white in Light Mode */
+html[data-theme="light"] .card-art,
+html[data-theme="light"] .card-art *,
+html[data-theme="light"] .card-art .tag,
+html[data-theme="light"] .card-art .badge,
+html[data-theme="light"] .card-art .meta,
+html[data-theme="light"] .card-art h1,
+html[data-theme="light"] .card-art h2,
+html[data-theme="light"] .card-art h3,
+html[data-theme="light"] .card-art p,
+html[data-theme="light"] .image-card,
+html[data-theme="light"] .image-card *,
+html[data-theme="light"] .media-card__image,
+html[data-theme="light"] .media-card__image *{
   color:#ffffff !important;
 }
 
-/* Links */
-html[data-theme="light"] .content a,
-html[data-theme="light"] .article-body a,
-html[data-theme="light"] main a:not(.brand):not(.card):not(.author){
-  color:#4456a6;
+/* Dark artwork labels remain dark translucent pills with white text */
+html[data-theme="light"] .card-art .tag,
+html[data-theme="light"] .card-art .badge{
+  background:rgba(4,7,15,.72) !important;
+  border-color:rgba(255,255,255,.10) !important;
+  color:#ffffff !important;
 }
 
-/* Article prose specifically matches the user's preferred grey-blue */
-html[data-theme="light"] .content,
-html[data-theme="light"] .article-content,
-html[data-theme="light"] .article-body{
-  color:#52627a !important;
+/* 2) Public login button is intentionally strong in BOTH themes */
+.pm-auth-btn,
+html[data-theme="light"] .pm-auth-btn{
+  background:linear-gradient(135deg,#ff4f78,#ff6f86) !important;
+  color:#ffffff !important;
+  border:1px solid rgba(255,79,120,.28) !important;
+  box-shadow:0 8px 22px rgba(255,79,120,.18) !important;
+  opacity:1 !important;
 }
-html[data-theme="light"] .content h1,
-html[data-theme="light"] .content h2,
-html[data-theme="light"] .content h3,
-html[data-theme="light"] .article-content h1,
-html[data-theme="light"] .article-content h2,
-html[data-theme="light"] .article-content h3{
-  color:#151925 !important;
-}
-
-/* Comments */
-html[data-theme="light"] .comments-panel{
-  border-color:rgba(26,35,52,.08) !important;
-}
-html[data-theme="light"] .comment-card{
-  background:#f8f9fc !important;
+.pm-auth-btn:hover,
+html[data-theme="light"] .pm-auth-btn:hover{
+  background:linear-gradient(135deg,#ff426f,#ff647f) !important;
+  color:#ffffff !important;
+  transform:translateY(-1px);
 }
 
-/* Modals retain readable overlay but white card */
-html[data-theme="light"] .pm-auth-modal,
-html[data-theme="light"] .modal,
-html[data-theme="light"] .auth-modal{
-  background:rgba(28,35,48,.38) !important;
+/* Make utility controls distinct in light mode */
+html[data-theme="light"] .pm-theme-toggle,
+html[data-theme="light"] .icon-btn,
+html[data-theme="light"] .menu-toggle{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.14) !important;
+  box-shadow:0 2px 8px rgba(26,35,52,.04);
 }
 
-/* Footer and misc dark-theme leftovers */
-html[data-theme="light"] footer,
-html[data-theme="light"] .footer{
-  color:#667085 !important;
-  border-color:rgba(26,35,52,.09) !important;
-}
-html[data-theme="light"] footer a,
-html[data-theme="light"] .footer a{
-  color:#475467 !important;
-}
-
-
-/* final logo consistency */
-.brand-mark{
-  width:38px !important;
-  height:38px !important;
-  border-radius:50% !important;
-  position:relative !important;
-  display:inline-block !important;
-  background:
-    radial-gradient(circle at 31% 28%,#fff 0 5.5%,transparent 6.5%),
-    linear-gradient(145deg,#ff4f78,#7b61ff) !important;
-}
-.brand-mark::after{
-  content:"" !important;
-  position:absolute !important;
-  width:13px !important;
-  height:13px !important;
-  border-radius:50% !important;
-  right:-3px !important;
-  bottom:4px !important;
-  background:#07080c !important;
-}
-html[data-theme="light"] .brand-mark::after{
-  background:#fff !important;
-}
-
-
-/* APPROVED PEPPERMOON LOGO IMAGE */
-.brand-logo-img{
-  width:38px !important;
-  height:38px !important;
-  object-fit:contain !important;
-  flex:0 0 38px !important;
-  display:block !important;
-  filter:none !important;
-  border:0 !important;
-  border-radius:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-</style></head><body><header class="top"><div class="nav"><a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a><span><a href="community.html">Community</a>&nbsp;&nbsp;&nbsp;<a href="index.html">Home</a></span></div></header>
-<button class="pm-theme-toggle" id="pmThemeToggle" type="button" style="position:fixed;right:16px;bottom:16px;z-index:900">☀ Light</button><main class="wrap"><div id="root"><div class="placeholder">Loading profile…</div></div></main>
-<script>
-const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-"),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-(async()=>{const q=new URLSearchParams(location.search).get('id');const s=(await sb.auth.getSession()).data.session;const id=q||(s&&s.user&&s.user.id);if(!id){root.innerHTML='<div class="placeholder">No profile selected.</div>';return}const r=await sb.from('profiles').select('*').eq('id',id).maybeSingle();if(!r.data){root.innerHTML='<div class="placeholder">Profile not found.</div>';return}const p=r.data,n=p.display_name||p.username||'User';document.title=n+' | Peppermoon';root.innerHTML=`<div class="card"><div class="head">${p.avatar_url?`<img class="avatar" src="${esc(p.avatar_url)}">`:`<div class="avatar">${esc(n.slice(0,1).toUpperCase())}</div>`}<div><h1>${esc(n)}</h1><div class="user">@${esc(p.username)}</div></div></div><div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div><div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div></div><div class="placeholder">User posts, reviews and activity will appear here when the community features are added.</div>`})();
-</script>
-<script>
-(function(){
-  function label(){
-    const btn=document.getElementById('pmThemeToggle');
-    if(!btn)return;
-    const isLight=document.documentElement.getAttribute('data-theme')==='light';
-    btn.textContent=isLight?'☾ Dark':'☀ Light';
-    btn.title=isLight?'Switch to dark mode':'Switch to light mode';
+/* 3) Mobile public-header layout */
+@media(max-width:760px){
+  .topbar .nav,
+  header .nav{
+    min-height:auto !important;
+    padding:10px 0 !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
   }
-  function toggle(){
-    const current=document.documentElement.getAttribute('data-theme')||'dark';
-    const next=current==='light'?'dark':'light';
-    document.documentElement.setAttribute('data-theme',next);
-    localStorage.setItem('peppermoon-theme',next);
-    label();
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('pmThemeToggle');
-    if(btn)btn.addEventListener('click',toggle);
-    label();
-  });
-})();
-</script>
 
-</body></html>
+  .brand{
+    flex:0 1 auto !important;
+    min-width:0 !important;
+    font-size:1.18rem !important;
+    gap:8px !important;
+  }
+
+  .brand-logo-img{
+    width:32px !important;
+    height:32px !important;
+    flex:0 0 32px !important;
+  }
+
+  /* Search + hamburger stay beside the brand */
+  .nav-actions{
+    margin-left:auto !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:6px !important;
+    order:2 !important;
+  }
+
+  .icon-btn,
+  .menu-toggle{
+    width:38px !important;
+    height:38px !important;
+    border-radius:12px !important;
+  }
+
+  /* Login/theme sit on a clean second row, not squeezed between logo and menu */
+  .pm-auth-area{
+    order:3 !important;
+    width:100% !important;
+    margin-left:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:8px !important;
+    padding-top:2px !important;
+  }
+
+  .pm-theme-toggle{
+    padding:9px 11px !important;
+    min-height:38px !important;
+  }
+
+  .pm-auth-btn{
+    min-height:38px !important;
+    padding:9px 14px !important;
+    font-size:.84rem !important;
+  }
+
+  .pm-user-menu{
+    margin-left:auto !important;
+  }
+
+  .pm-user-trigger{
+    min-height:38px !important;
+    padding:5px 9px 5px 6px !important;
+  }
+
+  /* Mobile menu opens below the complete two-row header */
+  .nav-links{
+    top:100% !important;
+    left:12px !important;
+    right:12px !important;
+    z-index:250 !important;
+    max-height:calc(100vh - 130px) !important;
+    overflow:auto !important;
+  }
+
+  /* Search panel becomes full-width and comfortable */
+  .search-panel{
+    padding:8px 0 12px !important;
+  }
+  .search-box{
+    border-radius:13px !important;
+  }
+
+  /* Main content spacing */
+  main{
+    overflow-x:hidden !important;
+  }
+
+  .hero-card{
+    border-radius:24px !important;
+  }
+
+  .grid-4,
+  .grid-3,
+  .cards,
+  .card-grid{
+    gap:14px !important;
+  }
+
+  .card{
+    border-radius:20px !important;
+  }
+
+  .card-body{
+    padding:16px 16px 18px !important;
+  }
+}
+
+/* Small phones */
+@media(max-width:430px){
+  .container{
+    width:min(calc(100% - 20px),var(--max,1180px)) !important;
+  }
+
+  .brand{
+    font-size:1.06rem !important;
+  }
+
+  .brand-logo-img{
+    width:30px !important;
+    height:30px !important;
+    flex-basis:30px !important;
+  }
+
+  .nav-actions{
+    gap:5px !important;
+  }
+
+  .icon-btn,
+  .menu-toggle{
+    width:36px !important;
+    height:36px !important;
+  }
+
+  .pm-auth-area{
+    justify-content:space-between !important;
+  }
+
+  .pm-theme-toggle,
+  .pm-auth-btn{
+    flex:0 0 auto !important;
+  }
+
+  .pm-auth-btn{
+    padding:9px 12px !important;
+  }
+
+  .hero-card{
+    min-height:440px !important;
+    padding:22px !important;
+  }
+
+  .hero-card h1{
+    font-size:clamp(2.25rem,12vw,3rem) !important;
+  }
+
+  .hero-card p{
+    font-size:.95rem !important;
+  }
+
+  .section-head{
+    gap:8px !important;
+  }
+}
+
+/* Community-page mobile controls use the same clear positioning */
+@media(max-width:760px){
+  .nav-right{
+    margin-left:auto !important;
+    gap:6px !important;
+    flex-wrap:wrap !important;
+    justify-content:flex-end !important;
+  }
+
+  .nav-right .pm-theme-toggle,
+  .nav-right .login-btn,
+  .nav-right .user-btn{
+    min-height:38px !important;
+  }
+
+  .hero-grid{
+    gap:16px !important;
+  }
+
+  .layout{
+    gap:16px !important;
+  }
+
+  .filters{
+    scrollbar-width:thin;
+  }
+
+  .post-actions{
+    flex-wrap:wrap !important;
+    align-items:center !important;
+  }
+
+  .owner-actions{
+    width:100% !important;
+    margin-left:0 !important;
+    justify-content:flex-end !important;
+  }
+
+  .comment-compose,
+  .reply-compose{
+    flex-direction:column !important;
+  }
+
+  .comment-submit,
+  .reply-submit{
+    width:100% !important;
+  }
+}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="nav">
+<a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
+<nav class="links"><a href="community.html">Community</a><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a></nav>
+<button class="theme" id="themeBtn">☀ Light</button>
+</div></header>
+<main class="wrap"><div id="profileRoot"><div class="empty">Loading profile…</div></div>
+<div class="tabs" id="tabs" style="display:none"><button class="tab active" data-tab="posts">Posts</button><button class="tab" data-tab="liked">Liked</button><button class="tab" data-tab="saved" id="savedTab">Saved</button></div>
+<div class="feed" id="activity"></div></main>
+<script>
+const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let pid=null,session=null;
+function ago(d){return new Date(d).toLocaleDateString()}
+function items(list){const a=$('activity');if(!list||!list.length){a.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.innerHTML='';list.forEach(p=>{const e=document.createElement('a');e.className='item';e.href='community.html';e.innerHTML=`<div class="small">${esc(ago(p.created_at))}</div><h3>${esc(p.title)}</h3><p>${esc((p.body||'').slice(0,280))}</p>`;a.appendChild(e)})}
+async function load(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('activity').innerHTML='<div class="empty">Loading…</div>';
+if(tab==='posts'){const r=await sb.from('posts').select('id,title,body,created_at').eq('author_id',pid).eq('status','published').order('created_at',{ascending:false});items(r.data);return}
+if(tab==='liked'){const r=await sb.from('post_likes').select('posts!post_likes_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'));return}
+if(tab==='saved'){if(!session||!session.user||session.user.id!==pid){$('activity').innerHTML='<div class="empty">Saved posts are private.</div>';return}const r=await sb.from('saved_posts').select('posts!saved_posts_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'))}}
+(async()=>{session=(await sb.auth.getSession()).data.session;pid=new URLSearchParams(location.search).get('id')||(session&&session.user&&session.user.id);if(!pid)return;const r=await sb.from('profiles').select('*').eq('id',pid).maybeSingle();if(!r.data)return;const p=r.data,n=p.display_name||p.username||'User';$('profileRoot').innerHTML=`<section class="card"><div class="head">${p.avatar_url?`<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`:`<div class="avatar">${esc(n[0].toUpperCase())}</div>`}<div><h1>${esc(n)}</h1><div class="user">@${esc(p.username)}</div></div></div><div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div><div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div></section>`;$('tabs').style.display='flex';if(!session||!session.user||session.user.id!==pid)$('savedTab').style.display='none';document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>load(b.dataset.tab));load('posts')})();
+function lab(){$('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'☾ Dark':'☀ Light'}$('themeBtn').onclick=()=>{const n=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('peppermoon-theme',n);lab()};lab();
+</script></body></html>
