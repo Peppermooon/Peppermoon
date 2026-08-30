@@ -60,3 +60,11 @@ V5 POLISH
 - Latest/Trending control placed immediately above the Community hero and made sticky while scrolling.
 - Explore Trending on Home now opens Community Trending.
 - No Supabase SQL required.
+
+
+MOBILE HOME-SCREEN ICON FIX
+- Added apple-touch-icon.png (180x180) for iPhone/iPad.
+- Added icon-192.png and icon-512.png for Android/Chrome.
+- Added manifest.webmanifest.
+- Added mobile web-app metadata to public pages.
+- If Peppermoon was already added to the home screen, remove the old shortcut and add it again so iOS/Android refreshes the icon.
