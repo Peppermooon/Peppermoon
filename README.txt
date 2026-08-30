@@ -22,3 +22,13 @@ SETUP
 4. Test a comment and a reply using a normal Google account.
 5. Log out and confirm comments remain visible.
 6. Test the Light/Dark toggle and reload the page to confirm the choice is remembered.
+
+
+THEME FIX CHECK
+- Fixed missing theme toggle JavaScript on community.html.
+- Verified every HTML page containing the Light/Dark button also contains:
+  * light-theme CSS
+  * localStorage theme persistence
+  * toggle JavaScript
+- Dark remains the default.
+- Selected theme persists after reload.

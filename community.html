@@ -601,5 +601,32 @@ sb.auth.onAuthStateChange(async(_event,session)=>{
 </script>
 
 
+
+<script>
+(function(){
+  function label(){
+    const btn=document.getElementById('pmThemeToggle');
+    if(!btn)return;
+    const isLight=document.documentElement.getAttribute('data-theme')==='light';
+    btn.textContent=isLight?'☾ Dark':'☀ Light';
+    btn.title=isLight?'Switch to dark mode':'Switch to light mode';
+  }
+
+  function toggle(){
+    const current=document.documentElement.getAttribute('data-theme')||'dark';
+    const next=current==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',next);
+    localStorage.setItem('peppermoon-theme',next);
+    label();
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    const btn=document.getElementById('pmThemeToggle');
+    if(btn)btn.addEventListener('click',toggle);
+    label();
+  });
+})();
+</script>
+
 </body>
 </html>
