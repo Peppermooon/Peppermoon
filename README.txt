@@ -32,3 +32,16 @@ THEME FIX CHECK
   * toggle JavaScript
 - Dark remains the default.
 - Selected theme persists after reload.
+
+
+LIGHT MODE + PUBLIC LOGO POLISH
+- Admin page intentionally left unchanged.
+- Unified the Peppermoon header logo across all public pages.
+- Removed image-based black-ring header logo variants.
+- Header now uses the rose/violet moon with white highlight and a true side cutout.
+- Light mode headings use near-black/dark navy.
+- Light mode body text uses grey-blue.
+- Light mode is mostly white with subtle grey cards.
+- Fixed white/invisible navigation and menu/search icons in light mode.
+- Added stronger light-mode overrides for article prose, comments, forms, menus, cards, footer and neutral buttons.
+- Accent buttons remain white text on the pink/violet accent.

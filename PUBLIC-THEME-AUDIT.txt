@@ -1,0 +1,18 @@
+PEPPERMOON PUBLIC THEME/LOGO AUDIT
+
+about.html: logo=OK, light-theme=OK, toggle=YES
+article.html: logo=OK, light-theme=OK, toggle=YES
+community.html: logo=OK, light-theme=OK, toggle=YES
+contact.html: logo=OK, light-theme=OK, toggle=YES
+games-to-screen.html: logo=OK, light-theme=OK, toggle=YES
+gaming.html: logo=OK, light-theme=OK, toggle=YES
+index.html: logo=OK, light-theme=OK, toggle=YES
+movie-watch-order.html: logo=OK, light-theme=OK, toggle=YES
+movies.html: logo=OK, light-theme=OK, toggle=YES
+open-world-games.html: logo=OK, light-theme=OK, toggle=YES
+profile.html: logo=OK, light-theme=OK, toggle=YES
+trending.html: logo=OK, light-theme=OK, toggle=YES
+tv-finale-explained.html: logo=OK, light-theme=OK, toggle=YES
+tv.html: logo=OK, light-theme=OK, toggle=YES
+
+Problems found after patch: 0
