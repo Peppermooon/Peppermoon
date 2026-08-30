@@ -295,6 +295,37 @@ html[data-theme="light"] .menu-toggle{
   }
 }
 
+
+/* V4 MOBILE MENU LIGHT-MODE FIX */
+html[data-theme="light"] .nav-links{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.12) !important;
+  box-shadow:0 18px 40px rgba(26,35,52,.12) !important;
+}
+html[data-theme="light"] .nav-links a{
+  color:#344054 !important;
+}
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active{
+  color:#151925 !important;
+  background:#f3f5f8 !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent transparent #ffffff transparent !important;
+}
+
+
+.follow-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px}
+.follow-btn{border:0;border-radius:11px;padding:10px 14px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#ff4f78,#ff6f86);color:#fff}
+.follow-btn.following{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text)}
+.follow-stats{display:flex;gap:14px;color:#8f98a8;font-size:.86rem}
+.follow-stats strong{color:var(--text)}
+html[data-theme="light"] .follow-btn.following{background:#fff;color:#344054;border-color:rgba(26,35,52,.12)}
+html[data-theme="light"] .follow-stats{color:#748198}
+html[data-theme="light"] .follow-stats strong{color:#151925}
+
 </style>
 </head>
 <body>
@@ -316,6 +347,62 @@ async function load(tab){document.querySelectorAll('.tab').forEach(b=>b.classLis
 if(tab==='posts'){const r=await sb.from('posts').select('id,title,body,created_at').eq('author_id',pid).eq('status','published').order('created_at',{ascending:false});items(r.data);return}
 if(tab==='liked'){const r=await sb.from('post_likes').select('posts!post_likes_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'));return}
 if(tab==='saved'){if(!session||!session.user||session.user.id!==pid){$('activity').innerHTML='<div class="empty">Saved posts are private.</div>';return}const r=await sb.from('saved_posts').select('posts!saved_posts_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'))}}
-(async()=>{session=(await sb.auth.getSession()).data.session;pid=new URLSearchParams(location.search).get('id')||(session&&session.user&&session.user.id);if(!pid)return;const r=await sb.from('profiles').select('*').eq('id',pid).maybeSingle();if(!r.data)return;const p=r.data,n=p.display_name||p.username||'User';$('profileRoot').innerHTML=`<section class="card"><div class="head">${p.avatar_url?`<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`:`<div class="avatar">${esc(n[0].toUpperCase())}</div>`}<div><h1>${esc(n)}</h1><div class="user">@${esc(p.username)}</div></div></div><div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div><div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div></section>`;$('tabs').style.display='flex';if(!session||!session.user||session.user.id!==pid)$('savedTab').style.display='none';document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>load(b.dataset.tab));load('posts')})();
+
+async function loadFollowState(){
+  const [fc,fg]=await Promise.all([
+    sb.from('follows').select('*',{count:'exact',head:true}).eq('following_id',pid),
+    sb.from('follows').select('*',{count:'exact',head:true}).eq('follower_id',pid)
+  ]);
+  $('followersCount').textContent=fc.count||0;
+  $('followingCount').textContent=fg.count||0;
+
+  if(!session||!session.user||session.user.id===pid){
+    $('followBtn').style.display='none';
+    return;
+  }
+
+  $('followBtn').style.display='';
+  const r=await sb.from('follows')
+    .select('follower_id')
+    .eq('follower_id',session.user.id)
+    .eq('following_id',pid)
+    .maybeSingle();
+
+  const following=!!r.data;
+  $('followBtn').textContent=following?'Following':'Follow';
+  $('followBtn').classList.toggle('following',following);
+
+  $('followBtn').onclick=async()=>{
+    if(following){
+      const d=await sb.from('follows').delete()
+        .eq('follower_id',session.user.id)
+        .eq('following_id',pid);
+      if(d.error){alert(d.error.message);return}
+    }else{
+      const i=await sb.from('follows').insert({
+        follower_id:session.user.id,
+        following_id:pid
+      });
+      if(i.error){alert(i.error.message);return}
+
+      await sb.from('notifications').insert({
+        recipient_id:pid,
+        actor_id:session.user.id,
+        type:'follow'
+      });
+    }
+    await loadFollowState();
+  };
+}
+
+(async()=>{session=(await sb.auth.getSession()).data.session;pid=new URLSearchParams(location.search).get('id')||(session&&session.user&&session.user.id);if(!pid)return;const r=await sb.from('profiles').select('*').eq('id',pid).maybeSingle();if(!r.data)return;const p=r.data,n=p.display_name||p.username||'User';$('profileRoot').innerHTML=`<section class="card"><div class="head">${p.avatar_url?`<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`:`<div class="avatar">${esc(n[0].toUpperCase())}</div>`}<div><h1>${esc(n)}</h1><div class="user">@${esc(p.username)}</div>
+<div class="follow-row" id="followRow">
+  <button class="follow-btn" id="followBtn" style="display:none">Follow</button>
+  <div class="follow-stats"><span><strong id="followersCount">0</strong> Followers</span><span><strong id="followingCount">0</strong> Following</span></div>
+</div>
+</div></div><div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div><div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div></section>`;$('tabs').style.display='flex';if(!session||!session.user||session.user.id!==pid)$('savedTab').style.display='none';document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>load(b.dataset.tab));
+await loadFollowState();
+const initialTab=(location.hash==='#saved' && session&&session.user&&session.user.id===pid)?'saved':'posts';
+load(initialTab)})();
 function lab(){$('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'☾ Dark':'☀ Light'}$('themeBtn').onclick=()=>{const n=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('peppermoon-theme',n);lab()};lab();
 </script></body></html>

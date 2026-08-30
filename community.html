@@ -847,6 +847,27 @@ html[data-theme="light"] .menu-toggle{
   }
 }
 
+
+/* V4 MOBILE MENU LIGHT-MODE FIX */
+html[data-theme="light"] .nav-links{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.12) !important;
+  box-shadow:0 18px 40px rgba(26,35,52,.12) !important;
+}
+html[data-theme="light"] .nav-links a{
+  color:#344054 !important;
+}
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active{
+  color:#151925 !important;
+  background:#f3f5f8 !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent transparent #ffffff transparent !important;
+}
+
 </style>
 </head>
 <body>
@@ -1041,8 +1062,21 @@ async function addComment(postId,body,parentId=null){
   const text=String(body||'').trim();
   if(!text)return false;
   const payload={post_id:postId,author_id:currentSession.user.id,body:text,parent_comment_id:parentId};
-  const r=await sb.from('comments').insert(payload);
+  const r=await sb.from('comments').insert(payload).select('id').maybeSingle();
   if(r.error){alert(r.error.message);return false}
+
+  let recipient=null;
+  let type='comment';
+
+  if(parentId){
+    type='reply';
+    const parent=await sb.from('comments').select('author_id').eq('id',parentId).maybeSingle();
+    recipient=parent.data?parent.data.author_id:null;
+  }else{
+    recipient=await getPostAuthor(postId);
+  }
+
+  await createNotification(recipient,type,postId,r.data?r.data.id:null);
   return true;
 }
 
@@ -1138,6 +1172,23 @@ async function loadComments(postId,panel,countEl){
 }
 
 
+
+async function createNotification(recipientId,type,postId=null,commentId=null){
+  if(!currentSession||!currentSession.user||!recipientId||recipientId===currentSession.user.id)return;
+  await sb.from('notifications').insert({
+    recipient_id:recipientId,
+    actor_id:currentSession.user.id,
+    type:type,
+    post_id:postId,
+    comment_id:commentId
+  });
+}
+
+async function getPostAuthor(postId){
+  const r=await sb.from('posts').select('author_id').eq('id',postId).maybeSingle();
+  return r.data?r.data.author_id:null;
+}
+
 async function getInteractionState(postIds){
   const likeCounts=new Map(), liked=new Set(), saved=new Set();
   if(!postIds.length)return {likeCounts,liked,saved};
@@ -1165,7 +1216,11 @@ async function toggleLike(postId,btn){
     if(!r.error)btn.classList.remove('like-active');
   }else{
     r=await sb.from('post_likes').insert({post_id:postId,user_id:currentSession.user.id});
-    if(!r.error)btn.classList.add('like-active');
+    if(!r.error){
+      btn.classList.add('like-active');
+      const recipient=await getPostAuthor(postId);
+      await createNotification(recipient,'like',postId,null);
+    }
   }
   if(r.error){alert(r.error.message);return}
   const c=await sb.from('post_like_counts').select('like_count').eq('post_id',postId).maybeSingle();

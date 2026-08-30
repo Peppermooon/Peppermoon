@@ -1122,6 +1122,27 @@ html[data-theme="light"] .menu-toggle{
   }
 }
 
+
+/* V4 MOBILE MENU LIGHT-MODE FIX */
+html[data-theme="light"] .nav-links{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.12) !important;
+  box-shadow:0 18px 40px rgba(26,35,52,.12) !important;
+}
+html[data-theme="light"] .nav-links a{
+  color:#344054 !important;
+}
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active{
+  color:#151925 !important;
+  background:#f3f5f8 !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent transparent #ffffff transparent !important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1140,7 +1161,8 @@ html[data-theme="light"] .menu-toggle{
     <div class="pm-user-dropdown" id="pmUserDropdown">
       <a id="pmProfileLink" href="profile.html">My Profile</a>
       <a href="#" id="pmCreatePostPlaceholder">Create Post</a>
-      <a href="#" id="pmSavedPlaceholder">Saved</a>
+      <a href="profile.html#saved" id="pmSavedPlaceholder">Saved</a>
+      <a href="notifications.html">Notifications</a>
       <button id="pmLogout" class="danger">Log out</button>
     </div>
   </div>
@@ -1575,10 +1597,7 @@ $('pmCreatePostPlaceholder').onclick=e=>{
   location.href='community.html#create';
 };
 
-$('pmSavedPlaceholder').onclick=e=>{
-  e.preventDefault();
-  alert('Saved content is coming next.');
-};
+$('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='profile.html#saved'};
 
 (async()=>{
   const r=await sbAuth.auth.getSession();
