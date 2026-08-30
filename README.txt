@@ -45,3 +45,12 @@ LIGHT MODE + PUBLIC LOGO POLISH
 - Fixed white/invisible navigation and menu/search icons in light mode.
 - Added stronger light-mode overrides for article prose, comments, forms, menus, cards, footer and neutral buttons.
 - Accent buttons remain white text on the pink/violet accent.
+
+
+FINAL APPROVED LOGO + HOME HERO
+- Approved transparent Peppermoon moon logo is now used across every public page.
+- Same approved logo is used for favicon.png.
+- Transparent lower-right cutout shows the actual background behind it.
+- Admin page remains unchanged.
+- Home "Welcome to Peppermoon" hero card remains in its original dark style even when Light Mode is active.
+- Rest of the Light Mode keeps the polished white/subtle-grey appearance.

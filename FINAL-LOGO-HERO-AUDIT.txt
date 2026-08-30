@@ -1,0 +1,18 @@
+PEPPERMOON FINAL LOGO/HERO AUDIT
+
+about.html: logo=OK, favicon=OK, old-logo-markup=NO
+article.html: logo=OK, favicon=OK, old-logo-markup=NO
+community.html: logo=OK, favicon=OK, old-logo-markup=NO
+contact.html: logo=OK, favicon=OK, old-logo-markup=NO
+games-to-screen.html: logo=OK, favicon=OK, old-logo-markup=NO
+gaming.html: logo=OK, favicon=OK, old-logo-markup=NO
+index.html: logo=OK, favicon=OK, old-logo-markup=NO
+movie-watch-order.html: logo=OK, favicon=OK, old-logo-markup=NO
+movies.html: logo=OK, favicon=OK, old-logo-markup=NO
+open-world-games.html: logo=OK, favicon=OK, old-logo-markup=NO
+profile.html: logo=OK, favicon=OK, old-logo-markup=NO
+trending.html: logo=OK, favicon=OK, old-logo-markup=NO
+tv-finale-explained.html: logo=OK, favicon=OK, old-logo-markup=NO
+tv.html: logo=OK, favicon=OK, old-logo-markup=NO
+
+Problems after patch: 0
