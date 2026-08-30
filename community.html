@@ -868,16 +868,146 @@ html[data-theme="light"] .nav-links::after{
   border-color:transparent transparent #ffffff transparent !important;
 }
 
+
+/* COMMUNITY AUTO-LINKS */
+.post-body a,
+.comment-body a{
+  color:#9eb0ff;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere;
+}
+.post-body a:hover,
+.comment-body a:hover{
+  color:#c7d0ff;
+}
+html[data-theme="light"] .post-body a,
+html[data-theme="light"] .comment-body a{
+  color:#4659a8 !important;
+}
+html[data-theme="light"] .post-body a:hover,
+html[data-theme="light"] .comment-body a:hover{
+  color:#2f418e !important;
+}
+
+
+
+/* =========================================================
+   PEPPERMOON GLOBAL NAVIGATION CLEANUP
+   ========================================================= */
+.nav-links a,
+nav a{
+  position:relative;
+}
+.nav-links a.active,
+nav a.active{
+  color:var(--text) !important;
+  font-weight:800 !important;
+}
+.nav-links a.active::after,
+nav a.active::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-8px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff4f78,#7b61ff);
+}
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav a.active{
+  color:#151925 !important;
+}
+
+/* The Peppermoon hero remains the original dark artwork in BOTH themes */
+html[data-theme="light"] .hero-card,
+html[data-theme="light"] .hero{
+  background:
+    radial-gradient(circle at 84% 30%,rgba(255,79,120,.24),transparent 28%),
+    radial-gradient(circle at 38% 0%,rgba(123,97,255,.20),transparent 42%),
+    linear-gradient(145deg,#14172c 0%,#17142c 42%,#100d18 72%,#190d17 100%) !important;
+  color:#f6f7fb !important;
+  border-color:rgba(255,255,255,.11) !important;
+}
+html[data-theme="light"] .hero-card *,
+html[data-theme="light"] .hero *{
+  color:inherit;
+}
+html[data-theme="light"] .hero-card h1,
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero-card .hero-title,
+html[data-theme="light"] .hero .hero-title{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card p,
+html[data-theme="light"] .hero p{
+  color:#c8ccda !important;
+}
+html[data-theme="light"] .hero-card .eyebrow,
+html[data-theme="light"] .hero .eyebrow{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card .secondary,
+html[data-theme="light"] .hero .secondary{
+  background:rgba(255,255,255,.07) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+
+/* Mobile active nav should read clearly inside hamburger menu */
+@media(max-width:760px){
+  .nav-links a.active::after,
+  nav a.active::after{
+    left:14px;
+    right:auto;
+    width:34px;
+    bottom:5px;
+  }
+}
+
+
+
+/* COMMUNITY FEED MODES */
+.community-feed-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:0 0 18px;
+}
+.community-feed-tab{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  border-radius:999px;
+  padding:9px 13px;
+  font-weight:800;
+  cursor:pointer;
+}
+.community-feed-tab.active{
+  color:#fff;
+  border-color:rgba(255,79,120,.34);
+  background:linear-gradient(135deg,rgba(255,79,120,.22),rgba(123,97,255,.18));
+}
+html[data-theme="light"] .community-feed-tab{
+  background:#fff;
+  color:#5d687b;
+  border-color:rgba(26,35,52,.12);
+}
+html[data-theme="light"] .community-feed-tab.active{
+  color:#202636;
+  background:linear-gradient(135deg,#fff1f5,#f4f0ff);
+  border-color:rgba(255,79,120,.28);
+}
+
 </style>
 </head>
 <body>
 <header>
   <div class="container nav">
     <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="links">
-      <a href="index.html">Home</a><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a>
-      <a href="tv.html">TV Series</a><a href="trending.html">Trending</a><a class="active" href="community.html">Community</a>
-    </nav>
+    <nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></nav>
     <div class="nav-right">
       <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
       <button class="login-btn" id="loginBtn">Log in / Sign up</button>
@@ -894,6 +1024,18 @@ html[data-theme="light"] .nav-links::after{
 </header>
 
 <main>
+
+<div class="community-feed-tabs" id="communityFeedTabs">
+  <button class="community-feed-tab active" data-feed="latest">Latest</button>
+  <button class="community-feed-tab" data-feed="trending">Trending</button>
+  <button class="community-feed-tab" data-feed="reviews">Reviews</button>
+  <button class="community-feed-tab" data-feed="discussions">Discussions</button>
+  <button class="community-feed-tab" data-feed="questions">Questions</button>
+  <button class="community-feed-tab" data-feed="recommendations">Recommendations</button>
+  <button class="community-feed-tab" data-feed="news">News</button>
+</div>
+
+
   <section class="hero">
     <div class="container hero-grid">
       <div>
@@ -968,6 +1110,27 @@ const sb=window.supabase.createClient(
 let currentSession=null,currentProfile=null,currentFilter='All',editingPostId=null;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function linkify(value){
+  const safe=esc(value);
+  const urlRe=/((?:https?:\/\/|www\.)[^\s<]+)/gi;
+
+  return safe.replace(urlRe,raw=>{
+    // Remove punctuation that commonly belongs to the surrounding sentence,
+    // while keeping URL punctuation that can validly appear inside a URL.
+    let url=raw;
+    let trailing='';
+
+    while(/[.,!?;:]$/.test(url)){
+      trailing=url.slice(-1)+trailing;
+      url=url.slice(0,-1);
+    }
+
+    const href=url.toLowerCase().startsWith('www.') ? 'https://'+url : url;
+
+    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer nofollow">'+url+'</a>'+trailing;
+  });
+}
+
 function showMsg(el,text,type='error'){el.textContent=text;el.className='msg show '+type}
 function hideMsg(el){el.className='msg';el.textContent=''}
 function initials(v){return String(v||'U').trim().slice(0,1).toUpperCase()}
@@ -1132,7 +1295,7 @@ async function loadComments(postId,panel,countEl){
       : `<span class="comment-avatar">${esc(initials(name))}</span>`;
     wrap.innerHTML=`${av}<div class="comment-card">
       <div class="comment-head"><span class="comment-name">${esc(name)}</span><span class="comment-time">@${esc(p.username||'user')} · ${esc(timeAgo(c.created_at))}</span></div>
-      <div class="comment-body">${esc(c.body)}</div>
+      <div class="comment-body">${linkify(c.body)}</div>
       <div class="comment-tools">
         ${!isReply?'<button class="reply-tool">Reply</button>':''}
         ${(mine||admin)?'<button class="delete-tool">Delete</button>':''}
@@ -1255,8 +1418,19 @@ async function loadPosts(){
   if(!r.data||!r.data.length){$('feed').innerHTML='<div class="feed-state">No posts here yet. Be the first to start a discussion.</div>';return}
 
   const interaction=await getInteractionState(r.data.map(x=>x.id));
+  let displayPosts=r.data.map(post=>({
+    ...post,
+    like_count:interaction.likeCounts.get(post.id)||0
+  }));
+  displayPosts=pmApplyFeedMode(displayPosts);
+
+  if(!displayPosts.length){
+    $('feed').innerHTML='<div class="feed-state">No posts match this feed.</div>';
+    return;
+  }
+
   $('feed').innerHTML='';
-  r.data.forEach(post=>{
+  displayPosts.forEach(post=>{
     const profile=post.profiles||{},name=profile.display_name||profile.username||'Peppermoon User';
     const mine=currentSession&&currentSession.user&&post.author_id===currentSession.user.id;
     const admin=currentProfile&&currentProfile.role==='admin';
@@ -1274,7 +1448,7 @@ async function loadPosts(){
         </div>
         <div class="badges"><span class="badge type">${esc(post.post_type)}</span><span class="badge">${esc(post.category)}</span></div>
         <h2>${esc(post.title)}</h2>
-        <div class="post-body">${esc(post.body)}</div>
+        <div class="post-body">${linkify(post.body)}</div>
       </div>
       ${post.image_url?`<img class="post-img" src="${esc(post.image_url)}" alt="">`:''}
       <div class="post-actions">
@@ -1359,6 +1533,57 @@ sb.auth.onAuthStateChange(async(_event,session)=>{
     label();
   });
 })();
+
+
+// Community feed mode: Latest / Trending / content type filters.
+let pmCommunityFeedMode='latest';
+
+function pmScorePost(p){
+  const likes=Number(p.like_count||p.likes_count||p.likes||0);
+  const comments=Number(p.comment_count||p.comments_count||p.comments||0);
+  const ageHours=Math.max(1,(Date.now()-new Date(p.created_at).getTime())/3600000);
+  return (likes*3 + comments*2 + 1) / Math.pow(ageHours+2,.22);
+}
+
+function pmApplyFeedMode(posts){
+  let arr=[...(posts||[])];
+
+  if(pmCommunityFeedMode==='trending'){
+    return arr.sort((a,b)=>pmScorePost(b)-pmScorePost(a));
+  }
+
+  const typeMap={
+    reviews:'Review',
+    discussions:'Discussion',
+    questions:'Question',
+    recommendations:'Recommendation',
+    news:'News / Update'
+  };
+
+  if(typeMap[pmCommunityFeedMode]){
+    arr=arr.filter(p=>p.post_type===typeMap[pmCommunityFeedMode]);
+  }
+
+  return arr.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+}
+
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('.community-feed-tab');
+  if(!b)return;
+  document.querySelectorAll('.community-feed-tab').forEach(x=>x.classList.toggle('active',x===b));
+  pmCommunityFeedMode=b.dataset.feed||'latest';
+  await loadPosts();
+});
+
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+  if(location.hash==='#trending'){
+    const b=document.querySelector('.community-feed-tab[data-feed="trending"]');
+    if(b) b.click();
+  }
+});
+
 </script>
 
 </body>

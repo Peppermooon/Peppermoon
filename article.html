@@ -855,13 +855,104 @@ html[data-theme="light"] .nav-links::after{
   border-color:transparent transparent #ffffff transparent !important;
 }
 
+
+/* GLOBAL USER-CONTENT LINKS */
+.content a,
+.article-body a,
+.article-content a,
+.post-body a,
+.comment-body a,
+.item p a,
+.bio a{
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere;
+}
+
+
+
+/* =========================================================
+   PEPPERMOON GLOBAL NAVIGATION CLEANUP
+   ========================================================= */
+.nav-links a,
+nav a{
+  position:relative;
+}
+.nav-links a.active,
+nav a.active{
+  color:var(--text) !important;
+  font-weight:800 !important;
+}
+.nav-links a.active::after,
+nav a.active::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-8px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff4f78,#7b61ff);
+}
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav a.active{
+  color:#151925 !important;
+}
+
+/* The Peppermoon hero remains the original dark artwork in BOTH themes */
+html[data-theme="light"] .hero-card,
+html[data-theme="light"] .hero{
+  background:
+    radial-gradient(circle at 84% 30%,rgba(255,79,120,.24),transparent 28%),
+    radial-gradient(circle at 38% 0%,rgba(123,97,255,.20),transparent 42%),
+    linear-gradient(145deg,#14172c 0%,#17142c 42%,#100d18 72%,#190d17 100%) !important;
+  color:#f6f7fb !important;
+  border-color:rgba(255,255,255,.11) !important;
+}
+html[data-theme="light"] .hero-card *,
+html[data-theme="light"] .hero *{
+  color:inherit;
+}
+html[data-theme="light"] .hero-card h1,
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero-card .hero-title,
+html[data-theme="light"] .hero .hero-title{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card p,
+html[data-theme="light"] .hero p{
+  color:#c8ccda !important;
+}
+html[data-theme="light"] .hero-card .eyebrow,
+html[data-theme="light"] .hero .eyebrow{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card .secondary,
+html[data-theme="light"] .hero .secondary{
+  background:rgba(255,255,255,.07) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+
+/* Mobile active nav should read clearly inside hamburger menu */
+@media(max-width:760px){
+  .nav-links a.active::after,
+  nav a.active::after{
+    left:14px;
+    right:auto;
+    width:34px;
+    bottom:5px;
+  }
+}
+
 </style>
 </head>
 <body>
 <header class="top">
   <div class="nav">
     <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="trending.html">Trending</a></nav>
+    <nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
   <button class="pm-auth-btn" id="pmOpenAuth">Log in / Sign up</button>
@@ -912,6 +1003,7 @@ function legacyToHtml(text) {
   }
 
   document.title=data.title+' | Peppermoon';
+  pmSetArticleSectionActive(data.category);
 
   document.getElementById('articleWrap').innerHTML=`
     <div class="meta">${esc(data.category)} · ${esc(data.author||'Peppermoon')}${data.published_at?' · '+new Date(data.published_at).toLocaleDateString():''}</div>
@@ -1222,6 +1314,45 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 
 
 <script>
+
+function pmSetArticleSectionActive(category){
+  const c=String(category||'').toLowerCase();
+  let href=null;
+  if(c.includes('game')) href='gaming.html';
+  else if(c.includes('movie') || c.includes('film')) href='movies.html';
+  else if(c.includes('tv') || c.includes('series')) href='tv.html';
+  document.querySelectorAll('.nav-links a, nav a').forEach(a=>a.classList.remove('active'));
+  if(href){
+    const a=document.querySelector('.nav-links a[href="'+href+'"], nav a[href="'+href+'"]');
+    if(a)a.classList.add('active');
+  }
+}
+
+
+
+function pmLinkify(value){
+  const safe=String(value||'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  const urlRe=/((?:https?:\/\/|www\.)[^\s<]+)/gi;
+
+  return safe.replace(urlRe,raw=>{
+    let url=raw;
+    let trailing='';
+
+    while(/[.,!?;:]$/.test(url)){
+      trailing=url.slice(-1)+trailing;
+      url=url.slice(0,-1);
+    }
+
+    const href=url.toLowerCase().startsWith('www.') ? 'https://'+url : url;
+
+    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer nofollow">'+url+'</a>'+trailing;
+  });
+}
+
+
 (function(){
   function label(){
     const btn=document.getElementById('pmThemeToggle');

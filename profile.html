@@ -1,7 +1,31 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>(function(){const s=localStorage.getItem('peppermoon-theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark')})();</script>
+<script>
+
+function pmLinkify(value){
+  const safe=String(value||'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  const urlRe=/((?:https?:\/\/|www\.)[^\s<]+)/gi;
+
+  return safe.replace(urlRe,raw=>{
+    let url=raw;
+    let trailing='';
+
+    while(/[.,!?;:]$/.test(url)){
+      trailing=url.slice(-1)+trailing;
+      url=url.slice(0,-1);
+    }
+
+    const href=url.toLowerCase().startsWith('www.') ? 'https://'+url : url;
+
+    return '<a href="'+href+'" target="_blank" rel="noopener noreferrer nofollow">'+url+'</a>'+trailing;
+  });
+}
+
+(function(){const s=localStorage.getItem('peppermoon-theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark')})();</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Profile | Peppermoon</title><link rel="icon" type="image/png" href="favicon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -326,12 +350,104 @@ html[data-theme="light"] .follow-btn.following{background:#fff;color:#344054;bor
 html[data-theme="light"] .follow-stats{color:#748198}
 html[data-theme="light"] .follow-stats strong{color:#151925}
 
+
+/* GLOBAL USER-CONTENT LINKS */
+.content a,
+.article-body a,
+.article-content a,
+.post-body a,
+.comment-body a,
+.item p a,
+.bio a{
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere;
+}
+
+
+
+/* =========================================================
+   PEPPERMOON GLOBAL NAVIGATION CLEANUP
+   ========================================================= */
+.nav-links a,
+nav a{
+  position:relative;
+}
+.nav-links a.active,
+nav a.active{
+  color:var(--text) !important;
+  font-weight:800 !important;
+}
+.nav-links a.active::after,
+nav a.active::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-8px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff4f78,#7b61ff);
+}
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav a.active{
+  color:#151925 !important;
+}
+
+/* The Peppermoon hero remains the original dark artwork in BOTH themes */
+html[data-theme="light"] .hero-card,
+html[data-theme="light"] .hero{
+  background:
+    radial-gradient(circle at 84% 30%,rgba(255,79,120,.24),transparent 28%),
+    radial-gradient(circle at 38% 0%,rgba(123,97,255,.20),transparent 42%),
+    linear-gradient(145deg,#14172c 0%,#17142c 42%,#100d18 72%,#190d17 100%) !important;
+  color:#f6f7fb !important;
+  border-color:rgba(255,255,255,.11) !important;
+}
+html[data-theme="light"] .hero-card *,
+html[data-theme="light"] .hero *{
+  color:inherit;
+}
+html[data-theme="light"] .hero-card h1,
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero-card .hero-title,
+html[data-theme="light"] .hero .hero-title{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card p,
+html[data-theme="light"] .hero p{
+  color:#c8ccda !important;
+}
+html[data-theme="light"] .hero-card .eyebrow,
+html[data-theme="light"] .hero .eyebrow{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card .secondary,
+html[data-theme="light"] .hero .secondary{
+  background:rgba(255,255,255,.07) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+
+/* Mobile active nav should read clearly inside hamburger menu */
+@media(max-width:760px){
+  .nav-links a.active::after,
+  nav a.active::after{
+    left:14px;
+    right:auto;
+    width:34px;
+    bottom:5px;
+  }
+}
+
 </style>
 </head>
 <body>
 <header class="top"><div class="nav">
 <a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-<nav class="links"><a href="community.html">Community</a><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a></nav>
+<div class="nav-links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></div>
+<nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></nav>
 <button class="theme" id="themeBtn">☀ Light</button>
 </div></header>
 <main class="wrap"><div id="profileRoot"><div class="empty">Loading profile…</div></div>
@@ -342,7 +458,7 @@ const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co"
 const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let pid=null,session=null;
 function ago(d){return new Date(d).toLocaleDateString()}
-function items(list){const a=$('activity');if(!list||!list.length){a.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.innerHTML='';list.forEach(p=>{const e=document.createElement('a');e.className='item';e.href='community.html';e.innerHTML=`<div class="small">${esc(ago(p.created_at))}</div><h3>${esc(p.title)}</h3><p>${esc((p.body||'').slice(0,280))}</p>`;a.appendChild(e)})}
+function items(list){const a=$('activity');if(!list||!list.length){a.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.innerHTML='';list.forEach(p=>{const e=document.createElement('div');e.className='item';e.style.cursor='pointer';e.onclick=()=>location.href='community.html';e.innerHTML=`<div class="small">${esc(ago(p.created_at))}</div><h3>${esc(p.title)}</h3><p>${pmLinkify((p.body||'').slice(0,280))}</p>`;a.appendChild(e)})}
 async function load(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('activity').innerHTML='<div class="empty">Loading…</div>';
 if(tab==='posts'){const r=await sb.from('posts').select('id,title,body,created_at').eq('author_id',pid).eq('status','published').order('created_at',{ascending:false});items(r.data);return}
 if(tab==='liked'){const r=await sb.from('post_likes').select('posts!post_likes_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'));return}

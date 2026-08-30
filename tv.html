@@ -1090,6 +1090,97 @@ html[data-theme="light"] .nav-links::after{
   border-color:transparent transparent #ffffff transparent !important;
 }
 
+
+/* GLOBAL USER-CONTENT LINKS */
+.content a,
+.article-body a,
+.article-content a,
+.post-body a,
+.comment-body a,
+.item p a,
+.bio a{
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere;
+}
+
+
+
+/* =========================================================
+   PEPPERMOON GLOBAL NAVIGATION CLEANUP
+   ========================================================= */
+.nav-links a,
+nav a{
+  position:relative;
+}
+.nav-links a.active,
+nav a.active{
+  color:var(--text) !important;
+  font-weight:800 !important;
+}
+.nav-links a.active::after,
+nav a.active::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:-8px;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ff4f78,#7b61ff);
+}
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav a.active{
+  color:#151925 !important;
+}
+
+/* The Peppermoon hero remains the original dark artwork in BOTH themes */
+html[data-theme="light"] .hero-card,
+html[data-theme="light"] .hero{
+  background:
+    radial-gradient(circle at 84% 30%,rgba(255,79,120,.24),transparent 28%),
+    radial-gradient(circle at 38% 0%,rgba(123,97,255,.20),transparent 42%),
+    linear-gradient(145deg,#14172c 0%,#17142c 42%,#100d18 72%,#190d17 100%) !important;
+  color:#f6f7fb !important;
+  border-color:rgba(255,255,255,.11) !important;
+}
+html[data-theme="light"] .hero-card *,
+html[data-theme="light"] .hero *{
+  color:inherit;
+}
+html[data-theme="light"] .hero-card h1,
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero-card .hero-title,
+html[data-theme="light"] .hero .hero-title{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card p,
+html[data-theme="light"] .hero p{
+  color:#c8ccda !important;
+}
+html[data-theme="light"] .hero-card .eyebrow,
+html[data-theme="light"] .hero .eyebrow{
+  color:#fff !important;
+}
+html[data-theme="light"] .hero-card .secondary,
+html[data-theme="light"] .hero .secondary{
+  background:rgba(255,255,255,.07) !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+
+/* Mobile active nav should read clearly inside hamburger menu */
+@media(max-width:760px){
+  .nav-links a.active::after,
+  nav a.active::after{
+    left:14px;
+    right:auto;
+    width:34px;
+    bottom:5px;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1098,7 +1189,7 @@ html[data-theme="light"] .nav-links::after{
 <header class="topbar">
   <div class="container nav">
     <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="nav-links" id="navLinks"><a class="" href="index.html">Home</a><a class="" href="gaming.html">Gaming</a><a class="" href="movies.html">Movies</a><a class="active" href="tv.html">TV Series</a><a class="" href="trending.html">Trending</a><a class="" href="community.html">Community</a><a class="" href="about.html">About</a></nav>
+    <nav class="nav-links" id="navLinks"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html" class="active">TV Series</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
     
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>

@@ -1,0 +1,18 @@
+about.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 1, 'About': 2}; old-global-trending=False
+article.html: {'Gaming': 1, 'Movies': 1, 'TV Series': 1, 'Community': 1, 'About': 1}; old-global-trending=False
+community.html: {'Gaming': 1, 'Movies': 1, 'TV Series': 1, 'Community': 1, 'About': 1}; old-global-trending=False
+contact.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 1, 'About': 2}; old-global-trending=False
+games-to-screen.html: {'Gaming': 3, 'Movies': 3, 'TV Series': 3, 'Community': 1, 'About': 2}; old-global-trending=False
+gaming.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 1, 'About': 2}; old-global-trending=False
+index.html: {'Gaming': 3, 'Movies': 3, 'TV Series': 3, 'Community': 1, 'About': 2}; old-global-trending=True
+movie-watch-order.html: {'Gaming': 3, 'Movies': 3, 'TV Series': 3, 'Community': 1, 'About': 2}; old-global-trending=False
+movies.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 1, 'About': 2}; old-global-trending=False
+notifications.html: {'Gaming': 1, 'Movies': 1, 'TV Series': 1, 'Community': 2, 'About': 1}; old-global-trending=False
+open-world-games.html: {'Gaming': 3, 'Movies': 3, 'TV Series': 3, 'Community': 1, 'About': 2}; old-global-trending=False
+profile.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 2, 'About': 2}; old-global-trending=False
+trending.html: redirect=community#trending
+tv-finale-explained.html: {'Gaming': 3, 'Movies': 3, 'TV Series': 3, 'Community': 1, 'About': 2}; old-global-trending=False
+tv.html: {'Gaming': 2, 'Movies': 2, 'TV Series': 2, 'Community': 1, 'About': 2}; old-global-trending=False
+
+CHECKS
+{'community_has_all_5_nav': True, 'community_no_global_trending': True, 'community_feed_trending': True, 'community_feed_applies': True, 'article_dynamic_active': True}
