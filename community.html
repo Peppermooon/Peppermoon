@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#07080c">
+<title>Community | Peppermoon</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#07080c;--panel:#11141d;--panel2:#0d1017;--text:#f6f7fb;--muted:#9da5b5;--line:rgba(255,255,255,.09);--pink:#ff4f78;--violet:#7b61ff;--cyan:#19d3c5}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:
+radial-gradient(circle at 12% -10%,rgba(123,97,255,.16),transparent 28%),
+radial-gradient(circle at 92% 0%,rgba(255,79,120,.12),transparent 24%),var(--bg);color:var(--text);min-height:100vh}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit}
+.container{width:min(calc(100% - 30px),1180px);margin:auto}
+header{position:sticky;top:0;z-index:50;background:rgba(7,8,12,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{min-height:72px;display:flex;align-items:center;gap:22px}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:950}
+.brand img{width:36px;height:36px;border-radius:50%}
+.links{display:flex;gap:18px;align-items:center;margin-left:12px;font-weight:750;color:#d5dae4;font-size:.9rem}
+.links a.active{color:#fff}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.login-btn,.user-btn,.create-btn{border:1px solid var(--line);border-radius:13px;padding:10px 14px;cursor:pointer;font-weight:850}
+.login-btn{background:linear-gradient(135deg,rgba(255,79,120,.18),rgba(123,97,255,.17));color:#fff}
+.user-wrap{position:relative;display:none}
+.user-btn{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);color:#fff;padding:7px 10px 7px 8px}
+.avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--pink),var(--violet));font-weight:900;background-size:cover;background-position:center}
+.dropdown{display:none;position:absolute;right:0;top:calc(100% + 8px);min-width:190px;padding:8px;background:#11141d;border:1px solid var(--line);border-radius:15px;box-shadow:0 18px 50px rgba(0,0,0,.42)}
+.dropdown.open{display:block}
+.dropdown a,.dropdown button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#e9ecf3;padding:10px 11px;border-radius:10px;cursor:pointer}
+.dropdown a:hover,.dropdown button:hover{background:rgba(255,255,255,.06)}
+.hero{padding:54px 0 25px}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:25px;align-items:end}
+.eyebrow{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,79,120,.09);border:1px solid rgba(255,79,120,.2);color:#ff9ab0;font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+h1{font-size:clamp(2.5rem,7vw,5.2rem);letter-spacing:-.065em;line-height:.92;margin:15px 0}
+.hero p{max-width:740px;color:#b4bbc9;font-size:1.03rem;line-height:1.7}
+.create-btn{border:0;color:#fff;background:linear-gradient(135deg,var(--pink),#ff7b60);padding:12px 17px}
+.layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:24px;padding:14px 0 80px}
+.filters{position:sticky;top:96px;align-self:start;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:20px;padding:14px}
+.filters h3{margin:4px 8px 12px;font-size:.86rem;color:#fff}
+.filter-btn{width:100%;border:0;background:transparent;color:#aeb6c5;padding:10px 11px;border-radius:11px;text-align:left;cursor:pointer;font-weight:750}
+.filter-btn.active,.filter-btn:hover{background:rgba(255,255,255,.055);color:#fff}
+.feed{display:grid;gap:15px}
+.feed-state{padding:30px;border:1px dashed rgba(255,255,255,.12);border-radius:20px;color:#929bab;text-align:center}
+.post{border:1px solid var(--line);border-radius:21px;background:rgba(255,255,255,.028);overflow:hidden}
+.post-main{padding:20px}
+.post-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.author{display:flex;gap:11px;align-items:center}
+.author-avatar{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,var(--pink),var(--violet));font-size:.83rem;font-weight:900;background-size:cover;background-position:center;flex:none}
+.author-name{font-weight:900;font-size:.92rem}
+.post-meta{font-size:.77rem;color:#858e9e;margin-top:3px}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0 8px}
+.badge{padding:5px 8px;border-radius:999px;border:1px solid var(--line);font-size:.7rem;font-weight:850;color:#b8c0cf}
+.badge.type{color:#ff9eb4;border-color:rgba(255,79,120,.23);background:rgba(255,79,120,.06)}
+.post h2{font-size:1.32rem;margin:8px 0 9px;line-height:1.3}
+.post-body{color:#c4cad5;line-height:1.67;white-space:pre-wrap;overflow-wrap:anywhere}
+.post-img{width:100%;max-height:520px;object-fit:cover;display:block;border-top:1px solid var(--line)}
+.post-actions{display:flex;gap:9px;padding:12px 20px;border-top:1px solid rgba(255,255,255,.065);color:#8f98a8;font-size:.82rem}
+.action{border:0;background:transparent;color:inherit;padding:7px 9px;border-radius:9px;cursor:pointer}
+.action:hover{background:rgba(255,255,255,.05);color:#fff}
+.owner-actions{margin-left:auto;display:flex;gap:5px}
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);display:none;place-items:center;padding:18px}
+.modal.open{display:grid}
+.modal-card{width:min(700px,100%);max-height:92vh;overflow:auto;background:#0e1118;border:1px solid var(--line);border-radius:24px;box-shadow:0 28px 90px rgba(0,0,0,.52)}
+.modal-head{position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#0e1118;border-bottom:1px solid var(--line)}
+.modal-head h2{margin:0}
+.close{width:36px;height:36px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04);color:#fff;cursor:pointer}
+.form{padding:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field label{font-size:.8rem;font-weight:850;color:#dbe0e9}
+.field input,.field select,.field textarea{width:100%;background:#090c12;color:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none}
+.field textarea{min-height:190px;resize:vertical;line-height:1.55}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(255,79,120,.45);box-shadow:0 0 0 4px rgba(255,79,120,.06)}
+.file-note{font-size:.78rem;color:#848d9e;line-height:1.5}
+.submit-row{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.secondary{border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:11px;padding:11px 15px;cursor:pointer}
+.primary{border:0;background:linear-gradient(135deg,var(--pink),#ff7b60);color:#fff;border-radius:11px;padding:11px 16px;font-weight:900;cursor:pointer}
+.msg{display:none;margin:12px 0;padding:10px 11px;border-radius:10px;font-size:.84rem}
+.msg.show{display:block}.msg.error{color:#ffb5be;background:rgba(255,79,100,.09);border:1px solid rgba(255,79,100,.2)}.msg.ok{color:#a7ebc4;background:rgba(53,208,127,.09);border:1px solid rgba(53,208,127,.2)}
+.auth-modal{position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.76);display:none;place-items:center;padding:18px}
+.auth-modal.open{display:grid}.auth-card{width:min(440px,100%);background:#0e1118;border:1px solid var(--line);border-radius:22px;padding:22px;text-align:center}
+.google{width:100%;background:#fff;color:#17191f;border:0;border-radius:12px;padding:12px;font-weight:900;cursor:pointer;margin-top:12px}
+.auth-card p{color:#959dad;line-height:1.6}
+@media(max-width:800px){.links{display:none}.layout{grid-template-columns:1fr}.filters{position:static;display:flex;overflow:auto;gap:5px;padding:8px}.filters h3{display:none}.filter-btn{white-space:nowrap;width:auto}.hero-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}.user-name{display:none}.post-main{padding:17px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="index.html"><img src="favicon.png" alt=""><span>Peppermoon</span></a>
+    <nav class="links">
+      <a href="index.html">Home</a><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a>
+      <a href="tv.html">TV Series</a><a href="trending.html">Trending</a><a class="active" href="community.html">Community</a>
+    </nav>
+    <div class="nav-right">
+      <button class="login-btn" id="loginBtn">Log in / Sign up</button>
+      <div class="user-wrap" id="userWrap">
+        <button class="user-btn" id="userBtn"><span class="avatar" id="navAvatar">U</span><span class="user-name" id="navName">User</span><span>▾</span></button>
+        <div class="dropdown" id="dropdown">
+          <a id="profileLink" href="profile.html">My Profile</a>
+          <a href="#create" id="menuCreate">Create Post</a>
+          <button id="logoutBtn">Log out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="eyebrow">Peppermoon Community</span>
+        <h1>Talk about what<br>you play & watch.</h1>
+        <p>Share reviews, discussions, theories, questions, recommendations and entertainment news. Anyone can read; sign in only when you want to participate.</p>
+      </div>
+      <button class="create-btn" id="heroCreate">＋ Create Post</button>
+    </div>
+  </section>
+
+  <section class="container layout">
+    <aside class="filters">
+      <h3>Browse community</h3>
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Gaming">Gaming</button>
+      <button class="filter-btn" data-filter="Movies">Movies</button>
+      <button class="filter-btn" data-filter="TV Series">TV Series</button>
+    </aside>
+    <div class="feed" id="feed"><div class="feed-state">Loading community posts…</div></div>
+  </section>
+</main>
+
+<div class="modal" id="postModal">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="postModalTitle">Create Post</h2><button class="close" id="closePost">✕</button></div>
+    <form class="form" id="postForm">
+      <div class="grid2">
+        <div class="field"><label>Post type</label>
+          <select id="postType" required>
+            <option>Discussion</option><option>Review</option><option>Question</option>
+            <option>Recommendation</option><option>Theory</option><option>News / Update</option>
+          </select>
+        </div>
+        <div class="field"><label>Category</label>
+          <select id="category" required><option>Gaming</option><option>Movies</option><option>TV Series</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Title</label><input id="title" maxlength="160" required placeholder="What do you want to talk about?"></div>
+      <div class="field"><label>Post</label><textarea id="body" maxlength="8000" required placeholder="Write your post…"></textarea></div>
+      <div class="field">
+        <label>Image (optional)</label>
+        <input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <div class="file-note">JPEG, PNG, WEBP or GIF. The image is stored separately from official Peppermoon article images.</div>
+      </div>
+      <div class="msg" id="postMsg"></div>
+      <div class="submit-row">
+        <button class="secondary" id="cancelPost" type="button">Cancel</button>
+        <button class="primary" id="submitPost" type="submit">Publish Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="auth-modal" id="authModal">
+  <div class="auth-card">
+    <h2>Join the discussion</h2>
+    <p>You can read Peppermoon without an account. Sign in when you want to post, comment, reply, like or save.</p>
+    <button class="google" id="googleBtn">Continue with Google</button>
+    <button class="secondary" id="closeAuth" style="margin-top:10px;width:100%">Not now</button>
+  </div>
+</div>
+
+<script>
+const sb=window.supabase.createClient(
+  "https://bgzlqvbvmstebdsnzmqv.supabase.co",
+  "sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",
+  {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}
+);
+
+let currentSession=null,currentProfile=null,currentFilter='All',editingPostId=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function showMsg(el,text,type='error'){el.textContent=text;el.className='msg show '+type}
+function hideMsg(el){el.className='msg';el.textContent=''}
+function initials(v){return String(v||'U').trim().slice(0,1).toUpperCase()}
+function timeAgo(d){
+  const sec=Math.max(1,Math.floor((Date.now()-new Date(d).getTime())/1000));
+  if(sec<60)return sec+'s ago'; const m=Math.floor(sec/60); if(m<60)return m+'m ago';
+  const h=Math.floor(m/60); if(h<24)return h+'h ago'; const days=Math.floor(h/24); if(days<30)return days+'d ago';
+  return new Date(d).toLocaleDateString();
+}
+function cleanUsername(v){return String(v||'').toLowerCase().replace(/[^a-z0-9_]/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'').slice(0,24)}
+
+async function ensureProfile(user){
+  let r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(r.data)return r.data;
+  const m=user.user_metadata||{};
+  let base=cleanUsername(m.username || (user.email||'user').split('@')[0]);
+  if(base.length<3)base='user';
+  let exists=await sb.from('profiles').select('id').eq('username',base).maybeSingle();
+  if(exists.data)base=(base.slice(0,17)+'_'+user.id.replace(/-/g,'').slice(0,5)).slice(0,24);
+  const payload={id:user.id,username:base,display_name:m.display_name||m.full_name||m.name||base,avatar_url:m.avatar_url||m.picture||null};
+  let ins=await sb.from('profiles').insert(payload).select().maybeSingle();
+  return ins.data||payload;
+}
+
+async function renderAuth(){
+  if(!currentSession||!currentSession.user){
+    $('loginBtn').style.display='';
+    $('userWrap').style.display='none';
+    currentProfile=null; return;
+  }
+  currentProfile=await ensureProfile(currentSession.user);
+  const name=(currentProfile&&(currentProfile.display_name||currentProfile.username))||currentSession.user.email||'User';
+  $('loginBtn').style.display='none';$('userWrap').style.display='block';$('navName').textContent=name;$('navAvatar').textContent=initials(name);
+  if(currentProfile&&currentProfile.avatar_url){$('navAvatar').style.backgroundImage='url("'+currentProfile.avatar_url+'")';$('navAvatar').textContent=''}
+  $('profileLink').href='profile.html?id='+encodeURIComponent(currentSession.user.id);
+}
+
+function requireLogin(){
+  if(currentSession&&currentSession.user)return true;
+  $('authModal').classList.add('open');
+  return false;
+}
+
+function openPost(post=null){
+  if(!requireLogin())return;
+  editingPostId=post?post.id:null;
+  $('postModalTitle').textContent=post?'Edit Post':'Create Post';
+  $('submitPost').textContent=post?'Save Changes':'Publish Post';
+  $('postType').value=post?.post_type||'Discussion';
+  $('category').value=post?.category||'Gaming';
+  $('title').value=post?.title||'';
+  $('body').value=post?.body||'';
+  $('imageFile').value='';
+  hideMsg($('postMsg'));
+  $('postModal').classList.add('open');
+}
+function closePost(){$('postModal').classList.remove('open');editingPostId=null}
+$('postModal').onclick=()=>{}; // never close data-entry modal on backdrop click
+$('closePost').onclick=closePost;$('cancelPost').onclick=closePost;
+
+async function uploadImage(file,userId){
+  if(!file)return null;
+  if(file.size>8*1024*1024)throw new Error('Image must be smaller than 8 MB.');
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  const path=userId+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;
+  const up=await sb.storage.from('community-images').upload(path,file,{cacheControl:'3600',upsert:false});
+  if(up.error)throw up.error;
+  return sb.storage.from('community-images').getPublicUrl(path).data.publicUrl;
+}
+
+$('postForm').onsubmit=async e=>{
+  e.preventDefault();
+  if(!requireLogin())return;
+  hideMsg($('postMsg'));$('submitPost').disabled=true;$('submitPost').textContent='Publishing…';
+  try{
+    let imageUrl=null;
+    const file=$('imageFile').files[0];
+    if(file)imageUrl=await uploadImage(file,currentSession.user.id);
+    const payload={
+      author_id:currentSession.user.id,
+      post_type:$('postType').value,
+      category:$('category').value,
+      title:$('title').value.trim(),
+      body:$('body').value.trim()
+    };
+    if(imageUrl)payload.image_url=imageUrl;
+
+    let r;
+    if(editingPostId){
+      delete payload.author_id;
+      r=await sb.from('posts').update(payload).eq('id',editingPostId);
+    }else{
+      r=await sb.from('posts').insert(payload);
+    }
+    if(r.error)throw r.error;
+    closePost();history.replaceState(null,'',location.pathname);await loadPosts();
+  }catch(err){
+    showMsg($('postMsg'),err.message||'Could not save the post.','error');
+  }finally{
+    $('submitPost').disabled=false;$('submitPost').textContent=editingPostId?'Save Changes':'Publish Post';
+  }
+};
+
+async function deletePost(id){
+  if(!confirm('Delete this post? This cannot be undone.'))return;
+  const r=await sb.from('posts').delete().eq('id',id);
+  if(r.error)alert(r.error.message);else loadPosts();
+}
+
+async function loadPosts(){
+  $('feed').innerHTML='<div class="feed-state">Loading community posts…</div>';
+  let q=sb.from('posts')
+    .select('id,author_id,post_type,category,title,body,image_url,status,created_at,updated_at,profiles!posts_author_id_fkey(username,display_name,avatar_url,role)')
+    .eq('status','published')
+    .order('created_at',{ascending:false})
+    .limit(50);
+  if(currentFilter!=='All')q=q.eq('category',currentFilter);
+  const r=await q;
+  if(r.error){$('feed').innerHTML='<div class="feed-state">Could not load community posts: '+esc(r.error.message)+'</div>';return}
+  if(!r.data||!r.data.length){$('feed').innerHTML='<div class="feed-state">No posts here yet. Be the first to start a discussion.</div>';return}
+
+  $('feed').innerHTML='';
+  r.data.forEach(post=>{
+    const profile=post.profiles||{},name=profile.display_name||profile.username||'Peppermoon User';
+    const mine=currentSession&&currentSession.user&&post.author_id===currentSession.user.id;
+    const admin=currentProfile&&currentProfile.role==='admin';
+    const node=document.createElement('article');node.className='post';
+    const avatar=profile.avatar_url
+      ? `<span class="author-avatar" style="background-image:url('${esc(profile.avatar_url)}')"></span>`
+      : `<span class="author-avatar">${esc(initials(name))}</span>`;
+    node.innerHTML=`
+      <div class="post-main">
+        <div class="post-top">
+          <a class="author" href="profile.html?id=${encodeURIComponent(post.author_id)}">
+            ${avatar}
+            <span><div class="author-name">${esc(name)}</div><div class="post-meta">@${esc(profile.username||'user')} · ${esc(timeAgo(post.created_at))}</div></span>
+          </a>
+        </div>
+        <div class="badges"><span class="badge type">${esc(post.post_type)}</span><span class="badge">${esc(post.category)}</span></div>
+        <h2>${esc(post.title)}</h2>
+        <div class="post-body">${esc(post.body)}</div>
+      </div>
+      ${post.image_url?`<img class="post-img" src="${esc(post.image_url)}" alt="">`:''}
+      <div class="post-actions">
+        <button class="action" data-coming="comment">💬 Comment</button>
+        <button class="action" data-coming="like">♡ Like</button>
+        <button class="action" data-coming="save">⌑ Save</button>
+        ${(mine||admin)?`<span class="owner-actions">${mine?'<button class="action edit-action">Edit</button>':''}<button class="action delete-action">Delete</button></span>`:''}
+      </div>`;
+    node.querySelectorAll('[data-coming]').forEach(b=>b.onclick=()=>alert('Comments, likes and saves are the next community update.'));
+    if(mine)node.querySelector('.edit-action').onclick=()=>openPost(post);
+    if(mine||admin)node.querySelector('.delete-action').onclick=()=>deletePost(post.id);
+    $('feed').appendChild(node);
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(b=>b.onclick=async()=>{
+  document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;await loadPosts();
+});
+
+$('heroCreate').onclick=()=>openPost();$('menuCreate').onclick=e=>{e.preventDefault();$('dropdown').classList.remove('open');openPost()};
+$('loginBtn').onclick=()=>$('authModal').classList.add('open');
+$('closeAuth').onclick=()=>$('authModal').classList.remove('open');
+$('authModal').onclick=()=>{}; // do not accidentally close auth prompt
+$('googleBtn').onclick=async()=>{
+  const r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://peppermooon.github.io/Peppermoon/community.html'}});
+  if(r.error)alert(r.error.message);
+};
+$('userBtn').onclick=()=>$('dropdown').classList.toggle('open');
+document.addEventListener('click',e=>{if($('userWrap')&&!$('userWrap').contains(e.target))$('dropdown').classList.remove('open')});
+$('logoutBtn').onclick=async()=>{await sb.auth.signOut()};
+
+(async()=>{
+  currentSession=(await sb.auth.getSession()).data.session;
+  await renderAuth();
+  await loadPosts();
+  if(location.hash==='#create')openPost();
+})();
+
+sb.auth.onAuthStateChange(async(_event,session)=>{
+  currentSession=session;
+  await renderAuth();
+  $('authModal').classList.remove('open');
+  await loadPosts();
+  if(session&&location.hash==='#create')openPost();
+});
+</script>
+</body>
+</html>

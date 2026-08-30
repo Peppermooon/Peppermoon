@@ -362,7 +362,7 @@ button,input,textarea{font:inherit}
 <header class="topbar">
   <div class="container nav">
     <a class="brand" href="index.html"><span class="brand-mark"></span><span>Peppermoon</span></a>
-    <nav class="nav-links" id="navLinks"><a class="" href="index.html">Home</a><a class="" href="gaming.html">Gaming</a><a class="" href="movies.html">Movies</a><a class="" href="tv.html">TV Series</a><a class="" href="trending.html">Trending</a><a class="" href="about.html">About</a></nav>
+    <nav class="nav-links" id="navLinks"><a class="" href="index.html">Home</a><a class="" href="gaming.html">Gaming</a><a class="" href="movies.html">Movies</a><a class="" href="tv.html">TV Series</a><a class="" href="trending.html">Trending</a><a class="" href="community.html">Community</a><a class="" href="about.html">About</a></nav>
     
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-auth-btn" id="pmOpenAuth">Log in / Sign up</button>
@@ -721,7 +721,7 @@ $('pmLogout').onclick=async()=>{
 
 $('pmCreatePostPlaceholder').onclick=e=>{
   e.preventDefault();
-  alert('Create Post is coming next.');
+  location.href='community.html#create';
 };
 
 $('pmSavedPlaceholder').onclick=e=>{
