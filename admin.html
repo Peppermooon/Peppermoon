@@ -227,7 +227,14 @@ tr:hover td{background:rgba(255,255,255,.018)}
 </header>
 
 <main class="shell">
-  <section class="login-wrap" id="loginView">
+  <section class="login-wrap" id="authLoadingView">
+    <div class="login-card">
+      <h1>Pepppermoon Admin</h1>
+      <p class="muted">Checking your admin session…</p>
+    </div>
+  </section>
+
+  <section class="login-wrap hidden" id="loginView">
     <form class="login-card" id="loginForm">
       <div style="font-size:2rem">🌙</div>
       <h1>Admin Login</h1>
@@ -410,16 +417,27 @@ function escapeHtml(v='') {
 }
 
 async function init() {
+  $('loginView').classList.add('hidden');
+  $('dashboardView').classList.add('hidden');
+  if ($('userBar')) $('userBar').classList.add('hidden');
+  if ($('authLoadingView')) $('authLoadingView').classList.remove('hidden');
+
   const { data: { session } } = await sb.auth.getSession();
-  setSession(session);
-  sb.auth.onAuthStateChange((_event, session) => setSession(session));
+  await setSession(session);
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    // TOKEN_REFRESHED is normal. Keep the dashboard visible.
+    await setSession(session);
+  });
 }
 
 async function setSession(session) {
+  if ($('authLoadingView')) $('authLoadingView').classList.add('hidden');
+
   if (!session || !session.user) {
     $('loginView').classList.remove('hidden');
     $('dashboardView').classList.add('hidden');
-    $('userBar').classList.add('hidden');
+    if ($('userBar')) $('userBar').classList.add('hidden');
     return;
   }
 
@@ -433,7 +451,7 @@ async function setSession(session) {
     await sb.auth.signOut();
     $('loginView').classList.remove('hidden');
     $('dashboardView').classList.add('hidden');
-    $('userBar').classList.add('hidden');
+    if ($('userBar')) $('userBar').classList.add('hidden');
     showMsg(
       $('loginMsg'),
       'This account is not authorized to access Peppermoon Admin.',
@@ -444,7 +462,8 @@ async function setSession(session) {
 
   $('loginView').classList.add('hidden');
   $('dashboardView').classList.remove('hidden');
-  $('userBar').classList.remove('hidden');
+  if ($('userBar')) $('userBar').classList.remove('hidden');
+
   $('userEmail').textContent =
     profile.display_name || profile.username || session.user.email || 'Admin';
 
