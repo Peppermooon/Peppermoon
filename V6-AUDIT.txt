@@ -1,0 +1,12 @@
+PEPPERMOON V6 STATIC AUDIT
+
+edit_button: PASS
+modal: PASS
+avatar_upload: PASS
+username_validation: PASS
+bio_limit: PASS
+no_backdrop_close: PASS
+saved_preserved: PASS
+likes_preserved: PASS
+follow_preserved: PASS
+manifest_preserved: PASS

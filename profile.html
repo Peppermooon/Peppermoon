@@ -481,6 +481,122 @@ html[data-theme="light"] .top .links a.active{color:#151925 !important}
   html[data-theme="light"] .top .links{background:#fff}
 }
 
+
+/* =========================================================
+   V6 PROFILE EDITING
+   ========================================================= */
+.profile-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.edit-profile-btn{
+  border:1px solid rgba(255,79,120,.28);
+  background:linear-gradient(135deg,#ff4f78,#ff6f86);
+  color:#fff;
+  border-radius:11px;
+  padding:9px 13px;
+  font-weight:850;
+  cursor:pointer;
+}
+.edit-profile-btn:hover{transform:translateY(-1px)}
+.profile-edit-modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(2,4,9,.72);
+}
+.profile-edit-modal.open{display:flex}
+.profile-edit-dialog{
+  width:min(100%,560px);
+  max-height:calc(100% - 24px);
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:#11141d;
+  color:var(--text);
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.profile-edit-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+}
+.profile-edit-head h2{margin:0;font-size:1.25rem}
+.profile-edit-close{
+  width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:var(--text);font-size:1.2rem;cursor:pointer;
+}
+.profile-edit-body{padding:20px}
+.avatar-editor{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.avatar-preview{
+  width:92px;height:92px;border-radius:50%;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,var(--pink),var(--violet));
+  background-size:cover;background-position:center;
+  font-size:2rem;font-weight:900;color:#fff;
+  overflow:hidden;
+}
+.avatar-upload-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:42px;padding:10px 14px;border-radius:11px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:var(--text);font-weight:800;cursor:pointer;
+}
+.avatar-help{font-size:.78rem;color:#8e98a9;margin-top:6px}
+.profile-field{margin:0 0 16px}
+.profile-field label{display:block;font-size:.82rem;font-weight:800;margin-bottom:7px}
+.profile-field input,.profile-field textarea{
+  width:100%;border:1px solid var(--line);border-radius:12px;
+  background:#0b0e15;color:var(--text);padding:12px 13px;
+  font:inherit;outline:none;
+}
+.profile-field textarea{min-height:110px;resize:vertical}
+.profile-field input:focus,.profile-field textarea:focus{border-color:rgba(255,79,120,.48)}
+.profile-charcount{font-size:.75rem;color:#7f8999;text-align:right;margin-top:4px}
+.profile-edit-error{
+  display:none;margin-bottom:14px;padding:10px 12px;border-radius:10px;
+  background:rgba(255,79,120,.09);border:1px solid rgba(255,79,120,.20);color:#ffb6c7;
+}
+.profile-edit-error.show{display:block}
+.profile-edit-footer{
+  display:flex;justify-content:flex-end;gap:8px;
+  padding:16px 20px;border-top:1px solid var(--line);
+}
+.profile-cancel,.profile-save{
+  min-height:42px;padding:10px 15px;border-radius:11px;font-weight:850;cursor:pointer;
+}
+.profile-cancel{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text)}
+.profile-save{border:0;background:linear-gradient(135deg,#ff4f78,#ff6f86);color:#fff}
+.profile-save:disabled{opacity:.55;cursor:not-allowed}
+html[data-theme="light"] .profile-edit-dialog{background:#fff;color:#161b29}
+html[data-theme="light"] .profile-edit-close,
+html[data-theme="light"] .avatar-upload-btn,
+html[data-theme="light"] .profile-cancel{background:#f7f8fa;color:#344054}
+html[data-theme="light"] .profile-field input,
+html[data-theme="light"] .profile-field textarea{background:#fff;color:#161b29;border-color:rgba(26,35,52,.14)}
+@media(max-width:520px){
+  .profile-edit-modal{padding:10px}
+  .profile-edit-dialog{border-radius:18px}
+  .profile-edit-body{padding:16px}
+  .profile-edit-footer{padding:14px 16px}
+  .profile-edit-footer button{flex:1}
+}
+
 </style>
 
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -500,6 +616,49 @@ html[data-theme="light"] .top .links a.active{color:#151925 !important}
 <main class="wrap"><div id="profileRoot"><div class="empty">Loading profile…</div></div>
 <div class="tabs" id="tabs" style="display:none"><button class="tab active" data-tab="posts">Posts</button><button class="tab" data-tab="liked">Liked</button><button class="tab" data-tab="saved" id="savedTab">Saved</button></div>
 <div class="feed" id="activity"></div></main>
+
+<div class="profile-edit-modal" id="profileEditModal" aria-hidden="true">
+  <div class="profile-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="profileEditTitle">
+    <div class="profile-edit-head">
+      <h2 id="profileEditTitle">Edit profile</h2>
+      <button class="profile-edit-close" id="profileEditClose" type="button" aria-label="Close">×</button>
+    </div>
+    <div class="profile-edit-body">
+      <div class="profile-edit-error" id="profileEditError"></div>
+
+      <div class="avatar-editor">
+        <div class="avatar-preview" id="avatarPreview">P</div>
+        <div>
+          <label class="avatar-upload-btn" for="avatarFile">Choose profile picture</label>
+          <input id="avatarFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <div class="avatar-help">JPG, PNG or WebP · maximum 5 MB</div>
+        </div>
+      </div>
+
+      <div class="profile-field">
+        <label for="displayNameInput">Display name</label>
+        <input id="displayNameInput" maxlength="50" autocomplete="name">
+      </div>
+
+      <div class="profile-field">
+        <label for="usernameInput">Username</label>
+        <input id="usernameInput" maxlength="30" autocomplete="username">
+        <div class="avatar-help">3–30 characters. Letters, numbers and underscores only.</div>
+      </div>
+
+      <div class="profile-field">
+        <label for="bioInput">Bio</label>
+        <textarea id="bioInput" maxlength="250"></textarea>
+        <div class="profile-charcount"><span id="bioCount">0</span>/250</div>
+      </div>
+    </div>
+    <div class="profile-edit-footer">
+      <button class="profile-cancel" id="profileEditCancel" type="button">Cancel</button>
+      <button class="profile-save" id="profileEditSave" type="button">Save changes</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -510,6 +669,169 @@ async function load(tab){document.querySelectorAll('.tab').forEach(b=>b.classLis
 if(tab==='posts'){const r=await sb.from('posts').select('id,title,body,created_at').eq('author_id',pid).eq('status','published').order('created_at',{ascending:false});items(r.data);return}
 if(tab==='liked'){const r=await sb.from('post_likes').select('posts!post_likes_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'));return}
 if(tab==='saved'){if(!session||!session.user||session.user.id!==pid){$('activity').innerHTML='<div class="empty">Saved posts are private.</div>';return}const r=await sb.from('saved_posts').select('posts!saved_posts_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'))}}
+
+
+let currentProfile=null;
+let pendingAvatarFile=null;
+
+function profileError(msg=''){
+  const e=$('profileEditError');
+  e.textContent=msg;
+  e.classList.toggle('show',!!msg);
+}
+
+function updateBioCount(){
+  $('bioCount').textContent=String(($('bioInput').value||'').length);
+}
+
+function setAvatarPreview(url,name){
+  const el=$('avatarPreview');
+  if(url){
+    el.textContent='';
+    el.style.backgroundImage=`url("${url.replace(/"/g,'%22')}")`;
+  }else{
+    el.style.backgroundImage='';
+    el.textContent=(name||'P').slice(0,1).toUpperCase();
+  }
+}
+
+function openProfileEditor(){
+  if(!session||!session.user||session.user.id!==pid||!currentProfile)return;
+  pendingAvatarFile=null;
+  $('avatarFile').value='';
+  $('displayNameInput').value=currentProfile.display_name||'';
+  $('usernameInput').value=currentProfile.username||'';
+  $('bioInput').value=currentProfile.bio||'';
+  updateBioCount();
+  setAvatarPreview(currentProfile.avatar_url,currentProfile.display_name||currentProfile.username);
+  profileError('');
+  $('profileEditModal').classList.add('open');
+  $('profileEditModal').setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+
+function closeProfileEditor(){
+  $('profileEditModal').classList.remove('open');
+  $('profileEditModal').setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  pendingAvatarFile=null;
+  if($('avatarFile'))$('avatarFile').value='';
+}
+
+async function uploadProfileAvatar(file){
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const safeExt=['jpg','jpeg','png','webp'].includes(ext)?ext:'jpg';
+  const path=`${session.user.id}/avatar-${Date.now()}.${safeExt}`;
+
+  const up=await sb.storage.from('profile-avatars').upload(path,file,{
+    cacheControl:'3600',
+    upsert:false,
+    contentType:file.type||undefined
+  });
+  if(up.error)throw up.error;
+
+  const pub=sb.storage.from('profile-avatars').getPublicUrl(path);
+  return pub.data.publicUrl;
+}
+
+async function saveProfileChanges(){
+  if(!session||!session.user||session.user.id!==pid)return;
+
+  const displayName=$('displayNameInput').value.trim();
+  const username=$('usernameInput').value.trim().toLowerCase();
+  const bio=$('bioInput').value.trim();
+
+  if(displayName.length>50){
+    profileError('Display name must be 50 characters or less.');
+    return;
+  }
+  if(!/^[a-z0-9_]{3,30}$/.test(username)){
+    profileError('Username must be 3–30 characters using only letters, numbers and underscores.');
+    return;
+  }
+
+  profileError('');
+  const btn=$('profileEditSave');
+  const oldLabel=btn.textContent;
+  btn.disabled=true;
+  btn.textContent='Saving…';
+
+  try{
+    // Username uniqueness check, excluding the current profile.
+    const existing=await sb.from('profiles')
+      .select('id')
+      .eq('username',username)
+      .neq('id',session.user.id)
+      .limit(1);
+
+    if(existing.error)throw existing.error;
+    if(existing.data&&existing.data.length){
+      throw new Error('That username is already taken.');
+    }
+
+    let avatarUrl=currentProfile.avatar_url||null;
+    if(pendingAvatarFile){
+      avatarUrl=await uploadProfileAvatar(pendingAvatarFile);
+    }
+
+    const upd=await sb.from('profiles').update({
+      username,
+      display_name:displayName||null,
+      bio:bio||null,
+      avatar_url:avatarUrl,
+      updated_at:new Date().toISOString()
+    }).eq('id',session.user.id);
+
+    if(upd.error)throw upd.error;
+
+    currentProfile={
+      ...currentProfile,
+      username,
+      display_name:displayName||null,
+      bio:bio||null,
+      avatar_url:avatarUrl
+    };
+
+    closeProfileEditor();
+    renderProfileCard(currentProfile);
+    await loadFollowState();
+  }catch(err){
+    profileError(err&&err.message?err.message:'Could not save profile.');
+  }finally{
+    btn.disabled=false;
+    btn.textContent=oldLabel;
+  }
+}
+
+function renderProfileCard(p){
+  currentProfile=p;
+  const n=p.display_name||p.username||'User';
+  const own=!!(session&&session.user&&session.user.id===pid);
+
+  $('profileRoot').innerHTML=`<section class="card">
+    <div class="head">
+      ${p.avatar_url
+        ? `<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`
+        : `<div class="avatar">${esc(n[0].toUpperCase())}</div>`}
+      <div>
+        <h1>${esc(n)}</h1>
+        <div class="user">@${esc(p.username)}</div>
+        <div class="follow-row" id="followRow">
+          <button class="follow-btn" id="followBtn" style="display:none">Follow</button>
+          <div class="follow-stats">
+            <span><strong id="followersCount">0</strong> Followers</span>
+            <span><strong id="followingCount">0</strong> Following</span>
+          </div>
+        </div>
+        ${own?`<div class="profile-actions"><button class="edit-profile-btn" id="editProfileBtn" type="button">Edit profile</button></div>`:''}
+      </div>
+    </div>
+    <div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div>
+    <div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div>
+  </section>`;
+
+  if(own&&$('editProfileBtn'))$('editProfileBtn').onclick=openProfileEditor;
+}
 
 async function loadFollowState(){
   const [fc,fg]=await Promise.all([
@@ -558,14 +880,44 @@ async function loadFollowState(){
   };
 }
 
-(async()=>{session=(await sb.auth.getSession()).data.session;pid=new URLSearchParams(location.search).get('id')||(session&&session.user&&session.user.id);if(!pid)return;const r=await sb.from('profiles').select('*').eq('id',pid).maybeSingle();if(!r.data)return;const p=r.data,n=p.display_name||p.username||'User';$('profileRoot').innerHTML=`<section class="card"><div class="head">${p.avatar_url?`<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`:`<div class="avatar">${esc(n[0].toUpperCase())}</div>`}<div><h1>${esc(n)}</h1><div class="user">@${esc(p.username)}</div>
-<div class="follow-row" id="followRow">
-  <button class="follow-btn" id="followBtn" style="display:none">Follow</button>
-  <div class="follow-stats"><span><strong id="followersCount">0</strong> Followers</span><span><strong id="followingCount">0</strong> Following</span></div>
-</div>
-</div></div><div class="bio">${esc(p.bio||'This Peppermoon user has not added a bio yet.')}</div><div class="meta">Joined ${p.created_at?new Date(p.created_at).toLocaleDateString():''}</div></section>`;$('tabs').style.display='flex';if(!session||!session.user||session.user.id!==pid)$('savedTab').style.display='none';document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>load(b.dataset.tab));
+(async()=>{session=(await sb.auth.getSession()).data.session;pid=new URLSearchParams(location.search).get('id')||(session&&session.user&&session.user.id);if(!pid)return;const r=await sb.from('profiles').select('*').eq('id',pid).maybeSingle();if(!r.data)return;const p=r.data;renderProfileCard(p);$('tabs').style.display='flex';if(!session||!session.user||session.user.id!==pid)$('savedTab').style.display='none';document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>load(b.dataset.tab));
 await loadFollowState();
 const initialTab=(location.hash==='#saved' && session&&session.user&&session.user.id===pid)?'saved':'posts';
-load(initialTab)})();
+load(initialTab);
+if(location.hash==='#edit' && session&&session.user&&session.user.id===pid){
+  setTimeout(openProfileEditor,0);
+}
+})();
+
+$('profileEditClose').onclick=closeProfileEditor;
+$('profileEditCancel').onclick=closeProfileEditor;
+$('profileEditSave').onclick=saveProfileChanges;
+$('bioInput').addEventListener('input',updateBioCount);
+
+$('avatarFile').addEventListener('change',()=>{
+  const f=$('avatarFile').files&&$('avatarFile').files[0];
+  if(!f)return;
+
+  if(!['image/jpeg','image/png','image/webp'].includes(f.type)){
+    profileError('Please choose a JPG, PNG or WebP image.');
+    $('avatarFile').value='';
+    return;
+  }
+  if(f.size>5*1024*1024){
+    profileError('Profile picture must be 5 MB or smaller.');
+    $('avatarFile').value='';
+    return;
+  }
+
+  pendingAvatarFile=f;
+  profileError('');
+  const reader=new FileReader();
+  reader.onload=()=>setAvatarPreview(reader.result,$('displayNameInput').value||$('usernameInput').value);
+  reader.readAsDataURL(f);
+});
+
+/* Deliberately do NOT close the editor by clicking the backdrop.
+   Close only with X or Cancel, matching Peppermoon data-entry modal behavior. */
+
 function lab(){$('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'☾ Dark':'☀ Light'}$('themeBtn').onclick=()=>{const n=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('peppermoon-theme',n);lab()};lab();
 </script></body></html>
