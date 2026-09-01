@@ -1,20 +1,13 @@
 
+PEPPERMOON V7 — COMMUNITY POST DETAIL
+- Dedicated post.html page for every Community post.
+- Full post page includes Like, Save, Share, Comments and Replies.
+- Community titles/open button link to the dedicated post page.
+- Stable post slugs use title + post ID.
+- Existing posts are backfilled by SQL.
+- This does NOT yet solve Facebook/WhatsApp rich previews on GitHub Pages; that needs the next server-side OG routing step.
 
-PEPPERMOON V6 — PROFILE EDITING
-- Users can edit only their own profile.
-- Editable: display name, username and bio.
-- Profile avatar upload supported.
-- Avatar formats: JPG, PNG, WebP.
-- Avatar max size: 5 MB.
-- Username format: 3–30 lowercase letters, numbers and underscores.
-- Username uniqueness is checked before save.
-- Avatar preview appears before upload.
-- Edit Profile modal closes only by X or Cancel, not backdrop click.
-- User profile menu gets an Edit profile shortcut where that menu exists.
-- Existing Posts / Liked / Saved / Follow / Notifications remain intact.
-- Existing mobile home-screen icon / manifest remains intact.
-
-SETUP:
-1. Run SUPABASE-PROFILE-AVATAR-SETUP.sql in Supabase SQL Editor.
-2. Upload/replace all website files from this build on GitHub.
-3. Open My Profile -> Edit profile.
+SETUP
+1. Run SUPABASE-POST-SLUG-SETUP.sql in Supabase SQL Editor.
+2. Upload the V7 files to GitHub.
+3. Test Community -> Open post -> full post page.
