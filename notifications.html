@@ -106,6 +106,29 @@ html[data-theme="light"] .hero .secondary{
   }
 }
 
+
+/* =========================================================
+   V8 MOBILE APP SHELL
+   ========================================================= */
+.mobile-bottom-nav{display:none}
+@media(max-width:760px){
+  body{padding-bottom:78px !important}
+  .hero-card{display:none !important}
+  .topbar .nav,header .nav,.top .nav{min-height:64px !important;padding:8px 0 !important;flex-wrap:nowrap !important}
+  .brand{font-size:1.14rem !important;gap:8px !important}
+  .brand-logo-img,.brand img{width:34px !important;height:34px !important;flex:0 0 34px !important}
+  .nav-links,nav.links,.top .links{display:none !important}
+  .pm-auth-area{width:auto !important;order:initial !important;margin-left:auto !important;padding-top:0 !important;justify-content:flex-end !important}
+  main{padding-top:0 !important}
+  .mobile-bottom-nav{position:fixed;left:10px;right:10px;bottom:10px;z-index:900;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;gap:2px;padding:7px 6px calc(7px + env(safe-area-inset-bottom));border:1px solid rgba(255,255,255,.10);border-radius:20px;background:rgba(12,14,22,.94);backdrop-filter:blur(18px);box-shadow:0 16px 38px rgba(0,0,0,.28)}
+  .mobile-bottom-nav a{min-width:0;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:14px;color:#8f98aa;font-size:.67rem;font-weight:800;text-decoration:none}
+  .mobile-bottom-nav a .mbn-icon{font-size:1.13rem;line-height:1}
+  .mobile-bottom-nav a.active{color:#fff;background:rgba(255,79,120,.12)}
+  html[data-theme="light"] .mobile-bottom-nav{background:rgba(255,255,255,.96);border-color:rgba(26,35,52,.11);box-shadow:0 14px 34px rgba(26,35,52,.14)}
+  html[data-theme="light"] .mobile-bottom-nav a{color:#667085}
+  html[data-theme="light"] .mobile-bottom-nav a.active{color:#151925;background:#fff1f5}
+}
+
 </style>
 
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -132,4 +155,11 @@ $('list').innerHTML='';r.data.forEach(n=>{const p=n.profiles||{},name=p.display_
 await sb.from('notifications').update({read:true}).eq('recipient_id',s.user.id).eq('read',false);
 })();
 </script>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <a href="index.html" data-mobile-section="home"><span class="mbn-icon">⌂</span><span>Home</span></a>
+  <a href="gaming.html" data-mobile-section="gaming"><span class="mbn-icon">🎮</span><span>Gaming</span></a>
+  <a href="movies.html" data-mobile-section="movies"><span class="mbn-icon">🎬</span><span>Movies</span></a>
+  <a href="tv.html" data-mobile-section="tv"><span class="mbn-icon">📺</span><span>TV</span></a>
+  <a href="community.html" data-mobile-section="community" class="active"><span class="mbn-icon">☾</span><span>Community</span></a>
+</nav>
 </body></html>

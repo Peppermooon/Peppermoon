@@ -1,13 +1,14 @@
 
-PEPPERMOON V7 — COMMUNITY POST DETAIL
-- Dedicated post.html page for every Community post.
-- Full post page includes Like, Save, Share, Comments and Replies.
-- Community titles/open button link to the dedicated post page.
-- Stable post slugs use title + post ID.
-- Existing posts are backfilled by SQL.
-- This does NOT yet solve Facebook/WhatsApp rich previews on GitHub Pages; that needs the next server-side OG routing step.
 
-SETUP
-1. Run SUPABASE-POST-SLUG-SETUP.sql in Supabase SQL Editor.
-2. Upload the V7 files to GitHub.
-3. Test Community -> Open post -> full post page.
+PEPPERMOON V8 — MOBILE APP SHELL + SOCIAL SHARE PREVIEWS
+
+MOBILE
+- Hero hidden on mobile only. Desktop hero unchanged.
+- Fixed bottom tabs: Home / Gaming / Movies / TV / Community.
+- Mobile home is feed-first with a compact intro.
+
+SHARE PREVIEWS
+- Cloudflare Pages Functions added for /article/<slug> and /post/<slug>.
+- They generate server-side Open Graph/Twitter metadata with each title, description and image.
+- GitHub Pages cannot execute these functions. Deploy this same repo through Cloudflare Pages to activate rich Facebook/WhatsApp/etc previews.
+- Supabase remains the backend.
