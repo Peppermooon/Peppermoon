@@ -1,0 +1,9 @@
+PEPPERMOON V8.1 AUDIT
+
+mobile_alignment_css: PASS
+single_row_rule: PASS
+avatar_compact: PASS
+github_share_safe: PASS
+cloudflare_share_preserved: PASS
+cloudflare_functions_preserved: PASS
+mobile_nav_preserved: PASS

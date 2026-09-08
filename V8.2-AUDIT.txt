@@ -1,0 +1,6 @@
+shared_helper: PASS
+article_no_assets_fetch: PASS
+post_no_assets_fetch: PASS
+article_og: PASS
+post_og: PASS
+routes_file: PASS

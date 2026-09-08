@@ -1,16 +1,50 @@
-export async function onRequest(context){
- const slug=context.params.slug;
- const api='https://bgzlqvbvmstebdsnzmqv.supabase.co/rest/v1/posts?slug=eq.'+encodeURIComponent(slug)+'&status=eq.published&select=title,body,image_url,slug';
- const r=await fetch(api,{headers:{apikey:'sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-',Authorization:'Bearer sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-'}});
- const rows=await r.json(); const p=Array.isArray(rows)?rows[0]:null;
- if(!p)return new Response('Post not found',{status:404});
- const reqUrl=new URL(context.request.url), origin=reqUrl.origin;
- const assetReq=new Request(origin+'/post.html?slug='+encodeURIComponent(slug),context.request);
- const asset=await context.env.ASSETS.fetch(assetReq);
- let html=await asset.text();
- const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const title=esc(p.title), raw=String(p.body||'').replace(/\s+/g,' ').trim().slice(0,220), desc=esc(raw||'Read this Peppermoon Community post.'), image=esc(p.image_url||origin+'/peppermoon-logo.png'), share=esc(origin+'/post/'+slug);
- const meta=`<title>${title} | Peppermoon Community</title><meta name="description" content="${desc}"><link rel="canonical" href="${share}"><meta property="og:type" content="article"><meta property="og:site_name" content="Peppermoon"><meta property="og:title" content="${title}"><meta property="og:description" content="${desc}"><meta property="og:image" content="${image}"><meta property="og:url" content="${share}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${title}"><meta name="twitter:description" content="${desc}"><meta name="twitter:image" content="${image}">`;
- html=html.replace(/<title>[\s\S]*?<\/title>/i,'').replace('</head>',meta+'</head>');
- return new Response(html,{headers:{'content-type':'text/html; charset=UTF-8','cache-control':'public, max-age=180'}});
+import { sharePage } from '../_shared.js';
+
+export async function onRequest(context) {
+  try {
+    const slug=String(context.params.slug||'');
+    if(!slug) return new Response('Post not found',{status:404});
+
+    const api='https://bgzlqvbvmstebdsnzmqv.supabase.co/rest/v1/posts?slug=eq.'+
+      encodeURIComponent(slug)+
+      '&status=eq.published&select=title,body,image_url,slug';
+
+    const r=await fetch(api,{
+      headers:{
+        apikey:'sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-',
+        Authorization:'Bearer sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-'
+      }
+    });
+
+    if(!r.ok) return new Response('Could not load post',{status:502});
+
+    const rows=await r.json();
+    const p=Array.isArray(rows)?rows[0]:null;
+    if(!p) return new Response('Post not found',{status:404});
+
+    const req=new URL(context.request.url);
+    const origin=req.origin;
+    const canonical=origin+'/post/'+encodeURIComponent(slug);
+    const destination=origin+'/post.html?slug='+encodeURIComponent(slug);
+    const description=String(p.body||'').replace(/\s+/g,' ').trim().slice(0,220);
+    const image=p.image_url || origin+'/peppermoon-logo.png';
+
+    const html=sharePage({
+      title:p.title,
+      description:description || 'Read this Peppermoon Community post.',
+      image,
+      canonical,
+      destination,
+      kind:'article'
+    });
+
+    return new Response(html,{
+      headers:{
+        'content-type':'text/html; charset=UTF-8',
+        'cache-control':'public, max-age=120'
+      }
+    });
+  } catch(err) {
+    return new Response('Share preview error',{status:500});
+  }
 }

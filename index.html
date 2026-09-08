@@ -1323,6 +1323,198 @@ html[data-theme="light"] .hero-card .secondary{
   .mobile-feed-intro p{margin:0;color:var(--muted);line-height:1.55}
 }
 
+
+/* =========================================================
+   V8.1 MOBILE APP ALIGNMENT FIX
+   ========================================================= */
+@media(max-width:760px){
+  /* One clean app-bar row */
+  .topbar .nav,
+  header .nav,
+  .top .nav{
+    min-height:68px !important;
+    padding:8px 0 !important;
+    gap:7px !important;
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+  }
+
+  .brand{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    font-size:1.02rem !important;
+    gap:7px !important;
+    overflow:hidden !important;
+  }
+
+  .brand span{
+    display:block !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  .brand-logo-img,
+  .brand img{
+    width:34px !important;
+    height:34px !important;
+    flex:0 0 34px !important;
+  }
+
+  /* All utilities stay on the SAME row */
+  .pm-auth-area{
+    flex:0 0 auto !important;
+    width:auto !important;
+    order:initial !important;
+    margin:0 !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:6px !important;
+  }
+
+  /* Theme becomes an icon-style app control */
+  .pm-theme-toggle{
+    width:42px !important;
+    height:42px !important;
+    min-height:42px !important;
+    padding:0 !important;
+    flex:0 0 42px !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    font-size:0 !important;
+    border-radius:13px !important;
+    display:grid !important;
+    place-items:center !important;
+  }
+  .pm-theme-toggle::before{
+    content:"◐";
+    font-size:1.05rem;
+    line-height:1;
+  }
+
+  /* Logged-in user control shows the avatar only on mobile */
+  .pm-user-menu{
+    margin:0 !important;
+    flex:0 0 auto !important;
+  }
+  .pm-user-trigger{
+    width:46px !important;
+    height:42px !important;
+    min-height:42px !important;
+    padding:3px !important;
+    border-radius:13px !important;
+    justify-content:center !important;
+    gap:0 !important;
+  }
+  .pm-user-trigger .pm-user-name,
+  .pm-user-trigger > span:last-child{
+    display:none !important;
+  }
+  .pm-avatar{
+    width:34px !important;
+    height:34px !important;
+    flex:0 0 34px !important;
+  }
+
+  /* Logged-out button becomes compact, but remains readable */
+  .pm-auth-btn{
+    min-height:42px !important;
+    padding:8px 11px !important;
+    font-size:.74rem !important;
+    white-space:nowrap !important;
+  }
+
+  .nav-actions{
+    flex:0 0 auto !important;
+    margin:0 !important;
+    order:initial !important;
+    display:flex !important;
+    gap:6px !important;
+    align-items:center !important;
+  }
+
+  .icon-btn,
+  .menu-toggle{
+    width:42px !important;
+    height:42px !important;
+    min-width:42px !important;
+    flex:0 0 42px !important;
+    border-radius:13px !important;
+  }
+
+  /* Avoid the old second-row/search spacing affecting app-bar alignment */
+  .search-panel{
+    padding:8px 0 10px !important;
+  }
+
+  /* Feed begins much closer to app bar */
+  .mobile-feed-intro{
+    margin:18px 0 18px !important;
+    padding:0 !important;
+  }
+  .mobile-feed-intro h1{
+    margin:5px 0 6px !important;
+    font-size:1.55rem !important;
+  }
+  .mobile-feed-intro p{
+    font-size:.92rem !important;
+  }
+
+  /* Reduce website-like vertical whitespace */
+  .section{
+    padding-top:26px !important;
+    padding-bottom:26px !important;
+  }
+  .section-head{
+    margin-bottom:14px !important;
+  }
+
+  /* Bottom nav respects narrow phones */
+  .mobile-bottom-nav{
+    left:8px !important;
+    right:8px !important;
+    bottom:8px !important;
+    gap:1px !important;
+    padding-left:5px !important;
+    padding-right:5px !important;
+  }
+  .mobile-bottom-nav a{
+    padding:4px 2px !important;
+    font-size:.63rem !important;
+  }
+  .mobile-bottom-nav a .mbn-icon{
+    font-size:1.05rem !important;
+  }
+}
+
+@media(max-width:390px){
+  .brand{
+    font-size:.96rem !important;
+  }
+  .pm-theme-toggle{
+    width:38px !important;
+    flex-basis:38px !important;
+  }
+  .pm-user-trigger{
+    width:42px !important;
+  }
+  .icon-btn,
+  .menu-toggle{
+    width:38px !important;
+    min-width:38px !important;
+    flex-basis:38px !important;
+  }
+  .pm-auth-area,
+  .nav-actions{
+    gap:4px !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
