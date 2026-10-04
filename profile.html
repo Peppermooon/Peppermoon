@@ -843,12 +843,32 @@ html[data-theme="light"] .pm-auth-field input{
   color:#1d2939 !important;
   -webkit-text-fill-color:#1d2939;
 }
+
+/* Navigation labels inherit the header surface in every interaction state. */
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] nav.links,
+html[data-theme="light"] .top .links,
+html[data-theme="light"] .nav-links a,
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav.links a,
+html[data-theme="light"] nav.links a:hover,
+html[data-theme="light"] nav.links a.active,
+html[data-theme="light"] .top .links a{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent !important;
+}
 </style>
+<style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
 </head>
 <body>
 <header class="top"><div class="nav">
 <a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-<nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></nav>
+<nav class="links"><a href="index.html">Home</a><a href="community.html" class="active" aria-current="page">Community</a><a href="about.html">About</a></nav>
 <button class="theme" id="themeBtn">☀ Light</button>
 </div></header>
 <main class="wrap"><div id="profileRoot"><div class="empty">Loading profile…</div></div>
@@ -1158,11 +1178,5 @@ $('avatarFile').addEventListener('change',()=>{
    Close only with X or Cancel, matching Peppermoon data-entry modal behavior. */
 
 function lab(){$('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'☾ Dark':'☀ Light'}$('themeBtn').onclick=()=>{const n=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('peppermoon-theme',n);lab()};lab();
-</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <a href="index.html" data-mobile-section="home"><span class="mbn-icon">⌂</span><span>Home</span></a>
-  <a href="gaming.html" data-mobile-section="gaming"><span class="mbn-icon">🎮</span><span>Gaming</span></a>
-  <a href="movies.html" data-mobile-section="movies"><span class="mbn-icon">🎬</span><span>Movies</span></a>
-  <a href="tv.html" data-mobile-section="tv"><span class="mbn-icon">📺</span><span>TV</span></a>
-  <a href="community.html" data-mobile-section="community" class="active"><span class="mbn-icon">☾</span><span>Community</span></a>
-</nav>
+</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="community.html" data-mobile-section="community" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 </body></html>

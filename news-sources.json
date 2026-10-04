@@ -1,0 +1,6 @@
+[
+  {"name":"GamesRadar+","feed_url":"https://www.gamesradar.com/feeds.xml","category":"auto","article_hosts":["www.gamesradar.com","gamesradar.com"],"summary_chars":180,"enabled":true},
+  {"name":"GameSpot","feed_url":"https://www.gamespot.com/feeds/news/","category":"auto","article_hosts":["www.gamespot.com","gamespot.com"],"summary_chars":180,"enabled":true},
+  {"name":"Variety","feed_url":"https://variety.com/feed/","category":"auto","article_hosts":["variety.com","www.variety.com"],"summary_chars":180,"enabled":true},
+  {"name":"IGN","feed_url":"https://www.ign.com/rss/articles/feed","category":"auto","article_hosts":["www.ign.com","ign.com"],"summary_chars":180,"enabled":false}
+]

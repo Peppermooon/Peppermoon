@@ -1547,14 +1547,51 @@ html[data-theme="light"] .pm-auth-field input{
   color:#1d2939 !important;
   -webkit-text-fill-color:#1d2939;
 }
+
+/* Navigation labels inherit the header surface in every interaction state. */
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] nav.links,
+html[data-theme="light"] .top .links,
+html[data-theme="light"] .nav-links a,
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav.links a,
+html[data-theme="light"] nav.links a:hover,
+html[data-theme="light"] nav.links a.active,
+html[data-theme="light"] .top .links a{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent !important;
+}
 </style>
+<style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
+<style id="pm-news-feed-styles">
+.news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.news-card{min-width:0;display:flex;flex-direction:column}
+.news-card .card-body{display:flex;flex-direction:column;flex:1}
+.news-card h3{overflow-wrap:anywhere}
+.news-card .meta{flex-wrap:wrap}
+.news-original{display:inline-block;margin-top:auto;padding-top:18px;font-weight:800;color:#ff8da7}
+html[data-theme="light"] .news-original{color:#4456a6}
+.news-intro,#newsStatus{color:var(--muted);line-height:1.6}
+.news-search-label{display:block;margin:22px 0 8px;font-weight:700}
+.news-search{width:100%;max-width:560px;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:inherit}
+.news-actions{display:flex;justify-content:center;margin:26px 0;gap:12px}
+.news-actions [hidden]{display:none!important}
+@media(max-width:1000px){.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.news-grid{grid-template-columns:1fr}.news-card .card-art{height:150px}.news-card .card-body{padding:20px}}
+</style>
+<script src="assets/news-feed.js" defer></script>
 </head>
 <body>
 
 <header class="topbar">
   <div class="container nav">
     <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="nav-links" id="navLinks"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
+    <nav class="nav-links" id="navLinks"><a href="index.html" class="active" aria-current="page">Home</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
     
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
@@ -1580,68 +1617,28 @@ html[data-theme="light"] .pm-auth-field input{
   </div>
 </header>
 <main>
-
-<section class="hero-home">
-  <div class="container">
-    <article class="hero-card">
-      <div>
-        <span class="eyebrow">Games • Movies • TV</span>
-        <h1>Welcome to Peppermoon.</h1>
-        <p>Reviews, explainers, comparisons, watch orders, game guides and the stories everyone is talking about — all in one place.</p>
-        <div class="btn-row">
-          <a class="btn btn-primary" href="community.html#trending">Explore Trending</a>
-          <a class="btn btn-secondary" href="#categories">Browse Categories</a>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
-<section class="mobile-feed-intro">
-  <span class="mobile-feed-kicker">Peppermoon</span>
-  <h1>What are you into today?</h1>
-  <p>Discover gaming, movies, TV and community discussions.</p>
-</section>
-
-<section class="section" id="categories">
-  <div class="container">
-    <div class="section-head">
-      <div><div class="section-kicker">Explore</div><h2 class="section-title">Three worlds. One moon.</h2></div>
-    </div>
-    <div class="grid-3">
-      <a class="category-tile" href="gaming.html"><div class="category-icon">🎮</div><h3>Gaming</h3><p>Reviews, game length, compatibility, comparisons, recommendations and story explainers.</p></a>
-      <a class="category-tile" href="movies.html"><div class="category-icon">🎬</div><h3>Movies</h3><p>Reviews, watch orders, endings explained, character guides and recommendations.</p></a>
-      <a class="category-tile" href="tv.html"><div class="category-icon">📺</div><h3>TV Series</h3><p>Season recaps, episode guides, release updates, character analysis and series recommendations.</p></a>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="section-head">
-      <div><div class="section-kicker">Featured</div><h2 class="section-title">Start reading</h2></div>
-      <a href="trending.html">View all →</a>
-    </div>
-    <div class="grid-4">
-      <a class="card" data-search="gaming open world games" href="open-world-games.html"><div class="card-art art-game"><span class="tag">Gaming</span>🎮</div><div class="card-body"><div class="meta">Guide <span class="dot"></span> 8 min</div><h3>Open-world games worth losing a weekend to</h3><p>Big worlds, strong stories and enough content to keep you playing.</p></div></a>
-      <a class="card" data-search="movies watch order franchise" href="movie-watch-order.html"><div class="card-art art-movie"><span class="tag">Movies</span>🎬</div><div class="card-body"><div class="meta">Watch Order <span class="dot"></span> 6 min</div><h3>The best way to watch a major movie franchise</h3><p>Release order, chronological order and which one works best.</p></div></a>
-      <a class="card" data-search="tv ending explained" href="tv-finale-explained.html"><div class="card-art art-tv"><span class="tag">TV Series</span>📺</div><div class="card-body"><div class="meta">Explained <span class="dot"></span> 7 min</div><h3>That finale explained without the confusion</h3><p>A clean breakdown of the ending, characters and what happens next.</p></div></a>
-      <a class="card" data-search="games movies adaptations" href="games-to-screen.html"><div class="card-art art-feature"><span class="tag">Feature</span>🌙</div><div class="card-body"><div class="meta">Feature <span class="dot"></span> 10 min</div><h3>When games become movies and TV</h3><p>Why some adaptations work — and why others miss the point.</p></div></a>
-    </div>
-  </div>
-</section>
-
+<section class="hero-home"><div class="container"><article class="hero-card"><div>
+<span class="eyebrow">Games • Movies • TV</span>
+<h1>Your next story starts here.</h1>
+<p>Discover the latest news and articles from entertainment publishers, together in one place.</p>
+<div class="btn-row"><a class="btn btn-primary" href="#latest-news">Read the latest</a><a class="btn btn-secondary" href="community.html">Join the community</a></div>
+</div></article></div></section>
+<section class="section" id="latest-news"><div class="container">
+<div class="section-head"><div><div class="section-kicker">Across the entertainment world</div><h2 class="section-title">Latest stories</h2></div></div>
+<p class="news-intro">Games, movies and TV — with every story linked to its original publisher.</p>
+<label class="news-search-label" for="newsSearch">Search headlines</label>
+<input id="newsSearch" class="news-search" type="search" placeholder="Search games, movies or TV stories…" maxlength="120">
+<p id="newsStatus" role="status" aria-live="polite">Loading stories…</p>
+<div id="newsGrid" class="news-grid" aria-busy="true"></div>
+<div class="news-actions"><button id="newsRetry" class="btn btn-secondary" type="button" hidden>Try again</button><button id="newsMore" class="btn btn-secondary" type="button" hidden>Load more stories</button></div>
+<noscript>Please enable JavaScript to see the latest stories.</noscript>
+</div></section>
 </main>
 
 <footer class="footer">
   <div class="container footer-inner">
     <div>© <span id="year"></span> Peppermoon. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="gaming.html">Gaming</a>
-      <a href="movies.html">Movies</a>
-      <a href="tv.html">TV Series</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </div>
+    <div class="footer-links"><a href="index.html" class="active" aria-current="page">Home</a><a href="community.html">Community</a><a href="about.html">About</a></div>
   </div>
 </footer>
 <script>
@@ -1673,53 +1670,10 @@ document.querySelectorAll("form[data-demo-form]").forEach(form=>{
 });
 </script>
 
-<script>(function(){const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const cls=c=>c==='Gaming'?'art-game':c==='Movies'?'art-movie':c==='TV Series'?'art-tv':'art-feature';const ico=c=>c==='Gaming'?'🎮':c==='Movies'?'🎬':c==='TV Series'?'📺':'🌙';const card=a=>`<a class="card" data-search="${esc((a.title||'')+' '+(a.summary||''))}" href="article.html?slug=${encodeURIComponent(a.slug)}"><div class="card-art ${cls(a.category)}" ${a.featured_image?`style="background-image:linear-gradient(to top,rgba(5,5,10,.72),rgba(5,5,10,.08)),url('${a.featured_image}');background-size:cover;background-position:center"`:''}><span class="tag">${esc(a.category)}</span>${a.featured_image?'':ico(a.category)}</div><div class="card-body"><div class="meta">${esc(a.author||'Peppermoon')} <span class="dot"></span> ${a.published_at?new Date(a.published_at).toLocaleDateString():''}</div><h3>${esc(a.title)}</h3><p>${esc(a.summary||'')}</p></div></a>`;async function run(){const p=location.pathname.split('/').pop()||'index.html';let q=sb.from('articles').select('*').eq('status','published').order('published_at',{ascending:false});if(p==='index.html'||p==='')q=q.eq('show_on_homepage',true);else if(p==='gaming.html')q=q.eq('category','Gaming');else if(p==='movies.html')q=q.eq('category','Movies');else if(p==='tv.html')q=q.eq('category','TV Series');else if(p==='trending.html')q=q.eq('category','Trending');else return;const{data,error}=await q.limit(p==='index.html'||p===''?8:24);if(error||!data||!data.length)return;const grids=[...document.querySelectorAll('.grid-4,.grid-3')];if(!grids.length)return;const target=(p==='index.html'||p==='')?grids[grids.length-1]:grids[0];target.innerHTML=data.map(card).join('')}run()})();</script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-(function() {
-  const sb = window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co", "sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");
-  const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const artClass=c=>c==='Gaming'?'art-game':c==='Movies'?'art-movie':c==='TV Series'?'art-tv':'art-feature';
-  const icon=c=>c==='Gaming'?'🎮':c==='Movies'?'🎬':c==='TV Series'?'📺':'🌙';
 
-  function card(a) {
-    return `<a class="card" data-search="${esc((a.title||'')+' '+(a.summary||'')+' '+(a.category||''))}" href="article.html?slug=${encodeURIComponent(a.slug)}">
-      <div class="card-art ${artClass(a.category)}" ${a.featured_image?`style="background-image:linear-gradient(to top,rgba(5,5,10,.70),rgba(5,5,10,.06)),url('${a.featured_image}');background-size:cover;background-position:center"`:''}>
-        <span class="tag">${esc(a.category)}</span>${a.featured_image?'':icon(a.category)}
-      </div>
-      <div class="card-body">
-        <div class="meta">${esc(a.author||'Peppermoon')} <span class="dot"></span> ${a.published_at?new Date(a.published_at).toLocaleDateString():''}</div>
-        <h3>${esc(a.title)}</h3>
-        <p>${esc(a.summary||'')}</p>
-      </div>
-    </a>`;
-  }
-
-  async function load() {
-    const path=location.pathname.split('/').pop()||'index.html';
-    let q=sb.from('articles').select('*').eq('status','published').order('published_at',{ascending:false});
-
-    if(path==='index.html'||path==='') q=q.eq('show_on_homepage',true);
-    else if(path==='gaming.html') q=q.eq('category','Gaming');
-    else if(path==='movies.html') q=q.eq('category','Movies');
-    else if(path==='tv.html') q=q.eq('category','TV Series');
-    else if(path==='trending.html') q=q.eq('category','Trending');
-    else return;
-
-    const {data,error}=await q.limit(path==='index.html'||path===''?8:24);
-    if(error||!data||!data.length) return;
-
-    const grids=[...document.querySelectorAll('.grid-4,.grid-3')];
-    if(!grids.length) return;
-
-    const target=(path==='index.html'||path==='') ? grids[grids.length-1] : grids[0];
-    target.innerHTML=data.map(card).join('');
-  }
-
-  load();
-})();
-</script>
 
 
 
@@ -2044,12 +1998,6 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 })();
 </script>
 
-<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <a href="index.html" data-mobile-section="home" class="active"><span class="mbn-icon">⌂</span><span>Home</span></a>
-  <a href="gaming.html" data-mobile-section="gaming"><span class="mbn-icon">🎮</span><span>Gaming</span></a>
-  <a href="movies.html" data-mobile-section="movies"><span class="mbn-icon">🎬</span><span>Movies</span></a>
-  <a href="tv.html" data-mobile-section="tv"><span class="mbn-icon">📺</span><span>TV</span></a>
-  <a href="community.html" data-mobile-section="community"><span class="mbn-icon">☾</span><span>Community</span></a>
-</nav>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 </body>
 </html>

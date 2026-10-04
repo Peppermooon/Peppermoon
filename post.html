@@ -262,10 +262,30 @@ html[data-theme="light"] .pm-auth-field input{
   color:#1d2939 !important;
   -webkit-text-fill-color:#1d2939;
 }
+
+/* Navigation labels inherit the header surface in every interaction state. */
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] nav.links,
+html[data-theme="light"] .top .links,
+html[data-theme="light"] .nav-links a,
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active,
+html[data-theme="light"] nav.links a,
+html[data-theme="light"] nav.links a:hover,
+html[data-theme="light"] nav.links a.active,
+html[data-theme="light"] .top .links a{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+html[data-theme="light"] .nav-links::before,
+html[data-theme="light"] .nav-links::after{
+  border-color:transparent !important;
+}
 </style>
+<style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
 </head>
 <body>
-<header class="top"><div class="container nav"><a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a><nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a class="active" href="community.html">Community</a><a href="about.html">About</a></nav><button class="theme" id="themeBtn">Theme</button></div></header>
+<header class="top"><div class="container nav"><a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a><nav class="links"><a href="index.html">Home</a><a href="community.html" class="active" aria-current="page">Community</a><a href="about.html">About</a></nav><button class="theme" id="themeBtn">Theme</button></div></header>
 <main class="main"><a class="back" href="community.html">← Back to Community</a><div id="root"><div class="state">Loading post…</div></div></main>
 <script>
 const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
@@ -298,11 +318,5 @@ function renderComment(c){const p=c.profiles||{},name=p.display_name||p.username
 async function render(){const i=await interactions(),p=post.profiles||{},name=p.display_name||p.username||'Peppermoon User',av=p.avatar_url?`<div class="avatar" style="background-image:url('${esc(p.avatar_url)}')"></div>`:`<div class="avatar">${esc((name[0]||'P').toUpperCase())}</div>`,roots=comments.filter(c=>!c.parent_comment_id);$('root').innerHTML=`<article class="post"><div class="post-head">${av}<div><div class="author"><a href="profile.html?id=${encodeURIComponent(post.author_id)}">${esc(name)}</a></div><div class="meta">${esc(post.category)} · ${new Date(post.created_at).toLocaleString()}</div></div></div><div class="content"><span class="badge">${esc(post.post_type)}</span><h1>${esc(post.title)}</h1><div class="body">${linkify(post.body)}</div></div>${post.image_url?`<img class="post-img" src="${esc(post.image_url)}" alt="">`:''}<div class="actions"><button class="action ${i.liked?'active':''}" id="likeBtn">♥ ${i.count}</button><button class="action ${i.saved?'active':''}" id="saveBtn">${i.saved?'★ Saved':'☆ Save'}</button><button class="action" id="shareBtn">↗ Share</button></div></article><section class="comments"><h2>Comments (${comments.length})</h2><div class="compose"><textarea id="commentInput" placeholder="${session?'Write a comment…':'Log in to comment'}" ${session?'':'disabled'}></textarea><button class="submit" id="commentSubmit" ${session?'':'disabled'}>Comment</button></div>${roots.length?roots.map(renderComment).join(''):'<div class="state">No comments yet.</div>'}</section>`;$('likeBtn').onclick=toggleLike;$('saveBtn').onclick=toggleSave;$('shareBtn').onclick=async()=>{try{if(navigator.share)await navigator.share({title:post.title,url:prettyPostShareUrl()});else await navigator.clipboard.writeText(prettyPostShareUrl())}catch{}};if($('commentSubmit'))$('commentSubmit').onclick=()=>addComment(null);document.querySelectorAll('[data-reply]').forEach(b=>b.onclick=()=>$('box-'+b.dataset.reply).classList.toggle('open'));document.querySelectorAll('[data-submit-reply]').forEach(b=>b.onclick=()=>addComment(Number(b.dataset.submitReply)));document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteComment(Number(b.dataset.delete)))}
 (async()=>{session=(await sb.auth.getSession()).data.session;const slug=new URLSearchParams(location.search).get('slug');if(!slug){$('root').innerHTML='<div class="state">Post not found.</div>';return}const r=await sb.from('posts').select('id,author_id,slug,post_type,category,title,body,image_url,status,created_at,profiles!posts_author_id_fkey(username,display_name,avatar_url)').eq('slug',slug).eq('status','published').maybeSingle();if(r.error||!r.data){$('root').innerHTML='<div class="state">This post could not be found.</div>';return}post=r.data;document.title=post.title+' | Peppermoon Community';await loadComments();await render()})();
 $('themeBtn').onclick=()=>{const cur=document.documentElement.getAttribute('data-theme')||'dark',next=cur==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('peppermoon-theme',next)};
-</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-  <a href="index.html" data-mobile-section="home"><span class="mbn-icon">⌂</span><span>Home</span></a>
-  <a href="gaming.html" data-mobile-section="gaming"><span class="mbn-icon">🎮</span><span>Gaming</span></a>
-  <a href="movies.html" data-mobile-section="movies"><span class="mbn-icon">🎬</span><span>Movies</span></a>
-  <a href="tv.html" data-mobile-section="tv"><span class="mbn-icon">📺</span><span>TV</span></a>
-  <a href="community.html" data-mobile-section="community" class="active"><span class="mbn-icon">☾</span><span>Community</span></a>
-</nav>
+</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="community.html" data-mobile-section="community" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 </body></html>
