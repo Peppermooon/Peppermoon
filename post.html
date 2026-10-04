@@ -240,6 +240,29 @@ html[data-theme="light"]{--bg:#f6f7fa;--panel:#fff;--text:#161b29;--line:rgba(26
 }
 
 </style>
+
+<style id="pm-light-auth-nav-fix">
+/* Keep light-mode navigation aligned with the page background. */
+html[data-theme="light"] header,
+html[data-theme="light"] .top,
+html[data-theme="light"] .topbar,
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] nav.links{
+  background:var(--bg, #f6f7fa) !important;
+}
+html[data-theme="light"] .pm-auth-close{
+  color:#344054 !important;
+  background:#f2f4f8 !important;
+  border-color:rgba(26,35,52,.14) !important;
+}
+html[data-theme="light"] .pm-auth-field label{
+  color:#344054 !important;
+}
+html[data-theme="light"] .pm-auth-field input{
+  color:#1d2939 !important;
+  -webkit-text-fill-color:#1d2939;
+}
+</style>
 </head>
 <body>
 <header class="top"><div class="container nav"><a class="brand" href="index.html"><img src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a><nav class="links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a class="active" href="community.html">Community</a><a href="about.html">About</a></nav><button class="theme" id="themeBtn">Theme</button></div></header>

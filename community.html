@@ -1283,6 +1283,29 @@ html[data-theme="light"] .community-feed-tabs{
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Peppermoon">
 
+
+<style id="pm-light-auth-nav-fix">
+/* Keep light-mode navigation aligned with the page background. */
+html[data-theme="light"] header,
+html[data-theme="light"] .top,
+html[data-theme="light"] .topbar,
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] nav.links{
+  background:var(--bg, #f6f7fa) !important;
+}
+html[data-theme="light"] .pm-auth-close{
+  color:#344054 !important;
+  background:#f2f4f8 !important;
+  border-color:rgba(26,35,52,.14) !important;
+}
+html[data-theme="light"] .pm-auth-field label{
+  color:#344054 !important;
+}
+html[data-theme="light"] .pm-auth-field input{
+  color:#1d2939 !important;
+  -webkit-text-fill-color:#1d2939;
+}
+</style>
 </head>
 <body>
 <header>
