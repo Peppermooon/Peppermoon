@@ -20,10 +20,15 @@
     let url;
     try { url = new URL(item.source_url); } catch { return null; }
     if (!['http:', 'https:'].includes(url.protocol)) return null;
-    const article = node('article', 'card news-card');
-    const art = node('div', 'card-art ' + (tones[item.category] || 'art-feature'));
-    art.setAttribute('aria-hidden', 'true');
-    art.append(node('span', 'tag', item.category), document.createTextNode(icons[item.category] || '🌙'));
+    const article = node('a', 'card news-card');
+    article.href = 'news.html?id=' + encodeURIComponent(item.id);
+    article.setAttribute('aria-label', item.title);
+    const art = node('div', 'card-art news-card-image');
+    const image = document.createElement('img');
+    const type = {'Gaming':'gaming','Movies':'movies','TV Series':'tv'}[item.category] || 'entertainment';
+    image.src = 'assets/news-' + type + '.svg';
+    image.alt = ''; image.loading = 'lazy'; image.width = 960; image.height = 540;
+    art.append(image, node('span', 'tag', item.category));
     const body = node('div', 'card-body');
     const meta = node('div', 'meta', item.source_name);
     if (item.published_at) {
@@ -34,9 +39,7 @@
       }
     }
     const heading = node('h3', '', item.title);
-    const link = node('a', 'news-original', 'Read original ↗');
-    link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
-    link.setAttribute('aria-label', 'Read ' + item.title + ' on ' + item.source_name + ' (opens in a new tab)');
+    const link = node('span', 'news-original', 'Read story →');
     body.append(meta, heading);
     if (item.summary) body.append(node('p', '', item.summary));
     body.append(link); article.append(art, body); return article;
@@ -84,3 +87,4 @@
   retry.addEventListener('click', () => load(offset === 0));
   load(true);
 })();
+

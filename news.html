@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="icon" type="image/png" href="favicon.png">
 <meta name="theme-color" content="#08090d">
-<title>Home | Peppermoon</title>
+<title>News | Peppermoon</title>
 <meta name="description" content="Home on Peppermoon — games, movies and TV series.">
 <style>
 :root{
@@ -1584,8 +1584,14 @@ html[data-theme="light"] .news-original{color:#4456a6}
 @media(max-width:1000px){.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.news-grid{grid-template-columns:1fr}.news-card .card-art{height:150px}.news-card .card-body{padding:20px}}
 </style>
-<script src="assets/news-feed.js?v=stories-1" defer></script>
-<style>.news-card-image{position:relative;padding:0!important;overflow:hidden}.news-card-image img{width:100%;height:100%;object-fit:cover;display:block}.news-card-image .tag{position:absolute;top:16px;left:16px}.news-card:focus-visible{outline:3px solid #ff4f78;outline-offset:4px}.news-card{text-decoration:none;color:inherit}</style></head>
+<script src="assets/news-story.js?v=1" defer></script>
+<style>.news-card-image{position:relative;padding:0!important;overflow:hidden}.news-card-image img{width:100%;height:100%;object-fit:cover;display:block}.news-card-image .tag{position:absolute;top:16px;left:16px}.news-card:focus-visible{outline:3px solid #ff4f78;outline-offset:4px}.news-card{text-decoration:none;color:inherit}</style><style>
+.pm-story{max-width:900px;padding-top:36px;padding-bottom:80px}.pm-story-back{display:inline-block;margin-bottom:28px;color:var(--muted)}
+.pm-story h1{font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.15;margin:14px 0 20px;overflow-wrap:anywhere}
+.pm-story-meta,.pm-story-caption,.pm-story-credit{color:var(--muted);line-height:1.7}.pm-story-image{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:20px;margin-top:28px}
+.pm-story-caption{font-size:.8rem;margin:8px 0 28px}.pm-story-text{font-size:1.1rem;line-height:1.85}.pm-story-text h2{font-size:1rem;text-transform:uppercase;letter-spacing:.08em}.pm-story-text .btn{margin-top:12px;white-space:normal}
+.pm-story [hidden]{display:none!important}
+</style></head>
 <body>
 
 <header class="topbar">
@@ -1616,24 +1622,17 @@ html[data-theme="light"] .news-original{color:#4456a6}
     <div class="search-box"><span>⌕</span><input id="siteSearch" type="search" placeholder="Filter articles on this page..."></div>
   </div>
 </header>
-<main>
-<section class="hero-home"><div class="container"><article class="hero-card"><div>
-<span class="eyebrow">Games • Movies • TV</span>
-<h1>Your next story starts here.</h1>
-<p>Discover the latest news and articles from entertainment publishers, together in one place.</p>
-<div class="btn-row"><a class="btn btn-primary" href="#latest-news">Read the latest</a><a class="btn btn-secondary" href="community.html">Join the community</a></div>
-</div></article></div></section>
-<section class="section" id="latest-news"><div class="container">
-<div class="section-head"><div><div class="section-kicker">Across the entertainment world</div><h2 class="section-title">Latest stories</h2></div></div>
-<p class="news-intro">Games, movies and TV — with every story linked to its original publisher.</p>
-<label class="news-search-label" for="newsSearch">Search headlines</label>
-<input id="newsSearch" class="news-search" type="search" placeholder="Search games, movies or TV stories…" maxlength="120">
-<p id="newsStatus" role="status" aria-live="polite">Loading stories…</p>
-<div id="newsGrid" class="news-grid" aria-busy="true"></div>
-<div class="news-actions"><button id="newsRetry" class="btn btn-secondary" type="button" hidden>Try again</button><button id="newsMore" class="btn btn-secondary" type="button" hidden>Load more stories</button></div>
-<noscript>Please enable JavaScript to see the latest stories.</noscript>
-</div></section>
-</main>
+<main><article class="container pm-story">
+<a class="pm-story-back" href="index.html#latest-news">← Back to latest stories</a>
+<p id="storyStatus" role="status">Loading story…</p>
+<div id="storyContent" hidden><p class="eyebrow" id="storyCategory"></p><h1 id="storyTitle"></h1>
+<p class="pm-story-meta" id="storyMeta"></p>
+<img id="storyImage" class="pm-story-image" width="960" height="540" alt="">
+<p class="pm-story-caption">Peppermoon category illustration</p>
+<div class="pm-story-text"><h2>From the source</h2><p id="storySummary"></p>
+<p class="pm-story-credit" id="storyCredit"></p><a id="storyOriginal" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Read full story at the source ↗</a></div></div>
+<button id="storyRetry" class="btn btn-secondary" type="button" hidden>Try again</button>
+<noscript>Please enable JavaScript to read this story.</noscript></article></main>
 
 <footer class="footer">
   <div class="container footer-inner">
