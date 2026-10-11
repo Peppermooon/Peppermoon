@@ -1587,6 +1587,7 @@ html[data-theme="light"] .news-original{color:#4456a6}
 <script src="assets/news-feed.js?v=manual-1" defer></script>
 <style>.news-card-image{position:relative;padding:0!important;overflow:hidden}.news-card-image img{width:100%;height:100%;object-fit:cover;display:block}.news-card-image .tag{position:absolute;top:16px;left:16px}.news-card:focus-visible{outline:3px solid #ff4f78;outline-offset:4px}.news-card{text-decoration:none;color:inherit}</style><link rel="stylesheet" href="assets/mobile-header.css?v=2">
 <script defer src="assets/mobile-header.js?v=2"></script>
+<link rel="stylesheet" href="assets/article-carousel.css?v=1">
 </head>
 <body>
 
@@ -1619,12 +1620,11 @@ html[data-theme="light"] .news-original{color:#4456a6}
   </div>
 </header>
 <main>
-<section class="hero-home"><div class="container"><article class="hero-card"><div>
-<span class="eyebrow">Games • Movies • TV</span>
-<h1>Your next story starts here.</h1>
-<p>Original stories, guides and perspectives on games, movies and TV from Peppermoon.</p>
-<div class="btn-row"><a class="btn btn-primary" href="#latest-news">Read the latest</a><a class="btn btn-secondary" href="community.html">Join the community</a></div>
-</div></article></div></section>
+<section class="hero-home article-carousel" id="featuredArticles" aria-label="Featured articles" aria-roledescription="carousel"><div class="container">
+<p class="featured-message" id="featuredMessage" role="status">Loading featured articles…</p>
+<div class="featured-track" id="featuredTrack" tabindex="0" aria-label="Swipe or use arrow keys to browse articles" aria-busy="true"></div>
+<div class="featured-controls" id="featuredControls" hidden><button id="featuredPrev" type="button" aria-label="Previous article">←</button><div class="featured-dots" id="featuredDots"></div><button id="featuredNext" type="button" aria-label="Next article">→</button></div>
+</div></section>
 <section class="section" id="latest-news"><div class="container">
 <div class="section-head"><div><div class="section-kicker">From Peppermoon</div><h2 class="section-title">Latest articles</h2></div></div>
 <p class="news-intro">Discover our latest articles on games, movies and TV.</p>
@@ -2001,6 +2001,7 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 </script>
 
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
+<script src="assets/article-carousel.js?v=1"></script>
 </body>
 </html>
 
