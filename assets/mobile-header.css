@@ -13,3 +13,16 @@
  .pm-theme-toggle::before{content:"◐" !important;position:absolute !important;inset:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;font-size:20px !important;line-height:1 !important;margin:0 !important;transform:none !important}
  .pm-theme-toggle::after{content:none !important;display:none !important}
 }
+
+@media(max-width:760px){
+ header.topbar .nav{grid-template-columns:minmax(0,1fr) auto auto !important;gap:6px !important;padding:10px 0 !important;min-height:56px !important}
+ header.topbar .brand{font-size:1rem !important;gap:6px !important}
+ header.topbar .brand img{width:28px !important;height:28px !important;flex-basis:28px !important}
+ header.topbar .pm-auth-area{grid-column:2 !important;grid-row:1 !important;width:auto !important;gap:4px !important}
+ header.topbar .nav-actions{grid-column:3 !important;grid-row:1 !important}
+ header.topbar .menu-toggle{display:none !important}
+ header.topbar .icon-btn,header.topbar .pm-theme-toggle,header.topbar .pm-user-trigger{width:34px !important;min-width:34px !important;height:34px !important;min-height:34px !important;flex-basis:34px !important;border-radius:10px !important}
+ header.topbar .pm-avatar{width:28px !important;height:28px !important;flex-basis:28px !important}
+ header.topbar .pm-auth-btn{font-size:0 !important;min-height:34px !important;padding:6px 8px !important}
+ header.topbar .pm-auth-btn:after{content:"Log in";font-size:11px}
+}

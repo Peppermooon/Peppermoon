@@ -1326,6 +1326,26 @@ html[data-theme="light"] .nav-links::after{
 }
 </style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
+<link rel="stylesheet" href="assets/mobile-header.css?v=3">
+<style id="community-mobile-contrast">
+html[data-theme="light"] #postModal .modal-card,
+html[data-theme="light"] #postModal .modal-head{background:#fff !important;color:#171b25 !important}
+html[data-theme="light"] #postModalTitle,
+html[data-theme="light"] #postModal .field label{color:#171b25 !important;-webkit-text-fill-color:#171b25 !important}
+html[data-theme="light"] #postModal .close{background:#edf0f5 !important;color:#171b25 !important}
+html[data-theme="light"] #postModal .field input,
+html[data-theme="light"] #postModal .field select,
+html[data-theme="light"] #postModal .field textarea{background:#fff !important;color:#171b25 !important;border-color:#ccd1dc !important}
+@media(max-width:760px){
+ body>header .nav{display:flex !important;flex-wrap:nowrap !important;min-height:56px !important;padding:10px 0 !important;gap:8px !important}
+ body>header .brand{flex:1 !important;overflow:visible !important;font-size:1rem !important}
+ body>header .brand span{overflow:visible !important;text-overflow:clip !important}
+ body>header .nav-right{width:auto !important;margin:0 !important;padding:0 !important;gap:6px !important;order:initial !important}
+ body>header .nav-right .pm-theme-toggle,body>header .nav-right .user-btn{width:36px !important;height:36px !important;min-height:36px !important;padding:2px !important}
+ body>header .nav-right .user-name,body>header .nav-right .user-btn>span:last-child{display:none}
+ #postModal .modal-card{max-height:85dvh}
+}
+</style>
 </head>
 <body>
 <header>
