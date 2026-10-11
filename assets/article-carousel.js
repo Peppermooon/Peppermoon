@@ -4,7 +4,7 @@
  const el=(tag,cls,text)=>{const n=document.createElement(tag);n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  try{
  const client=window.supabase.createClient('https://bgzlqvbvmstebdsnzmqv.supabase.co','sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-');
- const {data,error}=await client.from('articles').select('slug,title,summary,category,featured_image').eq('status','published').eq('show_on_homepage',true).order('published_at',{ascending:false,nullsFirst:false}).order('id',{ascending:false}).limit(5);
+ const {data,error}=await client.from('articles').select('slug,title,summary,category,featured_image').eq('status','published').eq('show_on_homepage',true).eq('featured',true).order('published_at',{ascending:false,nullsFirst:false}).order('id',{ascending:false});
  if(error)throw error;
  if(!data?.length){region.hidden=true;region.style.setProperty('display','none','important');return;}
  data.forEach((item,index)=>{
