@@ -1581,25 +1581,19 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 
 <script>
 
-function pmSetMobileArticleSection(category){
-  const c=String(category||'').toLowerCase(); let key=null;
-  if(c.includes('game')) key='gaming'; else if(c.includes('movie')||c.includes('film')) key='movies'; else if(c.includes('tv')||c.includes('series')) key='tv';
-  document.querySelectorAll('.mobile-bottom-nav a').forEach(a=>a.classList.remove('active'));
-  if(key){const a=document.querySelector('.mobile-bottom-nav a[data-mobile-section="'+key+'"]');if(a)a.classList.add('active')}
+function pmSetMobileArticleSection(){
+  document.querySelectorAll('.mobile-bottom-nav a').forEach(a=>{
+    const home=a.getAttribute('href')==='index.html';
+    a.classList.toggle('active',home);
+    if(home)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+  });
 }
-
-
-function pmSetArticleSectionActive(category){
-  const c=String(category||'').toLowerCase();
-  let href=null;
-  if(c.includes('game')) href='gaming.html';
-  else if(c.includes('movie') || c.includes('film')) href='movies.html';
-  else if(c.includes('tv') || c.includes('series')) href='tv.html';
-  document.querySelectorAll('.nav-links a, nav a').forEach(a=>a.classList.remove('active'));
-  if(href){
-    const a=document.querySelector('.nav-links a[href="'+href+'"], nav a[href="'+href+'"]');
-    if(a)a.classList.add('active');
-  }
+function pmSetArticleSectionActive(){
+  document.querySelectorAll('.nav-links a, nav.links a').forEach(a=>{
+    const home=a.getAttribute('href')==='index.html';
+    a.classList.toggle('active',home);
+    if(home)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+  });
 }
 
 
@@ -1653,3 +1647,4 @@ function pmLinkify(value){
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 </body>
 </html>
+

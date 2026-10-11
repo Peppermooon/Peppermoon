@@ -389,7 +389,7 @@ html[data-theme="light"] .nav-links::after{
 
   <section id="dashboardView" class="hidden">
     <div class="dashboard-head">
-      <div><h1>Content Dashboard</h1><p>Create, edit, preview and publish Peppermoon articles.</p></div>
+      <div><h1>Content Dashboard</h1><p>Create your own articles with cover images, save drafts and publish them on Home.</p></div>
       <button class="btn primary" id="newArticleBtn">+ New Article</button>
     </div>
 
@@ -454,7 +454,7 @@ html[data-theme="light"] .nav-links::after{
         </div>
 
         <div class="field"><label>Author</label><input id="articleAuthor" value="Peppermoon"></div>
-        <div class="field"><label>Status</label><select id="articleStatus"><option value="draft">Draft</option><option value="published">Published</option></select></div>
+        <div class="field"><label>Saved status</label><input id="articleStatus" value="draft" readonly><div class="help">Use Save Draft to keep it private, or Publish Article to make it public.</div></div>
 
         <div class="field span-2">
           <label>Short summary</label>
@@ -462,7 +462,7 @@ html[data-theme="light"] .nav-links::after{
         </div>
 
         <div class="field span-2">
-          <label>Featured image</label>
+          <label>Cover image</label>
           <input id="articleImage" type="file" accept="image/*">
           <div class="help">Used on homepage/category cards and at the top of the article.</div>
           <img id="imagePreview" class="img-preview hidden" alt="Preview">
@@ -495,7 +495,7 @@ html[data-theme="light"] .nav-links::after{
 
         <div class="span-2 checkrow">
           <label><input id="articleFeatured" type="checkbox"> Featured article</label>
-          <label><input id="articleHomepage" type="checkbox"> Show on homepage</label>
+          <label><input id="articleHomepage" type="checkbox"> Show on Home</label>
         </div>
       </div>
 
@@ -505,7 +505,7 @@ html[data-theme="light"] .nav-links::after{
         <button type="button" class="btn danger hidden" id="deleteArticleBtn">Delete</button>
         <button type="button" class="btn" id="saveDraftBtn">Save Draft</button>
         <button type="button" class="btn secondary" id="previewBottomBtn">Preview</button>
-        <button type="submit" class="btn primary">Save / Publish</button>
+        <button type="submit" class="btn primary" id="publishArticleBtn">Publish Article</button>
       </div>
     </form>
   </div>
@@ -674,6 +674,7 @@ function openNewArticle() {
   $('existingImageUrl').value='';
   $('articleAuthor').value='Peppermoon';
   $('articleStatus').value='draft';
+  $('articleHomepage').checked=true;
   $('imagePreview').classList.add('hidden');
   $('deleteArticleBtn').classList.add('hidden');
   $('editorTitle').textContent='New Article';
@@ -877,6 +878,8 @@ $('closePreview').addEventListener('click',()=>$('previewModal').classList.add('
 $('previewModal').addEventListener('click',e=>{if(e.target===$('previewModal'))$('previewModal').classList.add('hidden')});
 
 async function saveArticle(forceDraft=false) {
+  const publishButton=$('publishArticleBtn');
+  if(publishButton.disabled) return;
   clearMsg($('editorMsg'));
 
   const title=$('articleTitle').value.trim();
@@ -889,6 +892,8 @@ async function saveArticle(forceDraft=false) {
     return;
   }
 
+  publishButton.disabled=true;
+  $('saveDraftBtn').disabled=true;
   try {
     let imageUrl=$('existingImageUrl').value || null;
     const featuredFile=$('articleImage').files[0];
@@ -896,7 +901,7 @@ async function saveArticle(forceDraft=false) {
       imageUrl=await uploadImage(featuredFile,slug,'featured');
     }
 
-    const status=forceDraft?'draft':$('articleStatus').value;
+    const status=forceDraft?'draft':'published';
     const now=new Date().toISOString();
 
     const payload={
@@ -911,7 +916,7 @@ async function saveArticle(forceDraft=false) {
       featured:$('articleFeatured').checked,
       show_on_homepage:$('articleHomepage').checked,
       updated_at:now,
-      published_at: status==='published' ? now : null
+      published_at: status==='published' ? (allArticles.find(a=>String(a.id)===String($('articleId').value))?.published_at || now) : null
     };
 
     const id=$('articleId').value;
@@ -921,11 +926,14 @@ async function saveArticle(forceDraft=false) {
 
     if(result.error) throw result.error;
 
-    showMsg($('editorMsg'),forceDraft?'Draft saved.':'Article saved successfully.','ok');
+    showMsg($('editorMsg'),forceDraft?'Draft saved. It is not visible on Home.':($('articleHomepage').checked?'Published. Your article is now visible on Home.':'Published. Enable Show on Home to display it on the homepage.'),'ok');
     await loadArticles();
     setTimeout(()=>$('articleModal').classList.add('hidden'),650);
   } catch(err) {
     showMsg($('editorMsg'),err.message||String(err));
+  } finally {
+    publishButton.disabled=false;
+    $('saveDraftBtn').disabled=false;
   }
 }
 
@@ -989,3 +997,4 @@ init();
 
 </body>
 </html>
+

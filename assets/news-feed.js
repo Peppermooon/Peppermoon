@@ -18,19 +18,22 @@
   }
   function card(item) {
     let url;
-    try { url = new URL(item.source_url); } catch { return null; }
+    try { url = new URL('article.html?slug=' + encodeURIComponent(item.slug), location.href); } catch { return null; }
     if (!['http:', 'https:'].includes(url.protocol)) return null;
     const article = node('a', 'card news-card');
-    article.href = 'news.html?id=' + encodeURIComponent(item.id);
+    article.href = 'article.html?slug=' + encodeURIComponent(item.slug);
     article.setAttribute('aria-label', item.title);
     const art = node('div', 'card-art news-card-image');
     const image = document.createElement('img');
     const type = {'Gaming':'gaming','Movies':'movies','TV Series':'tv'}[item.category] || 'entertainment';
-    image.src = 'assets/news-' + type + '.svg';
+    const fallback = 'assets/news-' + type + '.svg';
+    image.src = fallback;
+    try { const cover = new URL(item.featured_image); if (cover.protocol === 'https:') image.src = cover.href; } catch {}
+    image.onerror = () => { image.onerror = null; image.src = fallback; };
     image.alt = ''; image.loading = 'lazy'; image.width = 960; image.height = 540;
     art.append(image, node('span', 'tag', item.category));
     const body = node('div', 'card-body');
-    const meta = node('div', 'meta', item.source_name);
+    const meta = node('div', 'meta', item.author || 'Peppermoon');
     if (item.published_at) {
       const date = new Date(item.published_at);
       if (!Number.isNaN(date.valueOf())) {
@@ -53,9 +56,10 @@
     grid.setAttribute('aria-busy', 'true');
     try {
       if (!client) throw new Error('Client unavailable');
-      let query = client.from('news_items')
-        .select('id,title,summary,category,source_name,source_url,published_at')
+      let query = client.from('articles')
+        .select('id,slug,title,summary,category,author,featured_image,published_at')
         .eq('status', 'published')
+        .eq('show_on_homepage', true)
         .order('published_at', {ascending:false, nullsFirst:false})
         .order('id', {ascending:false});
       const term = search.value.trim();
@@ -66,7 +70,7 @@
       for (const item of data || []) { const el = card(item); if (el) grid.append(el); }
       offset += (data || []).length;
       more.hidden = (data || []).length < size;
-      status.textContent = offset ? `${offset} stories shown · Newest first` : (term ? 'No stories match your search.' : 'New stories will appear here soon.');
+      status.textContent = offset ? `${offset} stories shown · Newest first` : (term ? 'No stories match your search.' : 'New stories coming soon.');
     } catch {
       if (version !== requestVersion) return;
       status.textContent = 'Stories could not be loaded. Please try again shortly.';
@@ -87,4 +91,5 @@
   retry.addEventListener('click', () => load(offset === 0));
   load(true);
 })();
+
 
