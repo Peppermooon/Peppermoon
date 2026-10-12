@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/article-preview.mjs": {
+      "includeFiles": "article.html"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/article.html",
+      "destination": "/api/article-preview"
+    }
+  ]
+}
