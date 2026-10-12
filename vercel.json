@@ -9,6 +9,10 @@
   },
   "routes": [
     {
+      "src": "/article/([^/]+)",
+      "dest": "/api/article-preview?slug=$1"
+    },
+    {
       "src": "/article\\.html",
       "dest": "/api/article-preview"
     },

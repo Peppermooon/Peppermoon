@@ -33,7 +33,8 @@ export default async function handler(req,res){
  const metadata=tags.map(([kind,name,value])=>'<meta '+kind+'="'+name+'" content="'+escape(value)+'">').join('\n')+'\n<link rel="canonical" href="'+escape(canonical)+'">';
  template=template.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
  template=template.replace('<head>','<head>\n<base href="'+escape(origin)+'/">');
- template=template.replace('</head>',metadata+'\n</head>');
+ template=template.replace(/<meta charset="UTF-8">/i,'');
+ template=template.replace('<head>','<head>\n<meta charset="UTF-8">\n'+metadata);
  res.setHeader('Cache-Control','public, max-age=0, s-maxage=60');
  res.statusCode=200;return res.end(template);
  }catch{res.statusCode=503;res.setHeader('Cache-Control','no-store');return res.end(template);}

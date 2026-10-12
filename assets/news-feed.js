@@ -21,7 +21,7 @@
     try { url = new URL('article.html?slug=' + encodeURIComponent(item.slug), location.href); } catch { return null; }
     if (!['http:', 'https:'].includes(url.protocol)) return null;
     const article = node('a', 'card news-card');
-    article.href = 'article.html?slug=' + encodeURIComponent(item.slug);
+    article.href = location.hostname.endsWith('github.io') ? 'article.html?slug=' + encodeURIComponent(item.slug) : '/article/' + encodeURIComponent(item.slug);
     article.setAttribute('aria-label', item.title);
     const art = node('div', 'card-art news-card-image');
     const image = document.createElement('img');

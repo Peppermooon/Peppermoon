@@ -5,7 +5,7 @@ const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 export default async function handler(req,res){
  res.setHeader('Content-Type','text/html; charset=utf-8');
  const origin=new URL('https://'+req.headers.host).origin;
- const url=new URL(req.url,origin),slug=url.searchParams.get('slug');
+ const url=new URL(req.url,origin),slug=url.searchParams.get('slug') || (url.pathname.startsWith('/article/') ? decodeURIComponent(url.pathname.slice(9)) : null);
  let template;
  try{template=await readFile(process.cwd()+'/article.html','utf8');}catch{res.statusCode=500;return res.end('Article page unavailable');}
  if(!slug||slug.length>240){res.statusCode=404;return res.end(template);}
@@ -17,7 +17,7 @@ export default async function handler(req,res){
  if(!response.ok)throw new Error('Article lookup failed');
  const [article]=await response.json();
  if(!article){res.statusCode=404;res.setHeader('Cache-Control','no-store');return res.end(template);}
- const canonical=origin+'/article.html?slug='+encodeURIComponent(article.slug);
+ const canonical=origin+'/article/'+encodeURIComponent(article.slug);
  let image=origin+'/peppermoon-logo.png';
  try{const cover=new URL(article.featured_image);if(cover.protocol==='https:')image=cover.href;}catch{}
  try{const cover=new URL(article.featured_image);if(cover.origin===SUPABASE&&cover.pathname.startsWith('/storage/v1/object/public/article-images/'))image=origin+'/api/share-image?slug='+encodeURIComponent(article.slug)+'&v=1';}catch{}
@@ -34,7 +34,8 @@ export default async function handler(req,res){
  if(image.includes('/api/share-image?'))tags.push(['property','og:image:width','1200'],['property','og:image:height','630']);
  const metadata=tags.map(([kind,name,value])=>'<meta '+kind+'="'+name+'" content="'+escape(value)+'">').join('\n')+'\n<link rel="canonical" href="'+escape(canonical)+'">';
  template=template.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
- template=template.replace('</head>',metadata+'\n</head>');
+ template=template.replace(/<meta charset="UTF-8">/i,'');
+ template=template.replace('<head>','<head>\n<meta charset="UTF-8">\n'+metadata+'\n<base href="'+escape(origin)+'/">');
  res.setHeader('Cache-Control','public, max-age=0, s-maxage=60');
  res.statusCode=200;return res.end(template);
  }catch{res.statusCode=503;res.setHeader('Cache-Control','no-store');return res.end(template);}

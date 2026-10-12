@@ -1250,7 +1250,7 @@ function legacyToHtml(text) {
 }
 
 (async()=>{
-  const slug=new URLSearchParams(location.search).get('slug');
+  const slug=new URLSearchParams(location.search).get('slug') || (location.pathname.startsWith('/article/') ? decodeURIComponent(location.pathname.slice(9)) : null);
 
   if(!slug) {
     document.getElementById('articleWrap').innerHTML='<div class="error">Article not specified.</div>';
