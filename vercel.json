@@ -5,9 +5,16 @@
     },
     "api/post-preview.mjs": {
       "includeFiles": "post.html"
+    },
+    "api/rating-preview.mjs": {
+      "includeFiles": "rating.html"
     }
   },
   "routes": [
+    {
+      "src": "/rating\\.html",
+      "dest": "/api/rating-preview"
+    },
     {
       "src": "/article/([^/]+)",
       "dest": "/api/article-preview?slug=$1"
