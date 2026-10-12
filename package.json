@@ -1,0 +1,7 @@
+{
+  "name": "peppermoon",
+  "private": true,
+  "dependencies": {
+    "sharp": "0.35.4"
+  }
+}

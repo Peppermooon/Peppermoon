@@ -20,16 +20,18 @@ export default async function handler(req,res){
  const canonical=origin+'/article.html?slug='+encodeURIComponent(article.slug);
  let image=origin+'/peppermoon-logo.png';
  try{const cover=new URL(article.featured_image);if(cover.protocol==='https:')image=cover.href;}catch{}
+ try{const cover=new URL(article.featured_image);if(cover.origin===SUPABASE&&cover.pathname.startsWith('/storage/v1/object/public/article-images/'))image=origin+'/api/share-image?slug='+encodeURIComponent(article.slug)+'&v=1';}catch{}
  const title=article.title+' | Peppermoon';
  const description=String(article.summary||'Read '+article.title+' on Peppermoon.').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,300);
  const tags=[
  ['name','description',description],['property','og:type','article'],['property','og:site_name','Peppermoon'],
  ['property','og:title',article.title],['property','og:description',description],['property','og:image',image],
- ['property','og:image:alt',article.title],['property','og:url',canonical],
+ ['property','og:image:type',image.includes('/api/share-image?')?'image/jpeg':''],['property','og:image:alt',article.title],['property','og:url',canonical],
  ['name','twitter:card','summary_large_image'],['name','twitter:title',article.title],
  ['name','twitter:description',description],['name','twitter:image',image]
  ];
  if(article.published_at)tags.push(['property','article:published_time',article.published_at]);
+ if(image.includes('/api/share-image?'))tags.push(['property','og:image:width','1200'],['property','og:image:height','630']);
  const metadata=tags.map(([kind,name,value])=>'<meta '+kind+'="'+name+'" content="'+escape(value)+'">').join('\n')+'\n<link rel="canonical" href="'+escape(canonical)+'">';
  template=template.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
  template=template.replace('</head>',metadata+'\n</head>');
