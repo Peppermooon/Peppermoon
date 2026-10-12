@@ -1884,7 +1884,7 @@ $('pmGoogleLogin').onclick=async()=>{
   const r=await sbAuth.auth.signInWithOAuth({
     provider:'google',
     options:{
-      redirectTo:"https://peppermooon.github.io/Peppermoon/"
+      redirectTo:window.location.origin + window.location.pathname + window.location.search
     }
   });
 

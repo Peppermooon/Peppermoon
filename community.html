@@ -1853,7 +1853,7 @@ $('loginBtn').onclick=()=>$('authModal').classList.add('open');
 $('closeAuth').onclick=()=>$('authModal').classList.remove('open');
 $('authModal').onclick=()=>{};
 $('googleBtn').onclick=async()=>{
-  const r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://peppermooon.github.io/Peppermoon/community.html'}});
+  const r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin + window.location.pathname + window.location.search}});
   if(r.error)alert(r.error.message);
 };
 $('userBtn').onclick=()=>$('dropdown').classList.toggle('open');
