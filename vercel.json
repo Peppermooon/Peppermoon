@@ -2,12 +2,23 @@
   "functions": {
     "api/article-preview.mjs": {
       "includeFiles": "article.html"
+    },
+    "api/post-preview.mjs": {
+      "includeFiles": "post.html"
     }
   },
   "routes": [
     {
       "src": "/article\\.html",
       "dest": "/api/article-preview"
+    },
+    {
+      "src": "/post/([^/]+)",
+      "dest": "/api/post-preview?slug=$1"
+    },
+    {
+      "src": "/post\\.html",
+      "dest": "/api/post-preview"
     },
     {
       "handle": "filesystem"
