@@ -1,3 +1,4 @@
+import {prepareImports} from './ratings-import.js';
 import {validateRating,slugify,displayCategory} from './ratings-core.js';
 const sb=window.supabase.createClient('https://bgzlqvbvmstebdsnzmqv.supabase.co','sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-');
 const $=id=>document.getElementById(id);let session=null,items=[],editing=null,busy=false;
@@ -19,3 +20,25 @@ $('ratingForm').addEventListener('submit',async event=>{event.preventDefault();i
  }catch(error){message(error.code==='23505'?'That Top 10 position is already occupied. Change its position and try again.':error.message||'The rating could not be saved.');}finally{busy=false;buttons.forEach(b=>b.disabled=false);}});
 sb.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT'){session=null;$('ratingsDashboard').hidden=true;$('loginPanel').hidden=false;}});
 authorize();
+
+$('importPreparedRatings').addEventListener('click',()=>{if(!busy)$('preparedRatingsFile').click();});
+$('preparedRatingsFile').addEventListener('change',async()=>{
+ if(busy||!session)return;busy=true;
+ const controls=Array.from(document.querySelectorAll('#ratingsDashboard button'));controls.forEach(button=>button.disabled=true);
+ message('Checking the prepared ratings and existing entries…');
+ try{
+ const file=$('preparedRatingsFile').files[0];
+ if(!file)throw new Error('Choose the prepared JSON import file.');
+ if(file.size>1024*1024)throw new Error('The prepared file is too large.');
+ const rows=JSON.parse(await file.text());
+ const {data:existing,error:readError}=await sb.from('pepper_ratings').select('title,category,slug');
+ if(readError)throw readError;
+ const payload=prepareImports(rows,existing||[],session.user.id);
+ if(!payload.length){message('All prepared titles already exist. Nothing was changed.');return;}
+ const {error}=await sb.from('pepper_ratings').insert(payload);
+ if(error)throw error;
+ await load();
+ message('Imported '+payload.length+' ratings as drafts with covers. Existing reviews were preserved. Edit any draft, then choose Publish Rating when ready.');
+ }catch(error){message(error.message||'The draft import failed. Nothing was published.');}
+ finally{busy=false;$('preparedRatingsFile').value='';controls.forEach(button=>button.disabled=false);}
+});
