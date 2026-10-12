@@ -4,10 +4,13 @@
       "includeFiles": "article.html"
     }
   },
-  "rewrites": [
+  "routes": [
     {
-      "source": "/article.html",
-      "destination": "/api/article-preview"
+      "src": "/article\\.html",
+      "dest": "/api/article-preview"
+    },
+    {
+      "handle": "filesystem"
     }
   ]
 }
