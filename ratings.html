@@ -1589,7 +1589,7 @@ html[data-theme="light"] .news-original{color:#4456a6}
 <script defer src="assets/mobile-header.js?v=2"></script>
 <link rel="stylesheet" href="assets/article-carousel.css?v=3">
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr)) !important}.mobile-bottom-nav a{min-width:0}}</style>
-<link rel="stylesheet" href="assets/ratings.css?v=1">
+<link rel="stylesheet" href="assets/ratings.css?v=2">
 </head>
 <body>
 
@@ -1623,8 +1623,8 @@ html[data-theme="light"] .news-original{color:#4456a6}
 </header>
 <main><section class="pepper-ratings"><div class="container"><div class="ratings-intro"><div class="ratings-eyebrow">Our take. Your next favourite.</div><h1>Pepper Ratings</h1><p>Our editorial scores and reviews for movies, games and TV series. Find your next favourite, or explore our curated Top 10.</p><p class="ratings-note">Peppermoon Editorial Ratings · Scores out of 10 · Community voting is not available yet.</p></div>
 <div class="rating-filters" aria-label="Review category"><button type="button" data-rating-category="All" aria-pressed="true">All</button><button type="button" data-rating-category="Movies" aria-pressed="false">Movies</button><button type="button" data-rating-category="Gaming" aria-pressed="false">Games</button><button type="button" data-rating-category="TV Series" aria-pressed="false">TV Series</button></div>
-<label class="news-search-label" for="ratingsSearch">Search reviews</label><input class="ratings-search" id="ratingsSearch" type="search" placeholder="Find a movie, game or TV series…"><p id="ratingsState" class="ratings-state" role="status">Loading editorial reviews…</p><button id="ratingsRetry" class="ratings-retry" type="button" hidden>Try again</button><div id="ratingsGrid" class="rating-grid"></div>
-<section class="ratings-top" aria-labelledby="topTitle"><div class="ratings-eyebrow">The Peppermoon picks</div><h2 id="topTitle">Top 10 Peppermoon Movies</h2><p class="ratings-note">Our curated all-time favourites. List position reflects our editorial selection and may differ from score order.</p><div class="rating-filters" aria-label="Top 10 category"><button type="button" data-top-category="Movies" aria-pressed="true">Movies</button><button type="button" data-top-category="Gaming" aria-pressed="false">Games</button><button type="button" data-top-category="TV Series" aria-pressed="false">TV Series</button></div><ol class="rating-list" id="topList"></ol><p id="topState" class="ratings-note"></p><p id="topUpdated" class="ratings-note"></p></section></div></section></main>
+<div id="ratingsSearchArea" hidden><label class="news-search-label" for="ratingsSearch">Search reviews</label><input class="ratings-search" id="ratingsSearch" type="search" placeholder="Find a movie, game or TV series…"></div><p id="ratingsState" class="ratings-state" role="status">Loading editorial reviews…</p><button id="ratingsRetry" class="ratings-retry" type="button" hidden>Try again</button><div id="ratingsGrid" class="rating-grid" hidden></div>
+<div id="ratingsTopLists" class="ratings-top-grid" aria-label="Top 10 lists"></div></div></section></main>
 
 <footer class="footer">
   <div class="container footer-inner">
@@ -1991,7 +1991,7 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="ratings.html" data-mobile-section="ratings" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 <script src="assets/article-carousel.js?v=2"></script>
-<script type="module" src="assets/ratings.js?v=1"></script>
+<script type="module" src="assets/ratings.js?v=2"></script>
 </body>
 </html>
 

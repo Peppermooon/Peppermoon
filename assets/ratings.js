@@ -7,12 +7,44 @@ function score(item){const el=node('div','pepper-score');el.append(node('strong'
 function card(item){const a=node('a','pepper-rating-card');a.href='rating.html?slug='+encodeURIComponent(item.slug);const body=node('div','rating-card-body');body.append(node('div','rating-card-meta',displayCategory(item.category)+(item.release_year?' · '+item.release_year:'')),node('h3','',item.title),score(item));if(item.summary)body.append(node('p','',item.summary));a.append(cover(item,'rating-cover'),body);return a;}
 function readableError(error){return error?.code==='PGRST205'||error?.code==='42P01'?'Pepper Ratings is being set up. Reviews will appear here soon.':'Ratings could not be loaded. Please try again.';}
 if($('ratingsGrid')){
- let items=[],category='All',topCategory='Movies';
- function render(){const term=$('ratingsSearch').value.trim().toLowerCase();const filtered=items.filter(item=>(category==='All'||item.category===category)&&item.title.toLowerCase().includes(term));$('ratingsGrid').replaceChildren(...filtered.map(card));$('ratingsState').textContent=filtered.length?filtered.length+' editorial reviews':items.length?'No reviews match your search.':'Our first Pepper Ratings are coming soon.';const ranked=topTen(items,topCategory);$('topTitle').textContent='Top 10 Peppermoon '+displayCategory(topCategory);$('topList').replaceChildren(...ranked.map(item=>{const li=node('li',''),link=node('a','');link.href='rating.html?slug='+encodeURIComponent(item.slug);link.append(node('span','rank',String(item.top_rank)),node('span','list-title',item.title),node('span','list-score',Number(item.score).toFixed(1)+' / 10'));li.append(link);return li;}));$('topState').textContent=ranked.length?'':'The '+displayCategory(topCategory).toLowerCase()+' list is coming soon.';const dates=ranked.map(i=>new Date(i.updated_at).valueOf()).filter(Number.isFinite);$('topUpdated').textContent=dates.length?'Updated '+new Date(Math.max(...dates)).toLocaleDateString():'';}
- async function load(){ $('ratingsState').textContent='Loading editorial reviews…';$('ratingsRetry').hidden=true;try{const {data,error}=await sb.from('pepper_ratings').select('id,slug,title,category,release_year,score,summary,image_url,status,top_rank,updated_at').eq('status','published').order('score',{ascending:false}).order('title').range(0,499);if(error)throw error;items=data||[];render();}catch(error){$('ratingsState').textContent=readableError(error);$('ratingsRetry').hidden=false;}}
+ let items=[],category='All',loaded=false,loadError='';
+ function listSection(type){
+  const section=node('section','ratings-top');
+  const title=node('h2','','Top 10 Peppermoon '+displayCategory(type));
+  section.append(node('div','ratings-eyebrow','The Peppermoon picks'),title);
+  const ranked=topTen(items,type),list=node('ol','rating-list');
+  for(const item of ranked){const li=node('li',''),link=node('a','');link.href='rating.html?slug='+encodeURIComponent(item.slug);link.append(node('span','rank',String(item.top_rank)),node('span','list-title',item.title),node('span','list-score',Number(item.score).toFixed(1)+' / 10'));li.append(link);list.append(li);}
+  section.append(list);
+  if(!ranked.length)section.append(node('p','ratings-note','This list is coming soon.'));
+  const dates=ranked.map(i=>new Date(i.updated_at).valueOf()).filter(Number.isFinite);
+  if(dates.length)section.append(node('p','ratings-note','Updated '+new Date(Math.max(...dates)).toLocaleDateString()));
+  return section;
+ }
+ function render(){
+  const all=category==='All';
+  $('ratingsSearchArea').hidden=all;
+  $('ratingsGrid').hidden=all;
+  $('ratingsTopLists').hidden=!all;
+  $('ratingsGrid').replaceChildren();
+  $('ratingsTopLists').replaceChildren();
+  if(all){
+   $('ratingsTopLists').append(...['Movies','Gaming','TV Series'].map(listSection));
+   $('ratingsState').textContent=loadError || (!loaded?'Loading Top 10 lists…':'Our curated all-time favourites. List positions reflect editorial selection and may differ from score order.');
+  }else{
+   const term=$('ratingsSearch').value.trim().toLowerCase();
+   const filtered=items.filter(item=>item.category===category&&item.title.toLowerCase().includes(term));
+   $('ratingsGrid').append(...filtered.map(card));
+   $('ratingsState').textContent=loadError || (!loaded?'Loading reviews…':filtered.length?filtered.length+' '+displayCategory(category).toLowerCase()+' editorial reviews':term?'No reviews match your search.':'Our first '+displayCategory(category).toLowerCase()+' reviews are coming soon.');
+  }
+ }
+ async function load(){loaded=false;loadError='';$('ratingsRetry').hidden=true;render();try{
+  const {data,error}=await sb.from('pepper_ratings').select('id,slug,title,category,release_year,score,summary,image_url,status,top_rank,updated_at').eq('status','published').order('score',{ascending:false}).order('title').range(0,499);
+  if(error)throw error;items=data||[];loaded=true;render();
+ }catch(error){loadError=readableError(error);$('ratingsRetry').hidden=false;render();}}
  document.querySelectorAll('[data-rating-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.ratingCategory;document.querySelectorAll('[data-rating-category]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render();}));
- document.querySelectorAll('[data-top-category]').forEach(button=>button.addEventListener('click',()=>{topCategory=button.dataset.topCategory;document.querySelectorAll('[data-top-category]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render();}));
- $('ratingsSearch').addEventListener('input',render);$('ratingsRetry').addEventListener('click',load);load();
+ $('ratingsSearch').addEventListener('input',render);
+ $('ratingsRetry').addEventListener('click',load);
+ load();
 }
 if($('ratingDetail')){
  const slug=new URLSearchParams(location.search).get('slug');
