@@ -1347,6 +1347,20 @@ html[data-theme="light"] #postModal .field textarea{background:#fff !important;c
 }
 </style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr)) !important}.mobile-bottom-nav a{min-width:0}}</style>
+<style id="community-header-single-row">
+@media(max-width:760px){
+ body>header .nav{display:flex !important;flex-flow:row nowrap !important;align-items:center !important;min-height:56px !important;gap:8px !important}
+ body>header .brand{flex:1 1 auto !important;min-width:0 !important;white-space:nowrap !important}
+ body>header .brand img{width:28px !important;height:28px !important;flex:0 0 28px !important}
+ body>header .nav-right{display:flex !important;flex:0 0 auto !important;flex-flow:row nowrap !important;align-items:center !important;gap:6px !important;width:auto !important;max-width:none !important;margin:0 !important}
+ body>header .nav-right .pm-theme-toggle,body>header .nav-right .user-btn{flex:0 0 36px !important;width:36px !important;min-width:36px !important;height:36px !important;min-height:36px !important;padding:0 !important}
+ body>header .nav-right .user-wrap{flex:0 0 auto !important}
+ body>header .nav-right .user-btn{display:flex !important;align-items:center !important;justify-content:center !important;gap:0 !important}
+ body>header .nav-right .avatar{width:28px !important;height:28px !important;flex:0 0 28px !important}
+ body>header .nav-right .login-btn{flex:0 0 auto !important;font-size:0 !important;padding:8px 10px !important;min-height:36px !important}
+ body>header .nav-right .login-btn::after{content:"Log in";font-size:12px;white-space:nowrap}
+}
+</style>
 </head>
 <body>
 <header>
