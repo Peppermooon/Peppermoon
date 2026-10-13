@@ -10,3 +10,7 @@
 .rating-cover{height:auto !important;aspect-ratio:2/3 !important;object-fit:contain !important;background:#10131c}
 @media(max-width:1000px){.ratings-top-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.rating-cover{max-height:460px}}
+
+/* Preserve uploaded image proportions without forced portrait letterboxing. */
+.pepper-rating-card .rating-cover{width:100%;height:auto !important;aspect-ratio:auto !important;max-height:none !important;object-fit:initial !important;display:block}
+.rating-grid{align-items:start}
