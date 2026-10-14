@@ -8,5 +8,23 @@ document.addEventListener('DOMContentLoaded',()=>{
  const button=document.getElementById('communitySearchToggle'),panel=document.getElementById('communitySearchPanel'),input=document.getElementById('communitySearch');
  if(button&&panel){button.onclick=()=>{panel.hidden=!panel.hidden;button.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)input.focus()};input.addEventListener('input',()=>{if(typeof loadPosts==='function')loadPosts()})}
  const header=document.querySelector('body>header');
- if(header&&document.querySelector('.community-feed-sticky')){const update=()=>{const h=header.getBoundingClientRect().height;document.querySelector('.community-feed-sticky').style.top=h+'px';document.querySelector('.filters').style.top=(h+24)+'px'};new ResizeObserver(update).observe(header);update()}
+ if(header&&document.querySelector('.community-feed-sticky')){
+ const tabs=document.querySelector('.community-feed-sticky'),filters=document.querySelector('.filters');
+ const tabsSpace=document.createElement('div'),anchor=document.createElement('div');
+ tabsSpace.setAttribute('aria-hidden','true');tabsSpace.hidden=true;tabs.before(tabsSpace);
+ anchor.className='pm-filter-anchor';filters.before(anchor);anchor.append(filters);
+ const update=()=>{
+  const h=header.getBoundingClientRect().height,mobile=window.innerWidth<=800;
+  tabs.classList.toggle('pm-mobile-pinned',mobile);tabs.style.top=h+'px';
+  tabsSpace.hidden=!mobile;tabsSpace.style.height=mobile?tabs.getBoundingClientRect().height+'px':'';
+  const top=h+tabs.getBoundingClientRect().height,rect=anchor.getBoundingClientRect();
+  const pinned=mobile&&rect.top<=top;
+  filters.classList.toggle('pm-mobile-pinned',pinned);
+  if(pinned){anchor.style.height=filters.getBoundingClientRect().height+'px';filters.style.top=top+'px';filters.style.left=rect.left+'px';filters.style.width=rect.width+'px';}
+  else{anchor.style.height='';filters.style.left='';filters.style.width='';filters.style.top=(h+24)+'px';}
+ };
+ new ResizeObserver(update).observe(header);new ResizeObserver(update).observe(tabs);
+ window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);update();
+ }
 });
+
