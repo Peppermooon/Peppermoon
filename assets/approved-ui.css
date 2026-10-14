@@ -1,0 +1,16 @@
+/* Approved changes only: light mode, stable account controls and menu icons. */
+.pm-theme-toggle,#pmThemeToggle,#themeBtn,.theme{display:none!important}
+html{overflow-y:scroll;scrollbar-gutter:stable}
+#pmOpenAuth,#loginBtn{visibility:hidden}
+body>header .nav{min-height:72px}
+.pm-auth-area,.nav-right{min-width:140px;justify-content:flex-end}
+#searchToggle,#searchPanel,.nav-actions{display:none!important}
+#pmUserDropdown a,#pmUserDropdown button,#dropdown a,#dropdown button{display:flex;align-items:center;gap:12px}
+#pmUserDropdown .danger,#dropdown .danger{color:#ed2857!important}
+.pm-menu-icon{width:20px;height:20px;flex-shrink:0}
+#communitySearchToggle{width:40px;height:40px;border:1px solid #dfe3eb;border-radius:12px;background:white;color:#344054;cursor:pointer}
+#communitySearchPanel{padding-bottom:12px}#communitySearch{width:100%;padding:12px;border:1px solid #dfe3eb;border-radius:12px;background:white;color:#151821;font:inherit}
+html[data-theme="light"] .modal-head{background:#0d1017;color:white}
+html[data-theme="light"] .modal-head h2{color:white!important}
+html[data-theme="light"] .form .field>label{color:#344054!important}
+@media(max-width:760px){body>header .nav{min-height:56px!important}.pm-auth-area,.nav-right{min-width:36px}.pm-auth-area{grid-column:3!important}.nav-actions{display:none!important}}

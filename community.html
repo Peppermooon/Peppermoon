@@ -1,14 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 
-<script>
-(function(){
-  const saved=localStorage.getItem('peppermoon-theme');
-  const theme=saved==='light'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',theme);
-})();
-</script>
+
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -1361,13 +1355,13 @@ html[data-theme="light"] #postModal .field textarea{background:#fff !important;c
  body>header .nav-right .login-btn::after{content:"Log in";font-size:12px;white-space:nowrap}
 }
 </style>
-</head>
+<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
 <body>
 <header>
   <div class="container nav">
     <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
     <nav class="links"><a href="index.html">Home</a><a href="ratings.html">Pepper Ratings</a><a href="community.html" class="active" aria-current="page">Community</a><a href="about.html">About</a></nav>
-    <div class="nav-right">
+    <div class="nav-right"><button class="icon-btn" id="communitySearchToggle" type="button" aria-label="Search community" aria-expanded="false">⌕</button>
       <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
       <button class="login-btn" id="loginBtn">Log in / Sign up</button>
       <div class="user-wrap" id="userWrap">
@@ -1375,12 +1369,12 @@ html[data-theme="light"] #postModal .field textarea{background:#fff !important;c
         <div class="dropdown" id="dropdown">
           <a id="profileLink" href="profile.html">My Profile</a>
           <a href="#create" id="menuCreate">Create Post</a>
-          <button id="logoutBtn">Log out</button>
+          <a href="profile.html#saved">Saved</a><a href="notifications.html">Notifications</a><button id="logoutBtn" class="danger">Log out</button>
         </div>
       </div>
     </div>
   </div>
-</header>
+<div class="container" id="communitySearchPanel" hidden><input type="search" id="communitySearch" placeholder="Search community posts…" aria-label="Search community posts"></div></header>
 
 <main>
 
@@ -1513,6 +1507,7 @@ async function ensureProfile(user){
 }
 
 async function renderAuth(){
+ if(currentSession?.user) $("loginBtn").style.display="none"; $("loginBtn").style.visibility="visible";
   if(!currentSession||!currentSession.user){
     $('loginBtn').style.display='';$('userWrap').style.display='none';currentProfile=null;return;
   }
@@ -1889,33 +1884,7 @@ sb.auth.onAuthStateChange(async(_event,session)=>{
 
 
 
-<script>
-(function(){
-  function label(){
-    const btn=document.getElementById('pmThemeToggle');
-    if(!btn)return;
-    const isLight=document.documentElement.getAttribute('data-theme')==='light';
-    btn.textContent=isLight?'☾ Dark':'☀ Light';
-    btn.title=isLight?'Switch to dark mode':'Switch to light mode';
-  }
-
-  function toggle(){
-    const current=document.documentElement.getAttribute('data-theme')||'dark';
-    const next=current==='light'?'dark':'light';
-    document.documentElement.setAttribute('data-theme',next);
-    localStorage.setItem('peppermoon-theme',next);
-    label();
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('pmThemeToggle');
-    if(btn)btn.addEventListener('click',toggle);
-    label();
-  });
-})();
-
-
-// Community feed mode: Latest / Trending / content type filters.
+<script>// Community feed mode: Latest / Trending / content type filters.
 let pmCommunityFeedMode='latest';
 
 function pmScorePost(p){
@@ -1927,6 +1896,7 @@ function pmScorePost(p){
 
 function pmApplyFeedMode(posts){
   let arr=[...(posts||[])];
+ const query=(document.getElementById("communitySearch")?.value||"").trim().toLowerCase();if(query)arr=arr.filter(p=>[p.title,p.body,p.category].join(" ").toLowerCase().includes(query));
 
   if(pmCommunityFeedMode==='trending'){
     return arr.sort((a,b)=>pmScorePost(b)-pmScorePost(a));

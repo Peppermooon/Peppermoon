@@ -1,14 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 
-<script>
-(function(){
-  const saved=localStorage.getItem('peppermoon-theme');
-  const theme=saved==='light'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',theme);
-})();
-</script>
+
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -1452,7 +1446,7 @@ html[data-theme="light"] .nav-links::after{
 <link rel="stylesheet" href="assets/mobile-header.css?v=2">
 <script defer src="assets/mobile-header.js?v=2"></script>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr)) !important}.mobile-bottom-nav a{min-width:0}}</style>
-</head>
+<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
 <body>
 
 <header class="topbar">
@@ -1682,6 +1676,7 @@ async function ensureProfile(user){
 }
 
 async function render(session){
+ if(session?.user) $("pmOpenAuth").style.display="none"; $("pmOpenAuth").style.visibility="visible";
   if(!session||!session.user){
     $('pmOpenAuth').style.display='';
     $('pmUserMenu').style.display='none';
@@ -1827,29 +1822,7 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 </script>
 
 
-<script>
-(function(){
-  function label(){
-    const btn=document.getElementById('pmThemeToggle');
-    if(!btn)return;
-    const isLight=document.documentElement.getAttribute('data-theme')==='light';
-    btn.textContent=isLight?'☾ Dark':'☀ Light';
-    btn.title=isLight?'Switch to dark mode':'Switch to light mode';
-  }
-  function toggle(){
-    const current=document.documentElement.getAttribute('data-theme')||'dark';
-    const next=current==='light'?'dark':'light';
-    document.documentElement.setAttribute('data-theme',next);
-    localStorage.setItem('peppermoon-theme',next);
-    label();
-  }
-  document.addEventListener('DOMContentLoaded',()=>{
-    const btn=document.getElementById('pmThemeToggle');
-    if(btn)btn.addEventListener('click',toggle);
-    label();
-  });
-})();
-</script>
+
 
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="ratings.html" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 </body>

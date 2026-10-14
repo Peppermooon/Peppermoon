@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-<script>(function(){const s=localStorage.getItem('peppermoon-theme');document.documentElement.setAttribute('data-theme',s==='light'?'light':'dark')})();</script>
+
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Notifications | Peppermoon</title>
 <link rel="icon" type="image/png" href="favicon.png">
@@ -374,10 +374,429 @@ html[data-theme="light"] .nav-links::after{
 </style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(4,minmax(0,1fr)) !important}.mobile-bottom-nav a{min-width:0}}</style>
-</head>
+<style>
+
+/* PEPPERMOON PUBLIC AUTH */
+.pm-auth-area{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+.pm-auth-btn,.pm-user-trigger{border:1px solid rgba(255,255,255,.10);background:linear-gradient(135deg,rgba(255,79,120,.16),rgba(123,97,255,.14));color:#fff;border-radius:13px;padding:10px 14px;font-weight:850;cursor:pointer}
+
+.pm-user-menu{position:relative}
+
+.pm-user-trigger{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);padding:7px 10px 7px 8px}
+
+.pm-avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#ff4f78,#7b61ff);font-size:.78rem;font-weight:900;background-size:cover;background-position:center}
+
+.pm-user-dropdown{position:absolute;top:calc(100% + 9px);right:0;min-width:190px;background:#11141d;border:1px solid rgba(255,255,255,.10);border-radius:15px;padding:8px;box-shadow:0 18px 50px rgba(0,0,0,.4);display:none;z-index:150}
+
+.pm-user-dropdown.open{display:block}
+
+.pm-user-dropdown a,.pm-user-dropdown button{display:block;width:100%;text-align:left;border:0;background:transparent;color:#e9ecf3;padding:10px 11px;border-radius:10px;cursor:pointer}
+
+.pm-user-dropdown a:hover,.pm-user-dropdown button:hover{background:rgba(255,255,255,.06)}
+
+.pm-user-dropdown .danger{color:#ff9eaa}
+
+.pm-auth-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.72);display:none;place-items:center;padding:18px}
+
+.pm-auth-modal.open{display:grid}
+
+.pm-auth-card{width:min(460px,100%);background:#0e1118;border:1px solid rgba(255,255,255,.10);border-radius:24px;box-shadow:0 25px 80px rgba(0,0,0,.48);overflow:hidden}
+
+.pm-auth-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+
+.pm-auth-head h2{margin:0;font-size:1.35rem}
+.pm-auth-close{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#fff;cursor:pointer}
+
+.pm-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 18px 0}
+
+.pm-auth-tab{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#b8bfcd;border-radius:11px;padding:10px;cursor:pointer;font-weight:850}
+
+.pm-auth-tab.active{color:#fff;background:linear-gradient(135deg,rgba(255,79,120,.16),rgba(123,97,255,.15));border-color:rgba(255,79,120,.28)}
+
+.pm-auth-body{padding:18px 20px 22px}
+.pm-auth-form{display:none}
+.pm-auth-form.active{display:block}
+
+.pm-auth-field{display:grid;gap:7px;margin-bottom:13px}
+.pm-auth-field label{font-size:.82rem;font-weight:800;color:#dce1ea}
+
+.pm-auth-field input{width:100%;padding:12px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:#0a0d13;color:#fff;outline:none}
+
+.pm-auth-submit{width:100%;border:0;border-radius:12px;padding:12px 14px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(135deg,#ff4f78,#ff7b60)}
+
+.pm-auth-note{margin:10px 0 0;color:#8f97a8;font-size:.8rem;line-height:1.55}
+
+.pm-auth-msg{display:none;margin-top:12px;padding:10px 11px;border-radius:10px;font-size:.84rem}
+.pm-auth-msg.show{display:block}
+
+.pm-auth-msg.ok{background:rgba(53,208,127,.10);border:1px solid rgba(53,208,127,.22);color:#a9efc6}
+
+.pm-auth-msg.error{background:rgba(255,95,109,.10);border:1px solid rgba(255,95,109,.22);color:#ffb2bb}
+.pm-auth-btn{padding:9px 10px;font-size:.82rem}
+.pm-user-name{display:none}
+
+
+
+.pm-social-auth{display:grid;gap:10px;margin-bottom:16px}
+
+.pm-google-btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  border:1px solid rgba(255,255,255,.12);background:#fff;color:#17191f;
+  border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer
+}
+
+.pm-google-btn:hover{background:#f2f3f6}
+
+.pm-google-g{
+  width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  font-weight:1000;font-size:1.05rem;color:#4285f4;background:#fff
+}
+
+.pm-auth-divider{display:flex;align-items:center;gap:10px;color:#778091;font-size:.76rem;font-weight:800;margin:2px 0 15px}
+
+.pm-auth-divider:before,.pm-auth-divider:after{content:"";height:1px;background:rgba(255,255,255,.08);flex:1}
+
+html[data-theme="light"] .card,
+html[data-theme="light"] .post,
+html[data-theme="light"] .filters,
+html[data-theme="light"] .profile-card,
+html[data-theme="light"] .pm-auth-card,
+html[data-theme="light"] .pm-user-dropdown,
+html[data-theme="light"] .modal-card,
+html[data-theme="light"] .auth-card{
+  background:#ffffff !important;
+  color:#151821 !important;
+  border-color:rgba(20,24,33,.10) !important;
+}
+
+html[data-theme="light"] .muted,
+html[data-theme="light"] .post-meta,
+html[data-theme="light"] .username,
+html[data-theme="light"] .meta,
+html[data-theme="light"] .pm-auth-note,
+html[data-theme="light"] .file-note{
+  color:#667085 !important;
+}
+
+html[data-theme="light"] .links,
+html[data-theme="light"] .nav-links,
+html[data-theme="light"] .pm-user-dropdown a,
+html[data-theme="light"] .pm-user-dropdown button,
+html[data-theme="light"] .dropdown a,
+html[data-theme="light"] .dropdown button{
+  color:#344054 !important;
+}
+
+html[data-theme="light"] .pm-auth-tab,
+html[data-theme="light"] .filter-btn,
+html[data-theme="light"] .secondary,
+html[data-theme="light"] .action{
+  color:#475467 !important;
+}
+
+html[data-theme="light"] .pm-auth-modal,
+html[data-theme="light"] .modal,
+html[data-theme="light"] .auth-modal{
+  background:rgba(31,35,48,.40) !important;
+}
+
+.pm-theme-toggle{
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.05);
+  color:inherit;
+  border-radius:12px;
+  padding:9px 11px;
+  cursor:pointer;
+  font-weight:850;
+  white-space:nowrap;
+}
+
+html[data-theme="light"] .pm-theme-toggle{
+  border-color:rgba(20,24,33,.12);
+  background:#ffffff;
+  color:#344054;
+}
+
+
+/* Secondary text */
+html[data-theme="light"] .muted,
+html[data-theme="light"] .meta,
+html[data-theme="light"] .post-meta,
+html[data-theme="light"] .username,
+html[data-theme="light"] .file-note,
+html[data-theme="light"] .pm-auth-note,
+html[data-theme="light"] .comment-time,
+html[data-theme="light"] .eyebrow-sub,
+html[data-theme="light"] small{
+  color:#748198 !important;
+}
+
+
+/* User/auth menus */
+html[data-theme="light"] .pm-user-trigger,
+html[data-theme="light"] .user-btn{
+  color:#344054 !important;
+  background:#ffffff !important;
+  border-color:rgba(26,35,52,.12) !important;
+}
+
+html[data-theme="light"] .pm-user-dropdown,
+html[data-theme="light"] .dropdown,
+html[data-theme="light"] .pm-auth-card,
+html[data-theme="light"] .modal-card,
+html[data-theme="light"] .auth-card{
+  background:#ffffff !important;
+  color:#161b29 !important;
+  border-color:rgba(26,35,52,.11) !important;
+}
+
+html[data-theme="light"] .pm-user-dropdown a,
+html[data-theme="light"] .pm-user-dropdown button,
+html[data-theme="light"] .dropdown a,
+html[data-theme="light"] .dropdown button{
+  color:#344054 !important;
+}
+
+
+/* Neutral buttons need visible text in light mode */
+html[data-theme="light"] .secondary,
+html[data-theme="light"] .action,
+html[data-theme="light"] .pm-auth-tab{
+  color:#475467 !important;
+  background:#ffffff !important;
+  border-color:rgba(26,35,52,.12) !important;
+}
+
+html[data-theme="light"] .pm-auth-tab.active{
+  color:#151925 !important;
+  background:#f1f3f7 !important;
+}
+
+
+/* Accent buttons intentionally remain white-on-colour */
+html[data-theme="light"] .primary,
+html[data-theme="light"] .create-btn,
+html[data-theme="light"] .pm-auth-submit,
+html[data-theme="light"] .comment-submit,
+html[data-theme="light"] .reply-submit{
+  color:#ffffff !important;
+}
+
+
+/* Modals retain readable overlay but white card */
+html[data-theme="light"] .pm-auth-modal,
+html[data-theme="light"] .modal,
+html[data-theme="light"] .auth-modal{
+  background:rgba(28,35,48,.38) !important;
+}
+
+
+/* 2) Public login button is intentionally strong in BOTH themes */
+.pm-auth-btn,
+html[data-theme="light"] .pm-auth-btn{
+  background:linear-gradient(135deg,#ff4f78,#ff6f86) !important;
+  color:#ffffff !important;
+  border:1px solid rgba(255,79,120,.28) !important;
+  box-shadow:0 8px 22px rgba(255,79,120,.18) !important;
+  opacity:1 !important;
+}
+
+.pm-auth-btn:hover,
+html[data-theme="light"] .pm-auth-btn:hover{
+  background:linear-gradient(135deg,#ff426f,#ff647f) !important;
+  color:#ffffff !important;
+  transform:translateY(-1px);
+}
+
+
+/* Make utility controls distinct in light mode */
+html[data-theme="light"] .pm-theme-toggle,
+html[data-theme="light"] .icon-btn,
+html[data-theme="light"] .menu-toggle{
+  background:#ffffff !important;
+  color:#344054 !important;
+  border-color:rgba(26,35,52,.14) !important;
+  box-shadow:0 2px 8px rgba(26,35,52,.04);
+}
+
+
+  /* Login/theme sit on a clean second row, not squeezed between logo and menu */
+  .pm-auth-area{
+    order:3 !important;
+    width:100% !important;
+    margin-left:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:8px !important;
+    padding-top:2px !important;
+  }
+
+
+  .pm-theme-toggle{
+    padding:9px 11px !important;
+    min-height:38px !important;
+  }
+
+
+  .pm-auth-btn{
+    min-height:38px !important;
+    padding:9px 14px !important;
+    font-size:.84rem !important;
+  }
+
+
+  .pm-user-menu{
+    margin-left:auto !important;
+  }
+
+
+  .pm-user-trigger{
+    min-height:38px !important;
+    padding:5px 9px 5px 6px !important;
+  }
+
+
+  .pm-auth-area{
+    justify-content:space-between !important;
+  }
+
+
+  .pm-theme-toggle,
+  .pm-auth-btn{
+    flex:0 0 auto !important;
+  }
+
+
+  .pm-auth-btn{
+    padding:9px 12px !important;
+  }
+
+
+  .nav-right .pm-theme-toggle,
+  .nav-right .login-btn,
+  .nav-right .user-btn{
+    min-height:38px !important;
+  }
+
+  .pm-auth-area{width:auto !important;order:initial !important;margin-left:auto !important;padding-top:0 !important;justify-content:flex-end !important}
+
+
+  /* All utilities stay on the SAME row */
+  .pm-auth-area{
+    flex:0 0 auto !important;
+    width:auto !important;
+    order:initial !important;
+    margin:0 !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:6px !important;
+  }
+
+
+  /* Theme becomes an icon-style app control */
+  .pm-theme-toggle{
+    width:42px !important;
+    height:42px !important;
+    min-height:42px !important;
+    padding:0 !important;
+    flex:0 0 42px !important;
+    overflow:hidden !important;
+    white-space:nowrap !important;
+    font-size:0 !important;
+    border-radius:13px !important;
+    display:grid !important;
+    place-items:center !important;
+  }
+
+  .pm-theme-toggle::before{
+    content:"◐";
+    font-size:1.05rem;
+    line-height:1;
+  }
+
+
+  /* Logged-in user control shows the avatar only on mobile */
+  .pm-user-menu{
+    margin:0 !important;
+    flex:0 0 auto !important;
+  }
+
+  .pm-user-trigger{
+    width:46px !important;
+    height:42px !important;
+    min-height:42px !important;
+    padding:3px !important;
+    border-radius:13px !important;
+    justify-content:center !important;
+    gap:0 !important;
+  }
+
+  .pm-user-trigger .pm-user-name,
+  .pm-user-trigger > span:last-child{
+    display:none !important;
+  }
+
+  .pm-avatar{
+    width:34px !important;
+    height:34px !important;
+    flex:0 0 34px !important;
+  }
+
+
+  /* Logged-out button becomes compact, but remains readable */
+  .pm-auth-btn{
+    min-height:42px !important;
+    padding:8px 11px !important;
+    font-size:.74rem !important;
+    white-space:nowrap !important;
+  }
+
+  .pm-theme-toggle{
+    width:38px !important;
+    flex-basis:38px !important;
+  }
+
+  .pm-user-trigger{
+    width:42px !important;
+  }
+
+  .pm-auth-area,
+  .nav-actions{
+    gap:4px !important;
+  }header.topbar{position:sticky;top:0;z-index:100;background:#f5f6fa;border-bottom:1px solid #dfe3eb}header.topbar .container{width:min(calc(100% - 36px),1180px);margin:auto}header.topbar .nav{display:flex;align-items:center;gap:22px;min-height:72px}header.topbar .brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:950;white-space:nowrap}header.topbar .brand img{width:36px;height:36px}header.topbar .nav-links{display:flex;gap:18px;align-items:center;font-weight:750;color:#344054}header.topbar .nav-links a.active{color:#151821}header.topbar .nav-actions{display:none}header.topbar .pm-auth-area{margin-left:auto}.pm-user-dropdown{background:white!important;color:#344054!important}.pm-user-dropdown a,.pm-user-dropdown button{color:#344054!important}.pm-auth-card{background:white!important;color:#151821!important}.pm-auth-input{background:white!important;color:#151821!important}</style><link rel="stylesheet" href="assets/mobile-header.css"><link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
 <body>
-<header class="top"><div class="nav"><a class="brand" href="index.html"><img src="peppermoon-logo.png"><span>Peppermoon</span></a>
-<div class="nav-links"><a href="gaming.html">Gaming</a><a href="movies.html">Movies</a><a href="tv.html">TV Series</a><a href="community.html" class="active">Community</a><a href="about.html">About</a></div></div></header>
+<header class="topbar">
+  <div class="container nav">
+    <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
+    <nav class="nav-links" id="navLinks"><a href="index.html" >Home</a><a href="ratings.html">Pepper Ratings</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
+    
+<div class="pm-auth-area" id="pmAuthArea">
+  <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
+  <button class="pm-auth-btn" id="pmOpenAuth">Log in / Sign up</button>
+  <div class="pm-user-menu" id="pmUserMenu" style="display:none">
+    <button class="pm-user-trigger" id="pmUserTrigger"><span class="pm-avatar" id="pmAvatar">U</span><span class="pm-user-name" id="pmUserName">User</span><span>▾</span></button>
+    <div class="pm-user-dropdown" id="pmUserDropdown">
+      <a id="pmProfileLink" href="profile.html">My Profile</a>
+      <a href="#" id="pmCreatePostPlaceholder">Create Post</a>
+      <a href="profile.html#saved" id="pmSavedPlaceholder">Saved</a>
+      <a href="notifications.html">Notifications</a>
+      <button id="pmLogout" class="danger">Log out</button>
+    </div>
+  </div>
+</div>
+<div class="nav-actions">
+      <button class="icon-btn" id="searchToggle" aria-label="Search">⌕</button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+    </div>
+  </div>
+  <div class="container search-panel" id="searchPanel">
+    <div class="search-box"><span>⌕</span><input id="siteSearch" type="search" placeholder="Filter articles on this page..."></div>
+  </div>
+</header><button id="themeBtn" type="button" hidden></button>
 <main class="wrap"><h1>Notifications</h1><div class="list" id="list"><div class="empty">Loading notifications…</div></div></main>
 <script>
 const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
@@ -392,4 +811,299 @@ await sb.from('notifications').update({read:true}).eq('recipient_id',s.user.id).
 })();
 </script>
 <nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="ratings.html" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="community.html" data-mobile-section="community" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
-</body></html>
+<div class="pm-auth-modal" id="pmAuthModal">
+  <div class="pm-auth-card">
+    <div class="pm-auth-head">
+      <h2>Join Peppermoon</h2>
+      <button class="pm-auth-close" id="pmCloseAuth">✕</button>
+    </div>
+
+    <div class="pm-auth-body">
+      <div class="pm-social-auth">
+        <button class="pm-google-btn" id="pmGoogleLogin" type="button">
+          <span class="pm-google-g">G</span>
+          Continue with Google
+        </button>
+      </div>
+
+      <div class="pm-auth-divider"><span>OR</span></div>
+
+      <div class="pm-auth-tabs">
+        <button class="pm-auth-tab active" data-auth-tab="login">Log in</button>
+        <button class="pm-auth-tab" data-auth-tab="signup">Sign up</button>
+      </div>
+
+      <form class="pm-auth-form active" id="pmLoginForm" style="margin-top:16px">
+        <div class="pm-auth-field">
+          <label>Email</label>
+          <input id="pmLoginEmail" type="email" required autocomplete="username">
+        </div>
+        <div class="pm-auth-field">
+          <label>Password</label>
+          <input id="pmLoginPassword" type="password" required autocomplete="current-password">
+        </div>
+        <button class="pm-auth-submit" type="submit">Log in</button>
+        <div class="pm-auth-msg" id="pmLoginMsg"></div>
+      </form>
+
+      <form class="pm-auth-form" id="pmSignupForm" style="margin-top:16px">
+        <div class="pm-auth-field">
+          <label>Username</label>
+          <input id="pmSignupUsername" type="text" minlength="3" maxlength="24"
+                 pattern="[A-Za-z0-9_]+" required placeholder="Example: MoonRider">
+        </div>
+        <div class="pm-auth-field">
+          <label>Display name</label>
+          <input id="pmSignupDisplayName" type="text" maxlength="50" placeholder="Optional">
+        </div>
+        <div class="pm-auth-field">
+          <label>Email</label>
+          <input id="pmSignupEmail" type="email" required autocomplete="email">
+        </div>
+        <div class="pm-auth-field">
+          <label>Password</label>
+          <input id="pmSignupPassword" type="password" minlength="6" required autocomplete="new-password">
+        </div>
+        <button class="pm-auth-submit" type="submit">Create account</button>
+        <p class="pm-auth-note">Email accounts may require email confirmation. Google users are signed in immediately after authentication.</p>
+        <div class="pm-auth-msg" id="pmSignupMsg"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+const sbAuth=window.supabase.createClient(
+  "https://bgzlqvbvmstebdsnzmqv.supabase.co",
+  "sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-",
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
+
+const $=id=>document.getElementById(id);
+
+function setMsg(el,t,type='error'){
+  if(!el)return;
+  el.textContent=t;
+  el.className='pm-auth-msg show '+type;
+}
+
+function cleanUsername(v){
+  return String(v||'')
+    .toLowerCase()
+    .replace(/[^a-z0-9_]/g,'_')
+    .replace(/_+/g,'_')
+    .replace(/^_+|_+$/g,'')
+    .slice(0,24);
+}
+
+async function usernameExists(username){
+  const r=await sbAuth.from('profiles').select('id').eq('username',username).maybeSingle();
+  return !!r.data;
+}
+
+async function buildSocialUsername(user){
+  const meta=user.user_metadata||{};
+  const emailPrefix=(user.email||'user').split('@')[0];
+  let base=cleanUsername(meta.preferred_username || meta.user_name || emailPrefix || 'user');
+  if(base.length<3)base='user';
+
+  if(!(await usernameExists(base)))return base;
+
+  const suffix=user.id.replace(/-/g,'').slice(0,5).toLowerCase();
+  let candidate=(base.slice(0,18)+'_'+suffix).slice(0,24);
+  if(!(await usernameExists(candidate)))return candidate;
+
+  return ('user_'+user.id.replace(/-/g,'').slice(0,10)).slice(0,24);
+}
+
+async function ensureProfile(user){
+  let r=await sbAuth.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(r.data)return r.data;
+
+  const meta=user.user_metadata||{};
+  let username=cleanUsername(meta.username);
+
+  if(!username){
+    username=await buildSocialUsername(user);
+  }
+
+  const displayName=
+    meta.display_name ||
+    meta.full_name ||
+    meta.name ||
+    username;
+
+  const avatar=
+    meta.avatar_url ||
+    meta.picture ||
+    null;
+
+  const payload={
+    id:user.id,
+    username:username,
+    display_name:displayName,
+    avatar_url:avatar
+  };
+
+  const inserted=await sbAuth.from('profiles').insert(payload).select().maybeSingle();
+  if(inserted.data)return inserted.data;
+
+  // A rare username collision can occur between simultaneous signups.
+  payload.username=('user_'+user.id.replace(/-/g,'').slice(0,10)).slice(0,24);
+  const retry=await sbAuth.from('profiles').insert(payload).select().maybeSingle();
+  return retry.data||null;
+}
+
+async function render(session){
+ if(session?.user) $("pmOpenAuth").style.display="none"; $("pmOpenAuth").style.visibility="visible";
+  if(!session||!session.user){
+    $('pmOpenAuth').style.display='';
+    $('pmUserMenu').style.display='none';
+    return;
+  }
+
+  const p=await ensureProfile(session.user);
+
+  if(!p){
+    $('pmOpenAuth').style.display='none';
+    $('pmUserMenu').style.display='block';
+    $('pmUserName').textContent='Profile';
+    $('pmAvatar').textContent='U';
+    return;
+  }
+
+  const n=p.display_name||p.username||session.user.email||'User';
+  $('pmOpenAuth').style.display='none';
+  $('pmUserMenu').style.display='block';
+  $('pmUserName').textContent=n;
+  $('pmAvatar').textContent=n.slice(0,1).toUpperCase();
+
+  if(p.avatar_url){
+    $('pmAvatar').style.backgroundImage='url("'+p.avatar_url+'")';
+    $('pmAvatar').textContent='';
+  }
+
+  $('pmProfileLink').href='profile.html?id='+encodeURIComponent(session.user.id);
+}
+
+$('pmOpenAuth').onclick=()=>$('pmAuthModal').classList.add('open');
+$('pmCloseAuth').onclick=()=>$('pmAuthModal').classList.remove('open');
+
+// Data-entry dialog intentionally does not close from backdrop clicks.
+$('pmAuthModal').onclick=()=>{};
+
+document.querySelectorAll('[data-auth-tab]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-auth-tab]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const login=b.dataset.authTab==='login';
+  $('pmLoginForm').classList.toggle('active',login);
+  $('pmSignupForm').classList.toggle('active',!login);
+});
+
+$('pmUserTrigger').onclick=()=>$('pmUserDropdown').classList.toggle('open');
+document.addEventListener('click',e=>{
+  if($('pmUserMenu') && !$('pmUserMenu').contains(e.target))
+    $('pmUserDropdown').classList.remove('open');
+});
+
+$('pmGoogleLogin').onclick=async()=>{
+  const r=await sbAuth.auth.signInWithOAuth({
+    provider:'google',
+    options:{
+      redirectTo:window.location.origin + window.location.pathname + window.location.search
+    }
+  });
+
+  if(r.error){
+    setMsg($('pmLoginMsg'),r.error.message,'error');
+  }
+};
+
+$('pmLoginForm').onsubmit=async e=>{
+  e.preventDefault();
+
+  const r=await sbAuth.auth.signInWithPassword({
+    email:$('pmLoginEmail').value.trim(),
+    password:$('pmLoginPassword').value
+  });
+
+  if(r.error){
+    setMsg($('pmLoginMsg'),r.error.message,'error');
+    return;
+  }
+
+  $('pmAuthModal').classList.remove('open');
+};
+
+$('pmSignupForm').onsubmit=async e=>{
+  e.preventDefault();
+
+  const username=cleanUsername($('pmSignupUsername').value);
+  const dn=$('pmSignupDisplayName').value.trim();
+
+  const chk=await sbAuth.from('profiles').select('id').eq('username',username).maybeSingle();
+  if(chk.data){
+    setMsg($('pmSignupMsg'),'Username already taken.','error');
+    return;
+  }
+
+  const r=await sbAuth.auth.signUp({
+    email:$('pmSignupEmail').value.trim(),
+    password:$('pmSignupPassword').value,
+    options:{
+      data:{
+        username:username,
+        display_name:dn||username
+      }
+    }
+  });
+
+  if(r.error){
+    setMsg($('pmSignupMsg'),r.error.message,'error');
+    return;
+  }
+
+  if(r.data.session && r.data.user){
+    await ensureProfile(r.data.user);
+    $('pmAuthModal').classList.remove('open');
+    return;
+  }
+
+  setMsg(
+    $('pmSignupMsg'),
+    'Account created. Confirm the email, then Peppermoon will recognize the session when you return.',
+    'ok'
+  );
+};
+
+$('pmLogout').onclick=async()=>{
+  await sbAuth.auth.signOut();
+  $('pmUserDropdown').classList.remove('open');
+};
+
+$('pmCreatePostPlaceholder').onclick=e=>{
+  e.preventDefault();
+  location.href='community.html#create';
+};
+
+$('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='profile.html#saved'};
+
+(async()=>{
+  const r=await sbAuth.auth.getSession();
+  await render(r.data.session);
+})();
+
+sbAuth.auth.onAuthStateChange(async(_event,session)=>{
+  await render(session);
+  if(session && $('pmAuthModal')) $('pmAuthModal').classList.remove('open');
+});
+})();
+</script></body></html>

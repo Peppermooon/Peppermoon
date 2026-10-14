@@ -39,7 +39,7 @@ if($('ratingsGrid')){
  }
  async function load(){loaded=false;loadError='';$('ratingsRetry').hidden=true;render();try{
   const {data,error}=await sb.from('pepper_ratings').select('id,slug,title,category,release_year,score,summary,image_url,status,top_rank,updated_at').eq('status','published').order('score',{ascending:false}).order('title').range(0,499);
-  if(error)throw error;items=data||[];loaded=true;render();
+  if(error)throw error;items=(data||[]).sort((a,b)=>Number(b.score)-Number(a.score)||a.title.localeCompare(b.title));loaded=true;render();
  }catch(error){loadError=readableError(error);$('ratingsRetry').hidden=false;render();}}
  document.querySelectorAll('[data-rating-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.ratingCategory;document.querySelectorAll('[data-rating-category]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render();}));
  $('ratingsSearch').addEventListener('input',render);
