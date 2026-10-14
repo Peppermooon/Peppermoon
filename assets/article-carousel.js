@@ -8,7 +8,7 @@
  if(error)throw error;
  if(!data?.length){region.hidden=true;region.style.setProperty('display','none','important');return;}
  data.forEach((item,index)=>{
- const link=el('a','featured-slide');link.href=location.hostname.endsWith('github.io')?'article.html?slug='+encodeURIComponent(item.slug):'/article/'+encodeURIComponent(item.slug);link.setAttribute('aria-label',item.title);link.setAttribute('aria-roledescription','slide');
+ const link=el('a','featured-slide');link.href=location.hostname.endsWith('github.io')?'/articles/'+encodeURIComponent(item.slug):'/articles/'+encodeURIComponent(item.slug);link.setAttribute('aria-label',item.title);link.setAttribute('aria-roledescription','slide');
  const img=el('img','');const type={'Gaming':'gaming','Movies':'movies','TV Series':'tv'}[item.category]||'entertainment';const fallback='assets/news-'+type+'.svg';img.src=fallback;
  try{const url=new URL(item.featured_image);if(url.protocol==='https:')img.src=url.href;}catch{}
  img.alt='';img.loading=index?'lazy':'eager';img.onerror=()=>{img.onerror=null;img.src=fallback;};

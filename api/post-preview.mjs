@@ -5,7 +5,8 @@ const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 export default async function handler(req,res){
  res.setHeader('Content-Type','text/html; charset=utf-8');
  const origin=new URL('https://'+req.headers.host).origin;
- const url=new URL(req.url,origin),slug=url.searchParams.get('slug') || (url.pathname.startsWith('/post/') ? decodeURIComponent(url.pathname.slice(6)) : null);
+ const url=new URL(req.url,origin);
+ const slug=url.searchParams.get('slug')||(url.pathname.startsWith('/posts/')?decodeURIComponent(url.pathname.slice(7)):url.pathname.startsWith('/post/')?decodeURIComponent(url.pathname.slice(6)):null);
  let template;
  try{template=await readFile(process.cwd()+'/post.html','utf8');}catch{res.statusCode=500;return res.end('Article page unavailable');}
  if(!slug||slug.length>240){res.statusCode=404;return res.end(template);}
@@ -17,7 +18,8 @@ export default async function handler(req,res){
  if(!response.ok)throw new Error('Article lookup failed');
  const [article]=await response.json();
  if(!article){res.statusCode=404;res.setHeader('Cache-Control','no-store');return res.end(template);}
- const canonical=origin+'/post/'+encodeURIComponent(article.slug);
+ const canonical=origin+'/posts/'+encodeURIComponent(article.slug);
+ if(url.pathname==='/post.html'||url.pathname.startsWith('/post/')){res.statusCode=308;res.setHeader('Location',canonical);return res.end();}
  let image=origin+'/peppermoon-logo.png';
  try{const cover=new URL(article.image_url);if(cover.protocol==='https:')image=cover.href;}catch{}
  const title=article.title+' | Peppermoon';
@@ -32,8 +34,10 @@ export default async function handler(req,res){
  if(article.created_at)tags.push(['property','article:published_time',article.created_at]);
  const metadata=tags.map(([kind,name,value])=>'<meta '+kind+'="'+name+'" content="'+escape(value)+'">').join('\n')+'\n<link rel="canonical" href="'+escape(canonical)+'">';
  template=template.replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
+ template=template.replace('<head>','<head><script>window.PM_CONTENT_SLUG='+JSON.stringify(article.slug).replace(/</g,'\\u003c')+';</script>');
  template=template.replace('<head>','<head>\n<base href="'+escape(origin)+'/">');
  template=template.replace(/<meta charset="UTF-8">/i,'');
+ template=template.replace('<head>','<head><script>window.PM_CONTENT_SLUG='+JSON.stringify(article.slug).replace(/</g,'\\u003c')+';</script>');
  template=template.replace('<head>','<head>\n<meta charset="UTF-8">\n'+metadata);
  res.setHeader('Cache-Control','public, max-age=0, s-maxage=60');
  res.statusCode=200;return res.end(template);

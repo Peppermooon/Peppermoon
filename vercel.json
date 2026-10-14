@@ -12,8 +12,48 @@
   },
   "routes": [
     {
-      "src": "/rating\\.html",
-      "dest": "/api/rating-preview"
+      "src": "/index\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/"
+      }
+    },
+    {
+      "src": "/community\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/community"
+      }
+    },
+    {
+      "src": "/ratings\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/ratings"
+      }
+    },
+    {
+      "src": "/about\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/about"
+      }
+    },
+    {
+      "src": "/community",
+      "dest": "/community.html"
+    },
+    {
+      "src": "/ratings",
+      "dest": "/ratings.html"
+    },
+    {
+      "src": "/about",
+      "dest": "/about.html"
+    },
+    {
+      "src": "/articles/([^/]+)",
+      "dest": "/api/article-preview?slug=$1"
     },
     {
       "src": "/article/([^/]+)",
@@ -22,6 +62,22 @@
     {
       "src": "/article\\.html",
       "dest": "/api/article-preview"
+    },
+    {
+      "src": "/ratings/([^/]+)",
+      "dest": "/api/rating-preview?slug=$1"
+    },
+    {
+      "src": "/rating/([^/]+)",
+      "dest": "/api/rating-preview?slug=$1"
+    },
+    {
+      "src": "/rating\\.html",
+      "dest": "/api/rating-preview"
+    },
+    {
+      "src": "/posts/([^/]+)",
+      "dest": "/api/post-preview?slug=$1"
     },
     {
       "src": "/post/([^/]+)",

@@ -1263,8 +1263,8 @@ html[data-theme="light"] .menu-toggle{
 <body>
 <header class="topbar">
   <div class="container nav">
-    <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="nav-links" id="navLinks"><a href="index.html" >Home</a><a href="ratings.html">Pepper Ratings</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
+    <a class="brand" href="/"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
+    <nav class="nav-links" id="navLinks"><a href="/" >Home</a><a href="/ratings">Pepper Ratings</a><a href="/community">Community</a><a href="/about">About</a></nav>
     
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
@@ -1340,7 +1340,7 @@ const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co"
 const $=id=>document.getElementById(id),esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let pid=null,session=null;
 function ago(d){return new Date(d).toLocaleDateString()}
-function items(list){const a=$('activity');if(!list||!list.length){a.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.innerHTML='';list.forEach(p=>{const e=document.createElement('div');e.className='item';e.style.cursor='pointer';e.onclick=()=>location.href='post.html?slug='+encodeURIComponent(p.slug||('post-'+p.id));e.innerHTML=`<div class="small">${esc(ago(p.created_at))}</div><h3>${esc(p.title)}</h3><p>${pmLinkify((p.body||'').slice(0,280))}</p>`;a.appendChild(e)})}
+function items(list){const a=$('activity');if(!list||!list.length){a.innerHTML='<div class="empty">Nothing here yet.</div>';return}a.innerHTML='';list.forEach(p=>{const e=document.createElement('div');e.className='item';e.style.cursor='pointer';e.onclick=()=>location.href='/posts/'+encodeURIComponent(p.slug||('post-'+p.id));e.innerHTML=`<div class="small">${esc(ago(p.created_at))}</div><h3>${esc(p.title)}</h3><p>${pmLinkify((p.body||'').slice(0,280))}</p>`;a.appendChild(e)})}
 async function load(tab){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('activity').innerHTML='<div class="empty">Loading…</div>';
 if(tab==='posts'){const r=await sb.from('posts').select('id,title,body,created_at').eq('author_id',pid).eq('status','published').order('created_at',{ascending:false});items(r.data);return}
 if(tab==='liked'){const r=await sb.from('post_likes').select('posts!post_likes_post_id_fkey(id,title,body,created_at,status)').eq('user_id',pid);items((r.data||[]).map(x=>x.posts).filter(x=>x&&x.status==='published'));return}
@@ -1596,7 +1596,7 @@ $('avatarFile').addEventListener('change',()=>{
    Close only with X or Cancel, matching Peppermoon data-entry modal behavior. */
 
 function lab(){$('themeBtn').textContent=document.documentElement.getAttribute('data-theme')==='light'?'☾ Dark':'☀ Light'}$('themeBtn').onclick=()=>{const n=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('peppermoon-theme',n);lab()};lab();
-</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="ratings.html" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="community.html" data-mobile-section="community" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
+</script><nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="/" data-mobile-section="home"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="/ratings" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="/community" data-mobile-section="community" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="/about" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 <div class="pm-auth-modal" id="pmAuthModal">
   <div class="pm-auth-card">
     <div class="pm-auth-head">
@@ -1877,7 +1877,7 @@ $('pmLogout').onclick=async()=>{
 
 $('pmCreatePostPlaceholder').onclick=e=>{
   e.preventDefault();
-  location.href='community.html#create';
+  location.href='/community#create';
 };
 
 $('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='profile.html#saved'};

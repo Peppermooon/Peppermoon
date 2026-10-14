@@ -1588,8 +1588,8 @@ html[data-theme="light"] .news-original{color:#4456a6}
 
 <header class="topbar">
   <div class="container nav">
-    <a class="brand" href="index.html"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
-    <nav class="nav-links" id="navLinks"><a href="index.html" class="active" aria-current="page">Home</a><a href="ratings.html">Pepper Ratings</a><a href="community.html">Community</a><a href="about.html">About</a></nav>
+    <a class="brand" href="/"><img class="brand-logo-img" src="peppermoon-logo.png" alt=""><span>Peppermoon</span></a>
+    <nav class="nav-links" id="navLinks"><a href="/" class="active" aria-current="page">Home</a><a href="/ratings">Pepper Ratings</a><a href="/community">Community</a><a href="/about">About</a></nav>
     
 <div class="pm-auth-area" id="pmAuthArea">
   <button class="pm-theme-toggle" id="pmThemeToggle" type="button">☀ Light</button>
@@ -1635,7 +1635,7 @@ html[data-theme="light"] .news-original{color:#4456a6}
 <footer class="footer">
   <div class="container footer-inner">
     <div>© <span id="year"></span> Peppermoon. All rights reserved.</div>
-    <div class="footer-links"><a href="index.html" class="active" aria-current="page">Home</a><a href="community.html">Community</a><a href="about.html">About</a></div>
+    <div class="footer-links"><a href="/" class="active" aria-current="page">Home</a><a href="/community">Community</a><a href="/about">About</a></div>
   </div>
 </footer>
 <script>
@@ -1954,7 +1954,7 @@ $('pmLogout').onclick=async()=>{
 
 $('pmCreatePostPlaceholder').onclick=e=>{
   e.preventDefault();
-  location.href='community.html#create';
+  location.href='/community#create';
 };
 
 $('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='profile.html#saved'};
@@ -1974,7 +1974,7 @@ sbAuth.auth.onAuthStateChange(async(_event,session)=>{
 
 
 
-<nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="index.html" data-mobile-section="home" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="ratings.html" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="community.html" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="about.html" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation"><a href="/" data-mobile-section="home" class="active" aria-current="page"><span class="mbn-icon" aria-hidden="true">⌂</span><span>Home</span></a><a href="/ratings" data-mobile-section="ratings"><span class="mbn-icon" aria-hidden="true">★</span><span>Ratings</span></a><a href="/community" data-mobile-section="community"><span class="mbn-icon" aria-hidden="true">☾</span><span>Community</span></a><a href="/about" data-mobile-section="about"><span class="mbn-icon" aria-hidden="true">ⓘ</span><span>About</span></a></nav>
 <script src="assets/article-carousel.js?v=2"></script>
 </body>
 </html>

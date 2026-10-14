@@ -4,7 +4,7 @@ const $=id=>document.getElementById(id);
 const node=(tag,cls,text)=>{const el=document.createElement(tag);el.className=cls;if(text!==undefined)el.textContent=text;return el;};
 function cover(item,cls){const img=node('img',cls);const fallback='assets/news-'+({'Movies':'movies','Gaming':'gaming','TV Series':'tv'}[item.category]||'entertainment')+'.svg';img.src=fallback;try{const url=new URL(item.image_url);if(url.protocol==='https:')img.src=url.href}catch{}img.alt='';img.loading='lazy';img.onerror=()=>{img.onerror=null;img.src=fallback};return img;}
 function score(item){const el=node('div','pepper-score');el.append(node('strong','',Number(item.score).toFixed(1)),node('span','','/ 10 · Pepper Score'));return el;}
-function card(item){const a=node('a','pepper-rating-card');a.href='rating.html?slug='+encodeURIComponent(item.slug);const body=node('div','rating-card-body');body.append(node('div','rating-card-meta',displayCategory(item.category)+(item.release_year?' · '+item.release_year:'')),node('h3','',item.title),score(item));if(item.summary)body.append(node('p','',item.summary));a.append(cover(item,'rating-cover'),body);return a;}
+function card(item){const a=node('a','pepper-rating-card');a.href='/ratings/'+encodeURIComponent(item.slug.replace(/^pepper-draft-/,''));const body=node('div','rating-card-body');body.append(node('div','rating-card-meta',displayCategory(item.category)+(item.release_year?' · '+item.release_year:'')),node('h3','',item.title),score(item));if(item.summary)body.append(node('p','',item.summary));a.append(cover(item,'rating-cover'),body);return a;}
 function readableError(error){return error?.code==='PGRST205'||error?.code==='42P01'?'Pepper Ratings is being set up. Reviews will appear here soon.':'Ratings could not be loaded. Please try again.';}
 if($('ratingsGrid')){
  let items=[],category='All',loaded=false,loadError='';
@@ -13,7 +13,7 @@ if($('ratingsGrid')){
   const title=node('h2','','Top 10 Peppermoon '+displayCategory(type));
   section.append(node('div','ratings-eyebrow','The Peppermoon picks'),title);
   const ranked=topTen(items,type),list=node('ol','rating-list');
-  for(const item of ranked){const li=node('li',''),link=node('a','');link.href='rating.html?slug='+encodeURIComponent(item.slug);link.append(node('span','rank',String(item.top_rank)),node('span','list-title',item.title),node('span','list-score',Number(item.score).toFixed(1)+' / 10'));li.append(link);list.append(li);}
+  for(const item of ranked){const li=node('li',''),link=node('a','');link.href='/ratings/'+encodeURIComponent(item.slug.replace(/^pepper-draft-/,''));link.append(node('span','rank',String(item.top_rank)),node('span','list-title',item.title),node('span','list-score',Number(item.score).toFixed(1)+' / 10'));li.append(link);list.append(li);}
   section.append(list);
   if(!ranked.length)section.append(node('p','ratings-note','This list is coming soon.'));
   const dates=ranked.map(i=>new Date(i.updated_at).valueOf()).filter(Number.isFinite);
@@ -47,7 +47,7 @@ if($('ratingsGrid')){
  load();
 }
 if($('ratingDetail')){
- const slug=new URLSearchParams(location.search).get('slug');
+ const slug=window.PM_CONTENT_SLUG||new URLSearchParams(location.search).get('slug')||(location.pathname.startsWith('/ratings/')?decodeURIComponent(location.pathname.slice(9)):null);
  try{if(!slug)throw new Error('Missing review');const {data:item,error}=await sb.from('pepper_ratings').select('*').eq('slug',slug).eq('status','published').maybeSingle();if(error)throw error;if(!item){$('ratingDetail').textContent='This review is not available.';}else{document.title=item.title+' · Pepper Ratings | Peppermoon';const section=node('article','review-layout'),copy=node('div','');copy.append(node('div','ratings-eyebrow',displayCategory(item.category)+(item.release_year?' · '+item.release_year:'')),node('h1','review-title',item.title),score(item),node('p','ratings-note','Peppermoon Editorial Rating · This is our editorial opinion, not a community vote.'));if(item.summary)copy.append(node('p','ratings-note',item.summary));copy.append(node('h2','','Our review'),node('div','review-body',item.review),node('p','review-updated','Updated '+new Date(item.updated_at).toLocaleDateString()));section.append(cover(item,'review-cover'),copy);$('ratingDetail').replaceChildren(section);}}
  catch(error){$('ratingDetail').textContent=readableError(error);}
 }
