@@ -22,3 +22,10 @@ html[data-theme="light"] .form .field>label{color:#344054!important}
 /* Match the Community sign-in button to the other public pages. */
 html[data-theme="light"] #loginBtn{background:linear-gradient(135deg,#ff4f78,#ff6f86)!important;color:#fff!important;border:1px solid rgba(255,79,120,.28)!important;box-shadow:0 8px 22px rgba(255,79,120,.18)!important;opacity:1!important}
 html[data-theme="light"] #loginBtn:hover{background:linear-gradient(135deg,#ff426f,#ff647f)!important;color:#fff!important;transform:translateY(-1px)}
+
+/* Keep the four Community post actions aligned on mobile. */
+@media(max-width:760px){
+ .post-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px!important;padding-left:12px;padding-right:12px}
+ .post-actions>.action{min-width:0;white-space:nowrap;font-size:12px;padding:7px 2px;text-align:center;justify-content:center}
+ .post-actions>.owner-actions{grid-column:1/-1}
+}
