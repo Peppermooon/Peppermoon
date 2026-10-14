@@ -1238,6 +1238,14 @@ html[data-theme="light"] .nav-links::after{
 const sb=window.supabase.createClient("https://bgzlqvbvmstebdsnzmqv.supabase.co","sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-");
 const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+
+function pmSetMobileArticleSection(){
+ document.querySelectorAll('.mobile-bottom-nav a').forEach(a=>{const home=a.getAttribute('href')==='index.html';a.classList.toggle('active',home);if(home)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+}
+function pmSetArticleSectionActive(){
+ document.querySelectorAll('.nav-links a, nav.links a').forEach(a=>{const home=a.getAttribute('href')==='index.html';a.classList.toggle('active',home);if(home)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+}
+
 function legacyToHtml(text) {
   if(!text) return '';
   if(/<[a-z][\s\S]*>/i.test(text)) return text;
