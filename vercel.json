@@ -12,6 +12,10 @@
   },
   "routes": [
     {
+      "src": "/sitemap\\.xml",
+      "dest": "/api/sitemap"
+    },
+    {
       "src": "/index\\.html",
       "status": 308,
       "headers": {
