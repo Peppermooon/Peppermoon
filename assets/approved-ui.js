@@ -28,3 +28,10 @@ document.addEventListener('DOMContentLoaded',()=>{
  }
 });
 
+
+// Vercel Web Analytics: collect page views after dashboard activation.
+(()=>{
+ if(!/^https?:$/.test(location.protocol)||document.querySelector('script[src="/_vercel/insights/script.js"]'))return;
+ window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
+ const script=document.createElement('script');script.defer=true;script.src='/_vercel/insights/script.js';document.head.appendChild(script);
+})();
