@@ -359,7 +359,7 @@ html[data-theme="light"] .nav-links::after{
 }
 </style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
-<link rel="stylesheet" href="assets/news-inbox.css"></head>
+<link rel="stylesheet" href="assets/news-inbox.css"><link rel="stylesheet" href="assets/admin-responsive.css"></head>
 <body>
 <header class="top">
   <div class="brand"><img src="favicon.png" alt=""><span>Peppermoon Admin</span></div>
@@ -647,12 +647,12 @@ function renderArticles() {
 
   $('articleRows').innerHTML = items.map(a=>`
     <tr>
-      <td><strong>${escapeHtml(a.title)}</strong><br><span style="color:#8f97a8;font-size:.78rem">${escapeHtml(a.slug)}</span></td>
-      <td>${escapeHtml(a.category)}</td>
-      <td><span class="badge ${a.status==='published'?'published':'draft'}">${escapeHtml(a.status||'draft')}</span></td>
-      <td>${a.show_on_homepage?'Yes':'—'}${a.featured?' · Featured':''}</td>
-      <td>${fmtDate(a.updated_at || a.created_at)}</td>
-      <td><div class="actions"><button class="btn small secondary" onclick="editArticle('${a.id}')">Edit</button></div></td>
+      <td data-label="Title"><strong>${escapeHtml(a.title)}</strong><br><span style="color:#8f97a8;font-size:.78rem">${escapeHtml(a.slug)}</span></td>
+      <td data-label="Category">${escapeHtml(a.category)}</td>
+      <td data-label="Status"><span class="badge ${a.status==='published'?'published':'draft'}">${escapeHtml(a.status||'draft')}</span></td>
+      <td data-label="Homepage">${a.show_on_homepage?'Yes':'—'}${a.featured?' · Featured':''}</td>
+      <td data-label="Updated">${fmtDate(a.updated_at || a.created_at)}</td>
+      <td data-label="Actions"><div class="actions"><button class="btn small secondary" onclick="editArticle('${a.id}')">Edit</button></div></td>
     </tr>`).join('');
 
   $('emptyState').classList.toggle('hidden', items.length>0);
