@@ -359,7 +359,7 @@ html[data-theme="light"] .nav-links::after{
 }
 </style>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(3,minmax(0,1fr)) !important}}</style>
-</head>
+<link rel="stylesheet" href="assets/news-inbox.css"></head>
 <body>
 <header class="top">
   <div class="brand"><img src="favicon.png" alt=""><span>Peppermoon Admin</span></div>
@@ -400,6 +400,12 @@ html[data-theme="light"] .nav-links::after{
       <div class="stat"><b id="statFeatured">0</b><span>Featured</span></div>
     </div>
 
+<section class="panel" id="newsInboxPanel">
+ <div class="panel-head"><h2>News inbox</h2><div class="actions"><button class="btn small secondary" type="button" id="newsInboxRefresh">Refresh news</button><button class="btn small secondary" type="button" id="newsInboxRestore">Restore dismissed</button></div></div>
+ <div style="padding:12px 16px" class="filters"><input id="newsInboxSearch" type="search" placeholder="Search source stories…"><select id="newsInboxCategory"><option value="">All categories</option><option>Gaming</option><option>Movies</option><option>TV Series</option></select></div>
+ <p id="newsInboxMessage" role="status">Loading source headlines. No AI generation happens until you approve a story.</p>
+ <div class="news-inbox-list" id="newsInboxRows"></div>
+</section>
     <section class="panel">
       <div class="panel-head">
         <h2>Articles</h2>
@@ -609,6 +615,7 @@ async function setSession(session) {
     profile.display_name || profile.username || session.user.email || 'Admin';
 
   await loadArticles();
+  document.dispatchEvent(new Event('pm-admin-ready'));
 }
 
 $('loginForm').addEventListener('submit', async e => {
@@ -892,6 +899,10 @@ async function saveArticle(forceDraft=false) {
     return;
   }
 
+  const savedArticle=allArticles.find(a=>String(a.id)===String($('articleId').value));
+  const aiDraft=(content+(savedArticle?.content||'')).includes('data-peppermoon-ai-draft');
+  if(!forceDraft&&aiDraft&&!$('existingImageUrl').value&&!$('articleImage').files[0]){showMsg($('editorMsg'),'Add your cover image before publishing this AI draft.');return;}
+
   publishButton.disabled=true;
   $('saveDraftBtn').disabled=true;
   try {
@@ -995,6 +1006,15 @@ init();
 })();
 </script>
 
-</body>
+<dialog class="news-generate-dialog" id="newsGenerateDialog"><form id="newsGenerateForm">
+ <h2>Approve this story for an AI draft</h2><h3 id="newsSourceTitle"></h3>
+ <p><a id="newsSourceLink" target="_blank" rel="noopener noreferrer">Read original</a></p><p class="muted" id="newsSourceExcerpt"></p>
+ <div class="field"><label for="newsDraftCategory">Peppermoon category</label><select id="newsDraftCategory"><option>Gaming</option><option>Movies</option><option>TV Series</option></select></div>
+ <div class="field"><label for="newsSourceNotes">Additional source facts (optional)</label><textarea id="newsSourceNotes" maxlength="7000" placeholder="Add facts you checked in the original. If the publisher blocks reading, supply enough facts here for a reliable draft."></textarea></div>
+ <label class="approval-label"><input type="checkbox" id="newsGenerateApproval" required><span>I approve AI generation for this story. This uses API credits and saves a private draft only.</span></label>
+ <p class="help">You will review the draft again and add your own cover image before publishing. Generation does not publish anything.</p>
+ <p id="newsGenerateError" role="alert"></p><div class="actions"><button class="btn secondary" type="button" id="newsGenerateCancel">Cancel</button><button class="btn primary" type="submit" id="newsGenerateSubmit">Generate draft</button></div>
+</form></dialog>
+<script defer src="assets/news-inbox.js"></script></body>
 </html>
 

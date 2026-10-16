@@ -1,0 +1,17 @@
+#newsInboxPanel{margin-bottom:24px}
+.news-inbox-list{padding:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-height:700px;overflow:auto}
+.news-inbox-item{border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.news-inbox-item h3{margin:8px 0;font-size:1rem;line-height:1.4}
+.news-inbox-item p{font-size:.85rem;line-height:1.5;overflow-wrap:anywhere}
+.news-inbox-item .actions{flex-wrap:wrap}
+#newsInboxMessage{padding:0 16px 12px;font-size:.85rem;line-height:1.5}
+.news-generate-dialog{width:min(680px,calc(100% - 24px));max-height:90vh;overflow:auto;padding:24px;border:1px solid var(--line);border-radius:20px;background:var(--panel,#11141d);color:var(--text,#fff)}
+.news-generate-dialog::backdrop{background:#0009}
+.news-generate-dialog h2{margin-top:0}
+.news-generate-dialog textarea{min-height:120px;max-height:260px}
+.news-generate-dialog .actions{justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.news-generate-dialog .approval-label{display:flex;align-items:flex-start;gap:10px;font-size:.9rem;margin-top:16px}
+.news-generate-dialog .approval-label input{width:auto;margin-top:4px}
+#newsGenerateError{color:#e65069;line-height:1.5}
+html[data-theme="light"] .news-generate-dialog{background:white;color:#151821}
+@media(max-width:760px){.news-inbox-list{grid-template-columns:1fr}.news-generate-dialog{padding:18px}}

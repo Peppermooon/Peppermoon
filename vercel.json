@@ -8,6 +8,12 @@
     },
     "api/rating-preview.mjs": {
       "includeFiles": "rating.html"
+    },
+    "api/news-generate.mjs": {
+      "maxDuration": 60
+    },
+    "api/news-inbox.mjs": {
+      "maxDuration": 30
     }
   },
   "routes": [
