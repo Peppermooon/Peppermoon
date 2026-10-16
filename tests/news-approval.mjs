@@ -6,9 +6,11 @@ const feed='<rss><channel><item><title><![CDATA[New game announced]]></title><li
 const parsed=parseFeed(feed,{name:'GameSpot',category:'Gaming'});assert.equal(parsed.length,1);assert.equal(parsed[0].excerpt,'Confirmed news & details');assert.equal(parsed[0].url,'https://www.gamespot.com/articles/new-game/');assert.equal(parsed[0].draft_slug,draftSlug(parsed[0].title,parsed[0].url));
 for(const url of ['http://www.ign.com/news','https://127.0.0.1/','https://www.ign.com.evil.com/','https://user:pass@www.ign.com/','https://www.ign.com:444/'])assert.throws(()=>sourceUrl(url));
 let calls=[],saved=null,role='admin',existing=false,shortSource=false,providerError=false,feedError=false;
+let quotaMode='allow';
 const article={id:'draft-id',title:'Original headline',status:'draft'};
 global.fetch=async (url,opts={})=>{
  url=String(url);calls.push({url,opts});
+ if(url.includes('/rpc/peppermoon_reserve_news_attempt')){if(quotaMode==='error')return new Response('{}',{status:503});if(quotaMode==='malformed')return new Response('{}');return new Response(JSON.stringify(quotaMode==='allow'?{allowed:true}:{allowed:false,reason:quotaMode}))}
  if(url.includes('/auth/v1/user'))return new Response(JSON.stringify({id:'admin-id'}));
  if(url.includes('/rest/v1/profiles'))return new Response(JSON.stringify([{role}]));
  if(url.includes('/rest/v1/articles')&&opts.method==='POST'){saved=JSON.parse(opts.body);return new Response(JSON.stringify([article]))}
@@ -35,7 +37,12 @@ shortSource=true;r=await request(generate);assert.equal(r.status,422);assert.equ
 existing=true;r=await request(generate);assert.equal(r.status,200);assert.equal(r.body.reused,true);assert.equal(aiCalls(),0);existing=false;
 r=await request(generate);assert.equal(r.status,200);assert.equal(aiCalls(),1);assert.equal(saved.status,'draft');assert.equal(saved.show_on_homepage,false);assert.equal(saved.featured,false);assert.equal(saved.featured_image,null);assert.equal(saved.published_at,null);assert.ok(saved.content.includes('&lt;script&gt;'));assert.ok(saved.content.includes('Source:'));assert.ok(saved.content.includes('data-peppermoon-ai-draft'));assert.equal(r.body.usage.total_tokens,170);
 const payload=JSON.parse(calls.find(c=>c.url==='https://api.openai.com/v1/responses').opts.body);assert.equal(payload.store,false);assert.equal(payload.reasoning.effort,'none');assert.ok(payload.max_output_tokens<=1800);
-providerError=true;r=await request(generate);assert.equal(r.status,502);assert.equal(saved,null);providerError=false;
+for(const mode of ['daily','monthly','error','malformed']){quotaMode=mode;r=await request(generate);assert.equal(r.status,['daily','monthly'].includes(mode)?429:503);assert.equal(aiCalls(),0);assert.equal(saved,null)}quotaMode='allow';
+process.env.NEWS_AI_DISABLED='true';r=await request(generate);assert.equal(r.status,503);assert.equal(aiCalls(),0);delete process.env.NEWS_AI_DISABLED;
+process.env.OPENAI_NEWS_MODEL='expensive-model';r=await request(generate);assert.equal(r.status,503);assert.equal(aiCalls(),0);delete process.env.OPENAI_NEWS_MODEL;
+assert.equal(payload.model,'gpt-6-luna');assert.equal(payload.service_tier,'default');
+providerError=true;r=await request(generate);assert.equal(r.status,502);assert.equal(saved,null);providerError=false;assert.equal(calls.filter(c=>c.url.includes('/rpc/peppermoon_reserve_news_attempt')).length,1);
+assert.ok(calls.findIndex(c=>c.url.includes('/rpc/peppermoon_reserve_news_attempt'))<calls.findIndex(c=>c.url==='https://api.openai.com/v1/responses'));
 r=await request(inbox,{method:'GET'});assert.equal(r.status,200);assert.equal(aiCalls(),0);assert.equal(r.body.ai_ready,true);assert.ok(r.body.warnings.some(w=>w.includes('IGN')));assert.ok(r.body.items.length>0);
 delete process.env.OPENAI_API_KEY;
 console.log('Passed RSS parsing, source restrictions, admin authorization, missing-key gating, explicit approval, short-source gating, draft reuse, private draft saving, HTML escaping, provider failure and zero-AI inbox checks.');

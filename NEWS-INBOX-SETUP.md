@@ -5,11 +5,11 @@
 1. Create an OpenAI API project with billing and a project API key.
 2. In Vercel, select the **peppermoon** project, then **Settings → Environment Variables**.
 3. Add `OPENAI_API_KEY` for **Production**, with the API key as its value. Keep it out of source code, screenshots and chat.
-4. Optional: set `OPENAI_NEWS_MODEL`. The default is `gpt-6-luna`.
+4. Run **SUPABASE-NEWS-LIMITS.sql** in the Supabase SQL Editor before generating. The model is locked to `gpt-6-luna`; remove any different `OPENAI_NEWS_MODEL` value.
 5. Redeploy the current production deployment so the server receives the environment variable.
 6. Sign into `/admin.html` using your existing admin account.
 
-No additional Supabase table or service-role key is needed. The APIs verify the signed-in user's `profiles.role` and use that user's existing article permissions. The API key stays server-side. Without the API key, the inbox works but generation is disabled.
+The limits SQL adds a protected counter table and an admin-only reservation function. No service-role key is needed. The APIs verify the signed-in user's `profiles.role` and use that user's existing article permissions. The API key stays server-side. Without the API key, the inbox works but generation is disabled.
 
 ## Editorial workflow
 
@@ -23,8 +23,8 @@ No additional Supabase table or service-role key is needed. The APIs verify the 
 
 ## Costs and limits
 
-Inbox loading, source reading and refreshing never call OpenAI. A generation request makes one AI call only after admin authorization, explicit approval, and a usable source check. Existing articles with the same generated source slug are reopened instead of regenerated. The UI prevents double-clicks; a per-instance lock also rejects overlapping requests for the same source. This is not a global billing cap across server instances.
+Inbox loading, source reading and refreshing never call OpenAI. A generation request makes one AI call only after admin authorization, explicit approval, and a usable source check. Existing articles with the same generated source slug are reopened instead of regenerated. The UI prevents double-clicks; a per-instance lock also rejects overlapping requests for the same source. The database now atomically reserves each paid attempt across all admins and server instances: at most **3 attempts per Sri Lanka calendar day and 20 per calendar month**. These are generation-attempt limits, not an OpenAI account dollar cap.
 
-Generation requests disable reasoning, cap source material at 14,500 characters and total output at 1,800 tokens, and do not use paid web-search tools or image generation. Actual usage is shown after generation. These controls bound individual requests; the earlier $0.24/month figure was an illustrative estimate, not a fixed bill or guaranteed cap. Set appropriate API billing controls and inspect actual usage during a three-story test.
+Generation requests disable reasoning, cap source material at 14,500 characters and total output at 1,800 tokens, and do not use paid web-search tools or image generation. Actual usage is shown after generation. These controls bound individual requests; the earlier $0.24/month figure was an illustrative estimate, not a fixed bill or guaranteed cap. Failed calls, timeouts and save failures keep their reserved slot because they may incur charges. There are no automatic retries. Missing/broken counter setup blocks generation before OpenAI; existing drafts and the free inbox still work. Counters survive redeployment, and rerunning setup does not reset them. The model is fixed and service tier is standard, so a more expensive model override is rejected. Set `NEWS_AI_DISABLED=true` in Vercel and redeploy to pause generation. These controls cover this endpoint only, not use of the API key elsewhere. Keep OpenAI automatic recharge off and inspect actual usage during the initial three-story test.
 
 No live AI calls were made during implementation. Authentication, approval gates, source restrictions, draft-only persistence, output escaping, error handling, and image-before-publish behaviour were tested with mocked API responses. Test model access and writing quality after configuring your own key.

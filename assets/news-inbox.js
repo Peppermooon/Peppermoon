@@ -24,7 +24,7 @@
  async function load(){
   if($('dashboardView').classList.contains('hidden'))return;
   $('newsInboxRefresh').disabled=true;
-  try{const data=await call('/api/news-inbox');items=data.items;aiReady=data.ai_ready;render();message((aiReady?'Choose a story, read the source, then approve AI generation.':'News inbox is available. AI generation is disabled until OPENAI_API_KEY is configured in Vercel.')+' '+(data.warnings||[]).join(' ')+' Checked '+new Date(data.checked_at).toLocaleTimeString());}
+  try{const data=await call('/api/news-inbox');items=data.items;aiReady=data.ai_ready;render();message((aiReady?'Choose a story, read the source, then approve AI generation. Limit: 3 attempts/day, 20/month (Sri Lanka time); failed attempts count.':'News inbox is available. AI generation is disabled until OPENAI_API_KEY is configured in Vercel.')+' '+(data.warnings||[]).join(' ')+' Checked '+new Date(data.checked_at).toLocaleTimeString());}
   catch(error){message(error.message,true)}finally{$('newsInboxRefresh').disabled=false}
  }
  $('newsInboxRefresh').onclick=load;$('newsInboxSearch').oninput=render;$('newsInboxCategory').onchange=render;
