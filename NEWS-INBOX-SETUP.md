@@ -5,11 +5,11 @@
 1. Create an OpenAI API project with billing and a project API key.
 2. In Vercel, select the **peppermoon** project, then **Settings → Environment Variables**.
 3. Add `OPENAI_API_KEY` for **Production**, with the API key as its value. Keep it out of source code, screenshots and chat.
-4. Run **SUPABASE-NEWS-LIMITS.sql** in the Supabase SQL Editor before generating. The model is locked to `gpt-6-luna`; remove any different `OPENAI_NEWS_MODEL` value.
+4. No limits SQL setup is required. Draft generation uses `gpt-6-luna` at standard service tier.
 5. Redeploy the current production deployment so the server receives the environment variable.
 6. Sign into `/admin.html` using your existing admin account.
 
-The limits SQL adds a protected counter table and an admin-only reservation function. No service-role key is needed. The APIs verify the signed-in user's `profiles.role` and use that user's existing article permissions. The API key stays server-side. Without the API key, the inbox works but generation is disabled.
+No additional database setup or service-role key is needed. Any previously created news-limit counters are unused and may be left in place. The APIs verify the signed-in user's `profiles.role` and use that user's existing article permissions. The API key stays server-side. Without the API key, the inbox works but generation is disabled.
 
 ## Editorial workflow
 
@@ -21,10 +21,12 @@ The limits SQL adds a protected counter table and an admin-only reservation func
 - Review and edit the result. Add your own cover image. Use the existing **Publish Article** button for your second approval. AI drafts without an uploaded/existing image cannot be published through Admin. Normal manual article creation remains available.
 - **Dismiss** hides an inbox item on that browser only. **Restore dismissed** brings those items back. Drafts are stored in Supabase and remain available from Articles even if the source disappears from its feed.
 
-## Costs and limits
+## Costs and usage
 
-Inbox loading, source reading and refreshing never call OpenAI. A generation request makes one AI call only after admin authorization, explicit approval, and a usable source check. Existing articles with the same generated source slug are reopened instead of regenerated. The UI prevents double-clicks; a per-instance lock also rejects overlapping requests for the same source. The database now atomically reserves each paid attempt across all admins and server instances: at most **3 attempts per Sri Lanka calendar day and 20 per calendar month**. These are generation-attempt limits, not an OpenAI account dollar cap.
+There are no Peppermoon daily or monthly generation quotas. Loading and refreshing the inbox never call OpenAI. Only an explicitly approved, authenticated admin generation makes a paid request. Existing drafts are reused, overlapping requests in the same server instance are rejected, and automatic retries are disabled.
 
-Generation requests disable reasoning, cap source material at 14,500 characters and total output at 1,800 tokens, and do not use paid web-search tools or image generation. Actual usage is shown after generation. These controls bound individual requests; the earlier $0.24/month figure was an illustrative estimate, not a fixed bill or guaranteed cap. Failed calls, timeouts and save failures keep their reserved slot because they may incur charges. There are no automatic retries. Missing/broken counter setup blocks generation before OpenAI; existing drafts and the free inbox still work. Counters survive redeployment, and rerunning setup does not reset them. The model is fixed and service tier is standard, so a more expensive model override is rejected. Set `NEWS_AI_DISABLED=true` in Vercel and redeploy to pause generation. These controls cover this endpoint only, not use of the API key elsewhere. Keep OpenAI automatic recharge off and inspect actual usage during the initial three-story test.
+After generation, the Admin editor message shows the actual input/output token counts returned by OpenAI and an **estimated USD cost**. Standard gpt-6-luna rates checked on 2026-10-16 are $0.10/million uncached input, $0.01/million cached input and $0.50/million output tokens. The estimate includes cached-token discounts, excludes taxes/card fees/other API use, and must be updated when rates change. It is not the invoice. OpenAI Usage is authoritative. The estimate is shown for the current generation, not stored as a permanent article billing record. If the provider supplies usage but saving fails, the error also includes its estimated cost. A timeout without usage cannot report a cost reliably.
 
-No live AI calls were made during implementation. Authentication, approval gates, source restrictions, draft-only persistence, output escaping, error handling, and image-before-publish behaviour were tested with mocked API responses. Test model access and writing quality after configuring your own key.
+Source material remains capped at 14,500 characters, output at 1,800 tokens, with no paid search or image generation. These keep individual articles short; there is no daily/monthly allowance. `NEWS_AI_DISABLED=true` can still pause generation after redeployment. Keep automatic recharge off if you only want manual credit purchases.
+
+No paid AI calls were made during implementation. Tests use mocked responses to check authorization, approval, private drafts, cost calculation and generation without quota database access. Test actual model access and writing quality with one story after adding your API key and credits.
