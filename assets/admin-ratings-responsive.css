@@ -1,0 +1,47 @@
+/* Ratings-specific adaptation of the shared Article Admin layout. */
+:root{--line:var(--border);--pink:#ff4f78}
+header.top{position:sticky;top:0;z-index:20;justify-content:space-between;background:var(--bg);padding:15px 22px;border-color:var(--line);gap:16px}
+header .brand{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:900;color:var(--text)}
+header .brand img{width:34px;height:34px;border-radius:50%}
+header .userbar{display:flex;gap:10px;align-items:center;font-size:.88rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;text-decoration:none;border:1px solid var(--line);border-radius:12px;padding:11px 15px;font-weight:800;line-height:1.4}
+.userbar a{color:var(--text);background:#30384e}
+.btn.primary{background:linear-gradient(135deg,#ff4f78,#ff7b60);color:#fff}
+.btn.small{padding:8px 10px;font-size:.82rem}
+main{max-width:1240px;padding-bottom:80px}
+section{border-color:var(--line)}
+#editor{scroll-margin-top:100px}
+.fields>*{min-width:0}
+.actions .btn{min-height:44px}
+html[data-theme="light"]{color-scheme:light;--bg:#f5f6fa;--panel:#fff;--text:#151821;--muted:#667085;--border:rgba(20,24,33,.12)}
+html[data-theme="light"] :is(input,select,textarea){background:#fff;color:#151821;border-color:rgba(20,24,33,.14)}
+html[data-theme="light"] section{background:#fff}
+html[data-theme="light"] header a{color:#344054}
+html[data-theme="light"] label{color:#344054}
+html[data-theme="light"] #ratingsAdminMessage{color:#344054;border:1px solid var(--line);border-radius:12px}
+html[data-theme="light"] #loginError{color:#b4233d}
+html[data-theme="light"] #setupNotice{border-color:#d54b72}
+html[data-theme="light"] #setupNotice a{color:#9c244c}
+.pm-theme-toggle{border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);padding:9px 11px;cursor:pointer;font:inherit;font-weight:800}
+@media(max-width:760px){
+ header.top{padding:12px;gap:10px}
+ header .brand{font-size:1.05rem}
+ header .brand img{width:30px;height:30px}
+ header .userbar{display:grid;width:100%;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,.7fr);gap:7px}
+ header .userbar .btn{font-size:.76rem;padding:8px;min-height:44px;text-align:center}
+ main{padding:18px 12px 80px}
+ section{padding:16px;margin-bottom:16px;border-radius:18px}
+ h1{font-size:1.6rem;line-height:1.2}
+ h2{font-size:1.3rem;overflow-wrap:anywhere}
+ .fields{grid-template-columns:minmax(0,1fr);gap:10px}
+ .wide{grid-column:auto}
+ input,select,textarea{font-size:16px;min-width:0}
+ input[type="file"]{font-size:14px;max-width:100%;padding:10px}
+ .actions{display:grid;grid-template-columns:minmax(0,1fr);width:100%;gap:8px}
+ .actions .btn{width:100%;min-height:46px}
+ #ratingForm .actions button[value="published"]{order:3}
+ .table-scroll td .btn{min-width:88px}
+ #editor{scroll-margin-top:150px}
+ #ratingsAdminMessage{bottom:58px;font-size:.88rem;overflow-wrap:anywhere}
+ #authState{overflow-wrap:anywhere;font-size:.88rem}
+}
