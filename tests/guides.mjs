@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import seeds from '../data/guides-seed.mjs';
-import {validateGuide,mediaMatches,renderGuideBody,safeImageUrl} from '../assets/guides-core.mjs';
+import {validateGuide,mediaMatches,renderGuideBody,safeImageUrl,guideMatchesSearch} from '../assets/guides-core.mjs';
 import {renderPage} from '../lib/guides-render.mjs';
 import {publishedGuides} from '../lib/guides-store.mjs';
 import handler from '../api/guides.mjs';
@@ -59,4 +59,29 @@ test('editing validation catches incomplete publishing, invalid positions and UR
  assert.throws(()=>validateGuide({...seeds[0],release_sections:[]}));
  assert.throws(()=>validateGuide({...seeds[0],story_sections:[]}));
  assert.throws(()=>validateGuide({...seeds[0],release_sections:[{heading:'Release',note:'',items:[{rank:0,title:'Example',type:'movie'}]}]}));
+});
+
+test('hub and individual guides include Home account controls and root-relative profile links',()=>{
+ for(const html of [renderPage({guides:seeds}),renderPage({guides:seeds,guide:seeds[0]})]){
+  const header=html.match(/<header[\s\S]*?<\/header>/)[0];
+  assert.match(header,/class="topbar"/);assert.match(header,/class="container nav"/);
+  assert.ok(header.indexOf('id="navLinks"')<header.indexOf('id="pmAuthArea"'));
+  for(const id of ['pmUserMenu','pmUserTrigger','pmAvatar','pmUserDropdown','pmOpenAuth'])assert.ok(header.includes('id="'+id+'"'));
+  assert.match(header,/href="\/guides" class="active" aria-current="page"/);
+  assert.match(html,/id="pmLoginForm"/);assert.match(html,/id="pmSignupForm"/);assert.match(html,/src="\/assets\/guides-auth.js\?v=1"/);
+  assert.doesNotMatch(header,/(?:href|src)="(?:profile|notifications|peppermoon-logo)\./);
+ }
+ const auth=readFileSync(new URL('../assets/guides-auth.js',import.meta.url),'utf8');assert.ok(auth.includes("href='/profile.html?id='"));assert.ok(auth.includes("location.href='/profile.html#saved'"));
+});
+test('guide hub offers two collection tabs and a search field while detail pages retain their reading controls',()=>{
+ const hub=renderPage({guides:seeds});
+ assert.match(hub,/data-guide-collection="screen" aria-selected="true"/);assert.match(hub,/data-guide-collection="games" aria-selected="false"/);
+ assert.match(hub,/Search universe \/ franchise/);assert.match(hub,/id="guideSearch" type="search"/);
+ assert.match(hub,/id="guides-games"[^>]*hidden/);assert.equal((hub.match(/data-guide-search=/g)||[]).length,17);
+ const detail=renderPage({guides:seeds,guide:seeds[0]});assert.ok(!detail.includes('id="guideSearch"'));assert.ok(detail.includes('data-guide-order-btn="story"'));
+});
+test('franchise search matches titles and summaries regardless of case and surrounding spaces',()=>{
+ const match=(g,q)=>guideMatchesSearch([g.franchise,g.title,g.summary].join(' '),q);
+ assert.deepEqual(seeds.filter(g=>g.collection==='games'&&match(g,'  ASSASSIN  ')).map(g=>g.slug),['assassins-creed']);
+ assert.ok(seeds.filter(g=>match(g,'star wars')).length>=2);assert.equal(seeds.filter(g=>match(g,'unknownfranchise123')).length,0);assert.equal(seeds.filter(g=>match(g,'')).length,17);
 });
