@@ -27,3 +27,10 @@ body{background:#f5f6fa;font-family:Inter,ui-sans-serif,system-ui,-apple-system,
  .mobile-bottom-nav a.active:after{content:"";position:absolute;bottom:4px;left:24%;right:24%;height:3px;border-radius:999px;background:linear-gradient(90deg,#ff4f78,#7b61ff)}
 }
 @media print{.mobile-bottom-nav{display:none}}
+
+/* Guide images and editable order entries. */
+.card{overflow:hidden}.guide-card-image{display:block;width:calc(100% + 46px);max-width:none;height:auto;aspect-ratio:16/9;object-fit:cover;margin:-23px -23px 20px;background:#eceef3}
+.guide-cover{display:block;width:100%;max-height:460px;aspect-ratio:16/9;object-fit:cover;border-radius:18px;margin-top:24px}
+.content .entry-meta{display:inline-block;margin-left:8px;font-size:.88em;color:#667085}.content .entry-note{font-size:.95rem;color:#596579;margin:4px 0 12px}.content a{overflow-wrap:anywhere}.guide-extra-notes{border-top:1px solid #eee7f0;padding-top:8px;margin-top:28px}
+@media(max-width:650px){.guide-card-image{width:calc(100% + 38px);margin:-19px -19px 16px}.content .entry-meta{display:block;margin-left:0}.guide-cover{border-radius:13px}}
+

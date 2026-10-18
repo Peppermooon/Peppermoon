@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f5f6fa">
+ <title>Manage Guides | Peppermoon Admin</title><link rel="icon" href="/favicon.png">
+ <link rel="stylesheet" href="/assets/admin-guides.css">
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+ <header class="admin-top"><a class="brand" href="/admin.html"><img src="/favicon.png" alt=""><span>Peppermoon Admin</span></a><nav aria-label="Admin navigation"><a href="/admin.html">Articles</a><a href="/admin-ratings.html">Pepper Ratings</a><a href="/admin-guides.html" aria-current="page">Guides</a><a href="/guides" target="_blank" rel="noopener">View Guides ↗</a></nav><button id="logout" class="btn secondary" type="button" hidden>Log out</button></header>
+ <main>
+  <p id="authState" role="status">Checking your admin session…</p>
+  <section id="loginPanel" class="panel login" hidden><h1>Admin login</h1><p>Use your existing Peppermoon admin account.</p><form id="loginForm"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button class="btn primary" type="submit">Log in</button><p id="loginError" role="alert"></p></form></section>
+  <div id="dashboard" hidden>
+   <section id="setupPanel" class="panel notice" hidden><h2>Activate guide editing once</h2><p>The public guides are available. To enable saving and image uploads from Admin, run the guide setup SQL in your Supabase SQL Editor. It creates guide storage and imports the existing 17 guides.</p><div class="actions"><button class="btn primary" id="copySetup" type="button">Copy setup SQL</button><a class="btn secondary" href="/SUPABASE-GUIDES-SETUP.sql" target="_blank" rel="noopener">Open setup file</a><button class="btn secondary" id="recheckSetup" type="button">I ran it — recheck</button></div><p>The setup preserves guides you have already edited if you run it again.</p></section>
+   <section class="panel"><div class="section-heading"><div><p class="kicker">EVERY UNIVERSE. IN ORDER.</p><h1>Manage Guides</h1><p>Edit watch and play orders, add franchises and choose card images.</p></div><button class="btn primary" id="newGuide" type="button">+ New franchise</button></div><div class="filters"><label>Find a guide<input id="search" type="search" placeholder="Search franchises or titles"></label><label>Collection<select id="collectionFilter"><option value="">All guides</option><option value="screen">Movies & TV</option><option value="games">Games</option></select></label><label>Status<select id="statusFilter"><option value="">All statuses</option><option value="published">Published</option><option value="draft">Drafts</option></select></label></div><p id="guideCount"></p><div id="guideList" class="guide-list"></div></section>
+   <section id="editor" class="panel" hidden><h2 id="editorHeading">New guide</h2><p id="savedStatus"></p><form id="guideForm">
+    <div class="fields">
+     <label>Franchise name<input id="edit_franchise" maxlength="160" placeholder="Star Wars" required></label>
+     <label>Guide title<input id="edit_title" maxlength="180" placeholder="Star Wars Watch Order" required></label>
+     <label>URL name<input id="edit_slug" maxlength="100" pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="star-wars" required><small>New guides use /guides/your-url-name. The URL stays fixed after the first save.</small></label>
+     <label>Collection<select id="edit_collection"><option value="screen">Movies & TV</option><option value="games">Games</option></select></label>
+     <label class="wide">Card summary<textarea id="edit_summary" maxlength="600" rows="3" placeholder="A short description for the Guides card."></textarea></label>
+     <label>Card position<input id="edit_display_order" type="number" min="0" max="9999" step="1" value="1"><small>Lower numbers appear first within the collection.</small></label>
+     <div></div>
+     <label>Upload card image<input id="imageFile" type="file" accept="image/jpeg,image/png,image/webp"><small>JPEG, PNG or WebP, up to 10 MB. An upload replaces the image URL when saved.</small></label>
+     <label>Or paste an image URL<input id="edit_image_url" type="url" placeholder="https://…"></label>
+     <label class="wide">Image description<input id="edit_image_alt" maxlength="250" placeholder="Describe the image for people using screen readers."></label>
+     <div class="wide image-preview" id="imagePreviewPanel" hidden><img id="imagePreview" alt="Selected guide image"><button id="removeImage" class="btn secondary" type="button">Remove image</button></div>
+     <label class="wide">Introduction<textarea id="edit_intro" rows="6" placeholder="Introduce the franchise and explain how to use its guide. Separate paragraphs with blank lines."></textarea></label>
+    </div>
+    <div class="order-tabs" role="tablist" aria-label="Edit guide order"><button id="releaseTab" class="btn secondary" type="button" role="tab" aria-selected="true" aria-controls="releaseEditor">Release order</button><button id="storyTab" class="btn secondary" type="button" role="tab" aria-selected="false" aria-controls="storyEditor">Story order</button></div>
+    <p class="help">Each entry has its own title, release year and type. Use the same position for separate titles whose stories overlap. Add separate sections for different timelines or continuities.</p>
+    <div id="releaseEditor" role="tabpanel" aria-labelledby="releaseTab"><div id="releaseSections"></div><button class="btn secondary add-section" type="button" data-add-section="release">+ Add release-order section</button></div>
+    <div id="storyEditor" role="tabpanel" aria-labelledby="storyTab" hidden><div id="storySections"></div><button class="btn secondary add-section" type="button" data-add-section="story">+ Add story-order section</button></div>
+    <label class="extra-notes">Extra notes, recommendations & sources<textarea id="edit_notes" rows="10" placeholder="Explain remakes, alternate timelines, your suggested starting point and source links. Separate paragraphs with blank lines."></textarea></label>
+    <div class="save-actions"><button class="btn secondary" type="submit" value="draft">Save draft / Unpublish</button><button class="btn primary" type="submit" value="published">Publish guide</button><button class="btn secondary" id="closeEditor" type="button">Close</button><a id="viewGuide" class="btn secondary" target="_blank" rel="noopener" hidden>View published guide ↗</a></div>
+   </form></section>
+  </div>
+  <p id="message" role="status" aria-live="polite"></p>
+ </main>
+ <script type="module" src="/assets/admin-guides.js"></script>
+</body></html>

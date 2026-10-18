@@ -1,3 +1,4 @@
+import {publishedGuides} from '../lib/guides-store.mjs';
 const ORIGIN='https://thepeppermoon.com';
 const SUPABASE='https://bgzlqvbvmstebdsnzmqv.supabase.co';
 const KEY='sb_publishable_Vr9Pah1UIb3EjRNTfT5vgg_VPnz3vl-';
@@ -16,11 +17,11 @@ async function published(table,fields){
 }
 export default async function handler(req,res){
  try{
-  const [articles,ratings,posts]=await Promise.all([published('articles','slug,published_at'),published('pepper_ratings','slug,updated_at'),published('posts','slug,created_at')]);
-  const STATIC_GUIDE_ROUTES=["","/community","/ratings","/about","/guides","/guides/star-wars","/guides/star-trek","/guides/predator","/guides/lord-of-the-rings","/guides/fast-and-furious","/guides/marvel-cinematic-universe","/guides/x-men","/guides/transformers","/guides/alien","/guides/harry-potter","/guides/assassins-creed","/guides/final-fantasy","/guides/resident-evil","/guides/tomb-raider","/guides/metal-gear","/guides/like-a-dragon","/guides/star-wars-games"];
+  const [articles,ratings,posts,{guides}]=await Promise.all([published('articles','slug,published_at'),published('pepper_ratings','slug,updated_at'),published('posts','slug,created_at'),publishedGuides()]);
+  const STATIC_GUIDE_ROUTES=['','/community','/ratings','/about','/guides'];
   const entries=new Map(STATIC_GUIDE_ROUTES.map(path=>[ORIGIN+path,'']));
   const add=(items,prefix,dateKey,clean=false)=>{for(const item of items){if(!item.slug)continue;const slug=clean?item.slug.replace(/^pepper-draft-/,''):item.slug;const url=ORIGIN+prefix+encodeURIComponent(slug);const date=item[dateKey]?new Date(item[dateKey]):null;entries.set(url,date&&!Number.isNaN(date.valueOf())?date.toISOString():'')}};
-  add(articles,'/articles/','published_at');add(ratings,'/ratings/','updated_at',true);add(posts,'/posts/','created_at');
+  add(articles,'/articles/','published_at');add(ratings,'/ratings/','updated_at',true);add(posts,'/posts/','created_at');add(guides,'/guides/','updated_at');add(guides,'/guides/','updated_at');add(guides,'/guides/','updated_at');
   if(entries.size>50000)throw new Error('Sitemap index required');
   const body='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+[...entries].map(([loc,date])=>'<url><loc>'+xml(loc)+'</loc>'+(date?'<lastmod>'+xml(date)+'</lastmod>':'')+'</url>').join('\n')+'\n</urlset>';
   res.setHeader('Content-Type','application/xml; charset=utf-8');
@@ -28,3 +29,4 @@ export default async function handler(req,res){
   res.statusCode=200;res.end(body);
  }catch{res.statusCode=503;res.setHeader('Cache-Control','no-store');res.end('Sitemap temporarily unavailable');}
 }
+

@@ -62,76 +62,152 @@
       "dest": "/about.html"
     },
     {
+      "src": "/guides/index\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides"
+      }
+    },
+    {
+      "src": "/guides/transformers-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/transformers"
+      }
+    },
+    {
+      "src": "/guides/like-a-dragon-yakuza-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/like-a-dragon"
+      }
+    },
+    {
+      "src": "/guides/final-fantasy-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/final-fantasy"
+      }
+    },
+    {
+      "src": "/guides/star-wars-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/star-wars"
+      }
+    },
+    {
+      "src": "/guides/harry-potter-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/harry-potter"
+      }
+    },
+    {
+      "src": "/guides/alien-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/alien"
+      }
+    },
+    {
+      "src": "/guides/fast-and-furious-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/fast-and-furious"
+      }
+    },
+    {
+      "src": "/guides/x-men-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/x-men"
+      }
+    },
+    {
+      "src": "/guides/tomb-raider-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/tomb-raider"
+      }
+    },
+    {
+      "src": "/guides/predator-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/predator"
+      }
+    },
+    {
+      "src": "/guides/metal-gear-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/metal-gear"
+      }
+    },
+    {
+      "src": "/guides/star-trek-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/star-trek"
+      }
+    },
+    {
+      "src": "/guides/star-wars-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/star-wars-games"
+      }
+    },
+    {
+      "src": "/guides/resident-evil-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/resident-evil"
+      }
+    },
+    {
+      "src": "/guides/assassins-creed-games-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/assassins-creed"
+      }
+    },
+    {
+      "src": "/guides/marvel-mcu-movies-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/marvel-cinematic-universe"
+      }
+    },
+    {
+      "src": "/guides/lord-of-the-rings-watch-order\\.html",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/lord-of-the-rings"
+      }
+    },
+    {
+      "src": "/guides/",
+      "status": 308,
+      "headers": {
+        "Location": "/guides"
+      }
+    },
+    {
       "src": "/guides",
-      "dest": "/guides/index.html"
+      "dest": "/api/guides"
     },
     {
-      "src": "/guides/star-wars",
-      "dest": "/guides/star-wars-watch-order.html"
+      "src": "/guides/([a-z0-9]+(?:-[a-z0-9]+)*)/",
+      "status": 308,
+      "headers": {
+        "Location": "/guides/$1"
+      }
     },
     {
-      "src": "/guides/star-trek",
-      "dest": "/guides/star-trek-watch-order.html"
-    },
-    {
-      "src": "/guides/predator",
-      "dest": "/guides/predator-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/lord-of-the-rings",
-      "dest": "/guides/lord-of-the-rings-watch-order.html"
-    },
-    {
-      "src": "/guides/fast-and-furious",
-      "dest": "/guides/fast-and-furious-watch-order.html"
-    },
-    {
-      "src": "/guides/marvel-cinematic-universe",
-      "dest": "/guides/marvel-mcu-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/x-men",
-      "dest": "/guides/x-men-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/transformers",
-      "dest": "/guides/transformers-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/alien",
-      "dest": "/guides/alien-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/harry-potter",
-      "dest": "/guides/harry-potter-movies-watch-order.html"
-    },
-    {
-      "src": "/guides/assassins-creed",
-      "dest": "/guides/assassins-creed-games-watch-order.html"
-    },
-    {
-      "src": "/guides/final-fantasy",
-      "dest": "/guides/final-fantasy-games-watch-order.html"
-    },
-    {
-      "src": "/guides/resident-evil",
-      "dest": "/guides/resident-evil-games-watch-order.html"
-    },
-    {
-      "src": "/guides/tomb-raider",
-      "dest": "/guides/tomb-raider-games-watch-order.html"
-    },
-    {
-      "src": "/guides/metal-gear",
-      "dest": "/guides/metal-gear-games-watch-order.html"
-    },
-    {
-      "src": "/guides/like-a-dragon",
-      "dest": "/guides/like-a-dragon-yakuza-games-watch-order.html"
-    },
-    {
-      "src": "/guides/star-wars-games",
-      "dest": "/guides/star-wars-games-watch-order.html"
+      "src": "/guides/([a-z0-9]+(?:-[a-z0-9]+)*)",
+      "dest": "/api/guides?slug=$1"
     },
     {
       "src": "/articles/([^/]+)",
