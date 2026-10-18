@@ -44,7 +44,7 @@ def filter_css(css):
     return '\n'.join(out)
 
 css='/* Header and account styles extracted from Home; guide content keeps its own styles. */\n'+filter_css(styles[0])+filter_css(styles[1])+filter_css(styles[-1])
-css+='\n.topbar .brand{text-transform:none}.topbar,#pmAuthModal{line-height:normal}.topbar a,#pmAuthModal a{text-decoration:none}.topbar button,#pmAuthModal button,#pmAuthModal input{font:inherit}body{background:var(--bg,#f6f7fa);color:var(--text,#161b29)}\n'
+css+='\n.topbar .brand{text-transform:none}.topbar,#pmAuthModal{line-height:normal}.topbar a,#pmAuthModal a{text-decoration:none}.topbar button,#pmAuthModal button,#pmAuthModal input{font-family:inherit;font-size:inherit;line-height:inherit}body{background:var(--bg,#f6f7fa);color:var(--text,#161b29)}\n'
 (root/'assets/guides-shell.css').write_text(css)
 header=re.search(r'<header\b[\s\S]*?</header>',source)[0]
 header=header.replace('href="/" class="active" aria-current="page"','href="/"').replace('href="/guides"','href="/guides" class="active" aria-current="page"')
