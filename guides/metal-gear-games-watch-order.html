@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Follow Big Boss and Solid Snake by release or fictional story chronology."><title>Metal Gear Watch Order | Peppermoon</title><link rel="stylesheet" href="styles.css"><link rel="canonical" href="https://thepeppermoon.com/guides/metal-gear"><style>
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{text-decoration:none}.guide-nav{display:flex;align-items:center;gap:clamp(10px,2vw,22px);font-weight:700;color:#526078;white-space:nowrap}.guide-nav a{text-decoration:none}.guide-nav a.active{color:#bc327c}.guide-nav a:hover{color:#8d2865}@media(max-width:650px){.header-inner{align-items:flex-start;flex-direction:column;gap:8px}.guide-nav{width:100%;overflow-x:auto;padding:4px 0 8px;font-size:.88rem;gap:15px}}
+</style></head><body><header class="top"><div class="wrap header-inner"><a class="brand" href="/">Peppermoon</a><nav class="guide-nav" aria-label="Main navigation"><a href="/">Home</a><a href="/guides" class="active" aria-current="page">Guides</a><a href="/ratings">Pepper Ratings</a><a href="/community">Community</a><a href="/about">About</a></nav></div></header><main class="wrap article"><a class="crumb" href="/guides">← Watch Guides</a><section class="hero"><div class="eyebrow">Games • Peppermoon Guide</div><h1>Metal Gear Watch Order</h1><p class="intro">Follow Big Boss and Solid Snake by release or fictional story chronology.</p></section><article class="content"><p>Metal Gear tells its saga out of sequence. The story begins with Big Boss during the Cold War, jumps to Solid Snake’s missions, and later returns to Big Boss’s rise. Release order preserves the reveals; chronological order follows the events in the games’ fictional history.</p><div class="guide-controls"><p class="control-label">Choose order</p><div class="selector" role="group" aria-label="Choose release or story order"><button type="button" data-guide-order="release" aria-pressed="true">Release order</button><button type="button" data-guide-order="story" aria-pressed="false">Story order</button></div><p class="guide-status" aria-live="polite"></p></div>
+<p>This guide covers the core story games and labels the 2025 Snake Eater remake as another way to play the same chapter.</p>
+<h2>Release order</h2>
+<ol>
+<li>Metal Gear (1987 • Game)</li>
+<li>Metal Gear 2: Solid Snake (1990 • Game)</li>
+<li>Metal Gear Solid (1998 • Game)</li>
+<li>Metal Gear Solid 2: Sons of Liberty (2001 • Game)</li>
+<li>Metal Gear Solid 3: Snake Eater (2004 • Game)</li>
+<li>Metal Gear Solid 4: Guns of the Patriots (2008 • Game)</li>
+<li>Metal Gear Solid: Peace Walker (2010 • Game)</li>
+<li>Metal Gear Rising: Revengeance (2013 • Action Game spin-off)</li>
+<li>Metal Gear Solid V: Ground Zeroes (2014 • Game)</li>
+<li>Metal Gear Solid V: The Phantom Pain (2015 • Game)</li>
+<li>Metal Gear Solid Δ: Snake Eater (2025 • Remake Game of Snake Eater)</li>
+</ol>
+<p>Metal Gear Solid: Master Collection Vol. 2 (2026 • Game Collection) makes Metal Gear Solid 4 and Peace Walker available in a new collection. It is a re-release package, not a new story chapter.</p>
+<h2>Story order</h2>
+<ol>
+<li>Metal Gear Solid 3: Snake Eater (2004 • Game; 1964) <strong>or</strong> Metal Gear Solid Δ: Snake Eater (2025 • Remake Game; same story).</li>
+<li>Metal Gear Solid: Peace Walker (2010 • Game; 1974).</li>
+<li>Metal Gear Solid V: Ground Zeroes (2014 • Game; 1975).</li>
+<li>Metal Gear Solid V: The Phantom Pain (2015 • Game; 1984).</li>
+<li>Metal Gear (1987 • Game; 1995).</li>
+<li>Metal Gear 2: Solid Snake (1990 • Game; 1999).</li>
+<li>Metal Gear Solid (1998 • Game; 2005).</li>
+<li>Metal Gear Solid 2: Sons of Liberty (2001 • Game; 2007 and 2009).</li>
+<li>Metal Gear Solid 4: Guns of the Patriots (2008 • Game; 2014).</li>
+<li>Metal Gear Rising: Revengeance (2013 • Action Game spin-off; 2018; optional epilogue).</li>
+</ol>
+<p>Portable Ops (2006 • Game) sits around 1970, but its status in the core continuity is debated. It is best treated as optional. The 2025 Delta remake takes the place of Snake Eater in a playthrough; playing both versions back-to-back is not needed for the story.</p>
+<h2>Peppermoon’s recommendation</h2>
+<p>Play in release order if you are new. The series was built around surprises, and starting with the 1964 chapter can reveal context the original games intended to unfold later. If you already know the plot, chronological order makes Big Boss’s arc easier to follow.</p>
+<p class="sources"><strong>Sources:</strong> <a href="https://www.konami.com/games/corporate/en/news/topics/20250306/" target="_blank" rel="noopener noreferrer">Konami on Snake Eater Delta</a>; <a href="https://www.konami.com/games/us/en/topics/3378/" target="_blank" rel="noopener noreferrer">Konami’s Master Collection Vol. 2</a>; <a href="https://www.digitaltrends.com/gaming/all-metal-gear-games-in-order-by-release-date-and-chronologically/" target="_blank" rel="noopener noreferrer">Metal Gear chronology guide</a>.</p></article><nav class="navrow" aria-label="Guide navigation"><a href="/guides">← All watch guides</a><a href="/guides/tomb-raider">← Previous</a><a href="/guides/like-a-dragon">Next →</a></nav></main><footer><div class="wrap">Peppermoon • Watch-order guides</div></footer><script>
+(function(){
+const content=document.querySelector('.content');if(!content)return;
+const toolbar=content.querySelector('.guide-controls');if(!toolbar)return;
+const orderButtons=[...toolbar.querySelectorAll('[data-guide-order]')];
+const mediaGroup=toolbar.querySelector('[data-media-group]');
+const mediaButtons=[...toolbar.querySelectorAll('[data-guide-media]')];
+const blocks=[];
+[...content.querySelectorAll('h2')].forEach(h=>{
+ const t=(h.textContent||'').toLowerCase();
+ let order=null;
+ if(t.includes('release order'))order='release';
+ else if(t.includes('story order')||t.includes('story progression'))order='story';
+ if(!order)return;
+ const nodes=[];for(let n=h;n&&!(n!==h&&n.tagName==='H2');n=n.nextElementSibling)nodes.push(n);
+ nodes.forEach(n=>n.dataset.guideOrderBlock=order);
+ blocks.push({order,nodes});
+});
+function types(li){
+ const t=(li.textContent||'').toLowerCase(),out=[];
+ if(/\bgame\b/.test(t))out.push('game');
+ if(/tv series|television series|animated tv series/.test(t))out.push('tv');
+ if(/\bfilm\b|movie/.test(t))out.push('movie');
+ if(!out.length)out.push('movie');
+ return out;
+}
+const allItems=blocks.flatMap(b=>b.nodes.flatMap(n=>[...n.querySelectorAll('li')]));
+allItems.forEach(li=>li.dataset.guideMedia=types(li).join(' '));
+const hasTV=allItems.some(li=>li.dataset.guideMedia.split(' ').includes('tv'));
+const hasMovie=allItems.some(li=>li.dataset.guideMedia.split(' ').includes('movie'));
+const hasGame=allItems.some(li=>li.dataset.guideMedia.split(' ').includes('game'));
+if(mediaGroup&&(!hasTV||!hasMovie)){mediaGroup.hidden=true;const label=toolbar.querySelector('[data-media-label]');if(label)label.hidden=true;}
+let order='release',media=hasTV&&hasMovie?'both':hasTV?'tv':hasGame?'game':'movie';
+function render(){
+ orderButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.guideOrder===order)));
+ mediaButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.guideMedia===media)));
+ blocks.forEach(block=>{
+  const relevant=block.nodes.flatMap(n=>[...n.querySelectorAll('li')]);
+  let visible=0;
+  relevant.forEach(li=>{
+   const ts=li.dataset.guideMedia.split(' ');
+   const wanted=media==='movies'?'movie':media;const keep=media==='both'?ts.includes('movie')||ts.includes('tv'):ts.includes(wanted);
+   li.hidden=!keep;if(keep)visible++;li.querySelectorAll('[data-guide-media-entry]').forEach(part=>{part.hidden=media!=='both'&&part.dataset.guideMediaEntry!==wanted;});
+  });
+  const showOrder=block.order===order;
+  block.nodes.forEach(n=>n.hidden=!showOrder||(relevant.length>0&&visible===0));
+ });
+ const orderName=order==='release'?'Release order':'Story order';
+ const mediaName=media==='both'?'Movies + TV':media==='tv'?'TV only':hasGame?'Games':'Movies';
+ const status=toolbar.querySelector('.guide-status');if(status)status.textContent=mediaName+' • '+orderName;
+}
+orderButtons.forEach(b=>b.addEventListener('click',()=>{order=b.dataset.guideOrder;render()}));
+mediaButtons.forEach(b=>b.addEventListener('click',()=>{media=b.dataset.guideMedia;render()}));
+render();
+})();
+</script></body></html>
