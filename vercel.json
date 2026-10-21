@@ -14,9 +14,30 @@
     },
     "api/news-inbox.mjs": {
       "maxDuration": 30
+    },
+    "api/top-ten.mjs": {
+      "includeFiles": "ratings.html"
     }
   },
   "routes": [
+    {
+      "src": "/top-10/?",
+      "status": 307,
+      "headers": {
+        "Location": "/top-10/movies/action"
+      }
+    },
+    {
+      "src": "/top-10/(movies|tv|gaming)/([a-z0-9-]+)/",
+      "status": 308,
+      "headers": {
+        "Location": "/top-10/$1/$2"
+      }
+    },
+    {
+      "src": "/top-10/(movies|tv|gaming)/([a-z0-9-]+)",
+      "dest": "/api/top-ten?medium=$1&genre=$2"
+    },
     {
       "src": "/sitemap\\.xml",
       "dest": "/api/sitemap"

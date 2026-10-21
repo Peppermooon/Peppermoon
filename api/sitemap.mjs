@@ -1,3 +1,4 @@
+import {topTenLists} from '../data/top-ten.mjs';
 import {publishedGuides} from '../lib/guides-store.mjs';
 const ORIGIN='https://thepeppermoon.com';
 const SUPABASE='https://bgzlqvbvmstebdsnzmqv.supabase.co';
@@ -20,6 +21,7 @@ export default async function handler(req,res){
   const [articles,ratings,posts,{guides}]=await Promise.all([published('articles','slug,published_at'),published('pepper_ratings','slug,updated_at'),published('posts','slug,created_at'),publishedGuides()]);
   const STATIC_GUIDE_ROUTES=['','/community','/ratings','/about','/guides'];
   const entries=new Map(STATIC_GUIDE_ROUTES.map(path=>[ORIGIN+path,'']));
+  for(const list of topTenLists)entries.set(ORIGIN+'/top-10/'+list.medium+'/'+list.slug,'');
   const add=(items,prefix,dateKey,clean=false)=>{for(const item of items){if(!item.slug)continue;const slug=clean?item.slug.replace(/^pepper-draft-/,''):item.slug;const url=ORIGIN+prefix+encodeURIComponent(slug);const date=item[dateKey]?new Date(item[dateKey]):null;entries.set(url,date&&!Number.isNaN(date.valueOf())?date.toISOString():'')}};
   add(articles,'/articles/','published_at');add(ratings,'/ratings/','updated_at',true);add(posts,'/posts/','created_at');add(guides,'/guides/','updated_at');add(guides,'/guides/','updated_at');add(guides,'/guides/','updated_at');
   if(entries.size>50000)throw new Error('Sitemap index required');
@@ -29,4 +31,5 @@ export default async function handler(req,res){
   res.statusCode=200;res.end(body);
  }catch{res.statusCode=503;res.setHeader('Cache-Control','no-store');res.end('Sitemap temporarily unavailable');}
 }
+
 

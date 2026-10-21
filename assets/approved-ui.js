@@ -35,3 +35,29 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};
  const script=document.createElement('script');script.defer=true;script.src='/_vercel/insights/script.js';document.head.appendChild(script);
 })();
+
+
+// Pepper Ratings destinations: hover on desktop, tap on mobile.
+document.addEventListener('DOMContentLoaded',()=>{
+ const groups=[];
+ const closeAll=except=>groups.forEach(({item,trigger})=>{if(item!==except){item.classList.remove('pm-ratings-open');trigger.setAttribute('aria-expanded','false')}});
+ document.querySelectorAll('body>header .nav-links a[href="/ratings"],body>header .nav-links a[href="ratings.html"],.mobile-bottom-nav a[data-mobile-section="ratings"],.mobile-bottom-nav a[href="/ratings"]').forEach((trigger,index)=>{
+  if(trigger.closest('.pm-ratings-nav-item'))return;
+  const mobile=!!trigger.closest('.mobile-bottom-nav'),item=document.createElement('div'),menu=document.createElement('div');
+  item.className='pm-ratings-nav-item'+(mobile?' pm-ratings-mobile-item':'');
+  trigger.before(item);item.append(trigger);menu.className='pm-ratings-destinations';menu.id='pmRatingsDestinations'+index;
+  menu.setAttribute('aria-label','Pepper Ratings destinations');
+  const isTop=location.pathname.startsWith('/top-10');
+  menu.innerHTML='<a href="/top-10/movies/action"'+(isTop?' aria-current="page"':'')+'>Top 10 by Genre</a><a href="/ratings"'+(!isTop&&location.pathname==='/ratings'?' aria-current="page"':'')+'>Pepper Ratings</a>';
+  item.append(menu);trigger.setAttribute('aria-haspopup','true');trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',menu.id);
+  if(isTop){trigger.classList.add('active');trigger.setAttribute('aria-current','page')}
+  const open=()=>{closeAll(item);item.classList.add('pm-ratings-open');trigger.setAttribute('aria-expanded','true')};
+  const close=()=>{item.classList.remove('pm-ratings-open');trigger.setAttribute('aria-expanded','false')};
+  trigger.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();if(item.classList.contains('pm-ratings-open'))close();else open()},true);
+  if(!mobile){item.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'&&matchMedia('(hover: hover) and (pointer: fine)').matches)open()});item.addEventListener('pointerleave',event=>{if(event.pointerType==='mouse'&&!item.contains(document.activeElement))close()});item.addEventListener('focusin',open);item.addEventListener('focusout',event=>{if(!item.contains(event.relatedTarget))close()})}
+  trigger.addEventListener('keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();open();menu.querySelector('a').focus()}if(event.key===' '){event.preventDefault();item.classList.contains('pm-ratings-open')?close():open()}});
+  groups.push({item,trigger});
+ });
+ document.addEventListener('pointerdown',event=>{if(!event.target.closest('.pm-ratings-nav-item'))closeAll()},true);
+ document.addEventListener('keydown',event=>{if(event.key==='Escape')closeAll()});
+});
