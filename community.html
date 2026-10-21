@@ -1367,9 +1367,9 @@ html[data-theme="light"] #postModal .field textarea{background:#fff !important;c
       <div class="user-wrap" id="userWrap">
         <button class="user-btn" id="userBtn"><span class="avatar" id="navAvatar">U</span><span class="user-name" id="navName">User</span><span>▾</span></button>
         <div class="dropdown" id="dropdown">
-          <a id="profileLink" href="profile.html">My Profile</a>
+          <a id="profileLink" href="/profile.html">My Profile</a>
           <a href="#create" id="menuCreate">Create Post</a>
-          <a href="profile.html#saved">Saved</a><a href="notifications.html">Notifications</a><button id="logoutBtn" class="danger">Log out</button>
+          <a href="/profile.html#saved">Saved</a><a href="/notifications.html">Notifications</a><button id="logoutBtn" class="danger">Log out</button>
         </div>
       </div>
     </div>
@@ -1517,7 +1517,7 @@ async function renderAuth(){
   const name=(currentProfile&&(currentProfile.display_name||currentProfile.username))||currentSession.user.email||'User';
   $('loginBtn').style.display='none';$('userWrap').style.display='block';$('navName').textContent=name;$('navAvatar').textContent=initials(name);
   if(currentProfile&&currentProfile.avatar_url){$('navAvatar').style.backgroundImage='url("'+currentProfile.avatar_url+'")';$('navAvatar').textContent=''}
-  $('profileLink').href='profile.html?id='+encodeURIComponent(currentSession.user.id);
+  $('profileLink').href='/profile.html?id='+encodeURIComponent(currentSession.user.id);
 }
 
 function requireLogin(){
@@ -1817,7 +1817,7 @@ async function loadPosts(){
     node.innerHTML=`
       <div class="post-main">
         <div class="post-top">
-          <a class="author" href="profile.html?id=${encodeURIComponent(post.author_id)}">
+          <a class="author" href="/profile.html?id=${encodeURIComponent(post.author_id)}">
             ${avatar}
             <span><div class="author-name">${esc(name)}</div><div class="post-meta">@${esc(profile.username||'user')} · ${esc(timeAgo(post.created_at))}</div></span>
           </a>

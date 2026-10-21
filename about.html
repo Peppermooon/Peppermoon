@@ -1460,10 +1460,10 @@ html[data-theme="light"] .nav-links::after{
   <div class="pm-user-menu" id="pmUserMenu" style="display:none">
     <button class="pm-user-trigger" id="pmUserTrigger"><span class="pm-avatar" id="pmAvatar">U</span><span class="pm-user-name" id="pmUserName">User</span><span>▾</span></button>
     <div class="pm-user-dropdown" id="pmUserDropdown">
-      <a id="pmProfileLink" href="profile.html">My Profile</a>
+      <a id="pmProfileLink" href="/profile.html">My Profile</a>
       <a href="#" id="pmCreatePostPlaceholder">Create Post</a>
-      <a href="profile.html#saved" id="pmSavedPlaceholder">Saved</a>
-      <a href="notifications.html">Notifications</a>
+      <a href="/profile.html#saved" id="pmSavedPlaceholder">Saved</a>
+      <a href="/notifications.html">Notifications</a>
       <button id="pmLogout" class="danger">Log out</button>
     </div>
   </div>
@@ -1706,7 +1706,7 @@ async function render(session){
     $('pmAvatar').textContent='';
   }
 
-  $('pmProfileLink').href='profile.html?id='+encodeURIComponent(session.user.id);
+  $('pmProfileLink').href='/profile.html?id='+encodeURIComponent(session.user.id);
 }
 
 $('pmOpenAuth').onclick=()=>$('pmAuthModal').classList.add('open');
@@ -1809,7 +1809,7 @@ $('pmCreatePostPlaceholder').onclick=e=>{
   location.href='/community#create';
 };
 
-$('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='profile.html#saved'};
+$('pmSavedPlaceholder').onclick=e=>{e.preventDefault();location.href='/profile.html#saved'};
 
 (async()=>{
   const r=await sbAuth.auth.getSession();
