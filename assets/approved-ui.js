@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 document.addEventListener('DOMContentLoaded',()=>{
  const groups=[];
  const closeAll=except=>groups.forEach(({item,trigger})=>{if(item!==except){item.classList.remove('pm-ratings-open');trigger.setAttribute('aria-expanded','false')}});
- document.querySelectorAll('body>header .nav-links a[href="/ratings"],body>header .nav-links a[href="ratings.html"],.mobile-bottom-nav a[data-mobile-section="ratings"],.mobile-bottom-nav a[href="/ratings"]').forEach((trigger,index)=>{
+ document.querySelectorAll('body>header nav a[href="/ratings"],body>header nav a[href="ratings.html"],.mobile-bottom-nav a[data-mobile-section="ratings"],.mobile-bottom-nav a[href="/ratings"]').forEach((trigger,index)=>{
   if(trigger.closest('.pm-ratings-nav-item'))return;
   const mobile=!!trigger.closest('.mobile-bottom-nav'),item=document.createElement('div'),menu=document.createElement('div');
   item.className='pm-ratings-nav-item'+(mobile?' pm-ratings-mobile-item':'');

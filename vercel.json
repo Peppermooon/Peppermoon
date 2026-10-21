@@ -22,9 +22,16 @@
   "routes": [
     {
       "src": "/top-10/?",
-      "status": 307,
+      "status": 308,
       "headers": {
         "Location": "/top-10/movies/action"
+      }
+    },
+    {
+      "src": "/top-10/(movies|tv|gaming)/?",
+      "status": 308,
+      "headers": {
+        "Location": "/top-10/$1/action"
       }
     },
     {

@@ -44,3 +44,11 @@ html[data-theme="light"] #loginBtn:hover{background:linear-gradient(135deg,#ff42
 .mobile-bottom-nav>.pm-ratings-mobile-item>a{flex:1;width:100%;min-width:0}
 .pm-ratings-mobile-item>.pm-ratings-destinations{top:auto;bottom:calc(100% + 12px);left:50%;transform:translateX(-50%);min-width:210px}
 .pm-ratings-destinations>a{min-height:0!important}
+
+/* Community has its own account/search controls; match its desktop navigation to Home. */
+@media(min-width:801px){
+ body>header:has(nav.links) .nav{gap:24px;justify-content:space-between}
+ body>header:has(nav.links)>.container{width:min(calc(100% - 36px),1180px)}
+ body>header:has(nav.links) .brand{gap:12px;font-size:1.55rem;letter-spacing:-.045em}
+ body>header nav.links{margin-left:0;gap:25px;font-size:.94rem;font-weight:760}
+}

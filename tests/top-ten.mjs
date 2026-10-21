@@ -22,4 +22,6 @@ function response(){return {statusCode:0,headers:{},setHeader(k,v){this.headers[
 let res=response();handler({url:'/api/top-ten?medium=movies&genre=action'},res);assert.equal(res.statusCode,200);assert(res.body.includes('Terminator 2'));
 res=response();handler({url:'/api/top-ten?medium=gaming&genre=romance'},res);assert.equal(res.statusCode,404);
 const cfg=JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url)));assert(cfg.routes.some(r=>r.dest==='/api/top-ten?medium=$1&genre=$2'));assert.equal(cfg.functions['api/top-ten.mjs'].includeFiles,'ratings.html');
+const baseRoute=cfg.routes.find(r=>r.src==='/top-10/(movies|tv|gaming)/?');assert.equal(baseRoute.status,308);assert.equal(baseRoute.headers.Location,'/top-10/$1/action');
+for(const medium of ['movies','tv','gaming'])assert(new RegExp('^'+baseRoute.src+'$').test('/top-10/'+medium));
 console.log('Passed: 47 lists, 470 descriptions, clean routes, schema, auth shell and invalid category handling.');
