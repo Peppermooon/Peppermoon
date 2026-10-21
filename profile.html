@@ -1259,7 +1259,7 @@ html[data-theme="light"] .menu-toggle{
   .pm-auth-area,
   .nav-actions{
     gap:4px !important;
-  }header.topbar{position:sticky;top:0;z-index:100;background:#f5f6fa;border-bottom:1px solid #dfe3eb}header.topbar .container{width:min(calc(100% - 36px),1180px);margin:auto}header.topbar .nav{display:flex;align-items:center;gap:22px;min-height:72px}header.topbar .brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:950;white-space:nowrap}header.topbar .brand img{width:36px;height:36px}header.topbar .nav-links{display:flex;gap:18px;align-items:center;font-weight:750;color:#344054}header.topbar .nav-links a.active{color:#151821}header.topbar .nav-actions{display:none}header.topbar .pm-auth-area{margin-left:auto}.pm-user-dropdown{background:white!important;color:#344054!important}.pm-user-dropdown a,.pm-user-dropdown button{color:#344054!important}.pm-auth-card{background:white!important;color:#151821!important}.pm-auth-input{background:white!important;color:#151821!important}</style><link rel="stylesheet" href="assets/mobile-header.css"><link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
+  }header.topbar{position:sticky;top:0;z-index:100;background:#f5f6fa;border-bottom:1px solid #dfe3eb}header.topbar .container{width:min(calc(100% - 36px),1180px);margin:auto}header.topbar .nav{display:flex;align-items:center;gap:22px;min-height:72px}header.topbar .brand{display:flex;align-items:center;gap:10px;font-size:1.35rem;font-weight:950;white-space:nowrap}header.topbar .brand img{width:36px;height:36px}header.topbar .nav-links{display:flex;gap:18px;align-items:center;font-weight:750;color:#344054}header.topbar .nav-links a.active{color:#151821}header.topbar .nav-actions{display:none}header.topbar .pm-auth-area{margin-left:auto}.pm-user-dropdown{background:white!important;color:#344054!important}.pm-user-dropdown a,.pm-user-dropdown button{color:#344054!important}.pm-auth-card{background:white!important;color:#151821!important}.pm-auth-input{background:white!important;color:#151821!important}</style><link rel="stylesheet" href="assets/mobile-header.css"><link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script><script src="/assets/header-state.js"></script></head>
 <body>
 <header class="topbar">
   <div class="container nav">
@@ -1749,6 +1749,7 @@ async function ensureProfile(user){
 }
 
 async function render(session){
+ window.pmHeaderState?.pending(session?.user||null);
  if(session?.user) $("pmOpenAuth").style.display="none"; $("pmOpenAuth").style.visibility="visible";
   if(!session||!session.user){
     $('pmOpenAuth').style.display='';
@@ -1757,6 +1758,7 @@ async function render(session){
   }
 
   const p=await ensureProfile(session.user);
+  window.pmHeaderState?.ready(session.user,p);
 
   if(!p){
     $('pmOpenAuth').style.display='none';

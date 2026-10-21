@@ -1446,7 +1446,7 @@ html[data-theme="light"] .nav-links::after{
 <link rel="stylesheet" href="assets/mobile-header.css?v=2">
 <script defer src="assets/mobile-header.js?v=2"></script>
 <style>@media(max-width:760px){.mobile-bottom-nav{grid-template-columns:repeat(5,minmax(0,1fr)) !important}.mobile-bottom-nav a{min-width:0}}</style>
-<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
+<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script><script src="/assets/header-state.js"></script></head>
 <body>
 
 <header class="topbar">
@@ -1676,6 +1676,7 @@ async function ensureProfile(user){
 }
 
 async function render(session){
+ window.pmHeaderState?.pending(session?.user||null);
  if(session?.user) $("pmOpenAuth").style.display="none"; $("pmOpenAuth").style.visibility="visible";
   if(!session||!session.user){
     $('pmOpenAuth').style.display='';
@@ -1684,6 +1685,7 @@ async function render(session){
   }
 
   const p=await ensureProfile(session.user);
+  window.pmHeaderState?.ready(session.user,p);
 
   if(!p){
     $('pmOpenAuth').style.display='none';

@@ -58,3 +58,13 @@ html[data-theme="light"] #loginBtn:hover{background:linear-gradient(135deg,#ff42
  body>header .nav>nav.nav-links,body>header .nav>nav.links{margin-left:auto}
  body>header .nav>.pm-auth-area,body>header .nav>.nav-right{margin-left:0}
 }
+
+/* Reserve the account slot while its session and profile are checked. */
+@media(min-width:801px){
+ body>header .nav>.pm-auth-area{flex:0 0 226px;width:226px;min-width:226px}
+ body>header .nav>.nav-right{flex:0 0 226px;width:226px;min-width:226px}
+ body>header .pm-user-menu,body>header .user-wrap{max-width:176px;min-width:0}
+ body>header .pm-user-trigger,body>header .user-btn{max-width:176px;white-space:nowrap}
+ body>header .pm-user-name,body>header .user-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ body>header .pm-avatar,body>header #navAvatar{flex-shrink:0}
+}

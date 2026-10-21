@@ -1355,7 +1355,7 @@ html[data-theme="light"] #postModal .field textarea{background:#fff !important;c
  body>header .nav-right .login-btn::after{content:"Log in";font-size:12px;white-space:nowrap}
 }
 </style>
-<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script></head>
+<link rel="stylesheet" href="assets/approved-ui.css"><script defer src="assets/approved-ui.js"></script><script src="/assets/header-state.js"></script></head>
 <body>
 <header>
   <div class="container nav">
@@ -1507,11 +1507,13 @@ async function ensureProfile(user){
 }
 
 async function renderAuth(){
+ window.pmHeaderState?.pending(currentSession?.user||null);
  if(currentSession?.user) $("loginBtn").style.display="none"; $("loginBtn").style.visibility="visible";
   if(!currentSession||!currentSession.user){
     $('loginBtn').style.display='';$('userWrap').style.display='none';currentProfile=null;return;
   }
   currentProfile=await ensureProfile(currentSession.user);
+  window.pmHeaderState?.ready(currentSession.user,currentProfile);
   const name=(currentProfile&&(currentProfile.display_name||currentProfile.username))||currentSession.user.email||'User';
   $('loginBtn').style.display='none';$('userWrap').style.display='block';$('navName').textContent=name;$('navAvatar').textContent=initials(name);
   if(currentProfile&&currentProfile.avatar_url){$('navAvatar').style.backgroundImage='url("'+currentProfile.avatar_url+'")';$('navAvatar').textContent=''}

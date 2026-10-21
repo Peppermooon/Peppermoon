@@ -88,6 +88,7 @@ async function ensureProfile(user){
 }
 
 async function render(session){
+ window.pmHeaderState?.pending(session?.user||null);
  if(session?.user) $("pmOpenAuth").style.display="none"; $("pmOpenAuth").style.visibility="visible";
   if(!session||!session.user){
     $('pmOpenAuth').style.display='';
@@ -96,6 +97,7 @@ async function render(session){
   }
 
   const p=await ensureProfile(session.user);
+  window.pmHeaderState?.ready(session.user,p);
 
   if(!p){
     $('pmOpenAuth').style.display='none';
