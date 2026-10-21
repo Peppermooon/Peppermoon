@@ -52,3 +52,9 @@ html[data-theme="light"] #loginBtn:hover{background:linear-gradient(135deg,#ff42
  body>header:has(nav.links) .brand{gap:12px;font-size:1.55rem;letter-spacing:-.045em}
  body>header nav.links{margin-left:0;gap:25px;font-size:.94rem;font-weight:760}
 }
+
+/* Keep desktop navigation immediately before the account controls. */
+@media(min-width:801px){
+ body>header .nav>nav.nav-links,body>header .nav>nav.links{margin-left:auto}
+ body>header .nav>.pm-auth-area,body>header .nav>.nav-right{margin-left:0}
+}
