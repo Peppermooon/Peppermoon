@@ -16,7 +16,7 @@ html main .featured-track .featured-slide .featured-read{color:#fff !important;-
 
 @media(max-width:760px){
  .featured-slide{height:auto !important;display:flex;flex-direction:column;align-items:stretch;background:#10131c}
- .featured-slide img{position:relative !important;inset:auto !important;display:block;width:100% !important;height:auto !important;aspect-ratio:16/9;object-fit:contain !important;background:#10131c}
+ .featured-slide img{position:relative !important;inset:auto !important;display:block;width:100% !important;height:auto !important;aspect-ratio:16/9;object-fit:cover !important;background:#10131c}
  .featured-slide:after{display:none}
  .featured-copy{padding:20px !important;flex:1}
  .featured-copy h2{font-size:1.55rem !important;margin:12px 0}
