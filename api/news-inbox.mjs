@@ -1,4 +1,5 @@
 import {SOURCES,parseFeed,requireAdmin,readText,send,HttpError} from '../lib/news-utils.mjs';
+import {GEMINI_NEWS_MODEL} from '../lib/news-gemini.mjs';
 let cache=null;
 export default async function handler(req,res){
  try{
@@ -11,6 +12,6 @@ export default async function handler(req,res){
    items.sort((a,b)=>new Date(b.published_at||0)-new Date(a.published_at||0));
    cache={time:Date.now(),items,warnings};
   }
-  send(res,200,{items:cache.items,warnings:cache.warnings,checked_at:new Date(cache.time).toISOString(),ai_ready:!!process.env.OPENAI_API_KEY});
+  send(res,200,{items:cache.items,warnings:cache.warnings,checked_at:new Date(cache.time).toISOString(),ai_ready:!!process.env.GEMINI_API_KEY&&process.env.NEWS_AI_DISABLED!=='true',ai_provider:'gemini',ai_model:GEMINI_NEWS_MODEL});
  }catch(error){send(res,error.status||503,{error:error.status?error.message:'News inbox could not be loaded. Please try again.'})}
 }

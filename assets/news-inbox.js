@@ -3,7 +3,7 @@
  const dismissed=()=>{try{return new Set(JSON.parse(localStorage.getItem('pm-news-dismissed')||'[]'))}catch{return new Set()}};
  const message=(text,error=false)=>{const el=$('newsInboxMessage');el.textContent=text;el.style.color=error?'#e65069':''};
  async function call(path,options={}){const {data:{session}}=await sb.auth.getSession();if(!session)throw Error('Please sign in again.');const r=await fetch(path,{...options,headers:{Authorization:'Bearer '+session.access_token,...options.headers}});let data;try{data=await r.json()}catch{throw Error('Server unavailable. Please try again.')}if(!r.ok)throw Error((data.error||'Request failed')+costText(data.cost));return data}
- function costText(cost){return cost?' Estimated AI cost: US$'+Number(cost.usd).toFixed(6)+' ('+cost.input_tokens+' input / '+cost.output_tokens+' output tokens). Final charges: OpenAI Usage.':''}
+ function costText(cost){return cost?' Estimated AI cost: US$'+Number(cost.usd).toFixed(6)+' ('+cost.input_tokens+' input / '+cost.output_tokens+' output tokens). Final charges: Google AI Studio billing.':''}
  function render(){
   const term=$('newsInboxSearch').value.trim().toLowerCase(),category=$('newsInboxCategory').value,hidden=dismissed();
   const visible=items.filter(i=>!hidden.has(i.url)&&(!category||category===i.category)&&(!term||(i.title+' '+i.source).toLowerCase().includes(term)));
@@ -25,7 +25,7 @@
  async function load(){
   if($('dashboardView').classList.contains('hidden'))return;
   $('newsInboxRefresh').disabled=true;
-  try{const data=await call('/api/news-inbox');items=data.items;aiReady=data.ai_ready;render();message((aiReady?'Choose a story, read the source, then approve AI generation.':'News inbox is available. AI generation is disabled until OPENAI_API_KEY is configured in Vercel.')+' '+(data.warnings||[]).join(' ')+' Checked '+new Date(data.checked_at).toLocaleTimeString());}
+  try{const data=await call('/api/news-inbox');items=data.items;aiReady=data.ai_ready;render();message((aiReady?'Gemini drafting is configured. Read the source, then approve a draft. Check Google AI Studio for quota and billing.':'News inbox is available. Gemini drafting is unavailable. Check GEMINI_API_KEY in Vercel Production and whether AI drafting is paused.')+' '+(data.warnings||[]).join(' ')+' Checked '+new Date(data.checked_at).toLocaleTimeString());}
   catch(error){message(error.message,true)}finally{$('newsInboxRefresh').disabled=false}
  }
  $('newsInboxRefresh').onclick=load;$('newsInboxSearch').oninput=render;$('newsInboxCategory').onchange=render;
@@ -35,7 +35,7 @@
  $('newsGenerateForm').onsubmit=async event=>{
   event.preventDefault();if(busy||!selected)return;if(!$('newsGenerateApproval').checked){$('newsGenerateError').textContent='Approve this story before generating.';return}
   busy=true;$('newsGenerateSubmit').disabled=true;$('newsGenerateCancel').disabled=true;$('newsGenerateSubmit').textContent='Generating…';$('newsGenerateError').textContent='';
-  try{const result=await call('/api/news-generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({approved:true,url:selected.url,title:selected.title,category:$('newsDraftCategory').value,excerpt:selected.excerpt,notes:$('newsSourceNotes').value})});await loadArticles();render();$('newsGenerateDialog').close();window.editArticle(result.article.id);const notes=(result.review_notes||[]).join(' ');showMsg($('editorMsg'),(result.reused?'Existing article opened. No new AI generation was needed.':'AI draft saved privately. Review the facts, add your image, then publish when ready.')+(notes?' Review notes: '+notes:'')+(result.cost?costText(result.cost):(result.usage?' Tokens used: '+result.usage.total_tokens+'. Estimated cost unavailable.':'')),'ok');}
+  try{const result=await call('/api/news-generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({approved:true,url:selected.url,title:selected.title,category:$('newsDraftCategory').value,excerpt:selected.excerpt,notes:$('newsSourceNotes').value})});await loadArticles();render();$('newsGenerateDialog').close();window.editArticle(result.article.id);const notes=(result.review_notes||[]).join(' ');showMsg($('editorMsg'),(result.reused?'Existing article opened. No new AI generation was needed.':'AI draft saved privately. Review the facts, add your image, then publish when ready.')+(notes?' Review notes: '+notes:'')+(result.cost?costText(result.cost):(result.usage?' Gemini tokens used: '+result.usage.total_tokens+'. Check Google AI Studio for quota and billing.':'')),'ok');}
   catch(error){$('newsGenerateError').textContent=error.message}
   finally{busy=false;$('newsGenerateSubmit').disabled=false;$('newsGenerateCancel').disabled=false;$('newsGenerateSubmit').textContent='Generate draft'}
  };
