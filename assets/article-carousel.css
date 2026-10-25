@@ -21,3 +21,9 @@ html main .featured-track .featured-slide .featured-read{color:#fff !important;-
  .featured-copy{padding:20px !important;flex:1}
  .featured-copy h2{font-size:1.55rem !important;margin:12px 0}
 }
+
+/* Let desktop hero text use the banner width while preserving edge padding. */
+@media(min-width:761px){
+ .featured-copy{width:100%;max-width:none;box-sizing:border-box}
+ .featured-copy p{max-width:none}
+}
