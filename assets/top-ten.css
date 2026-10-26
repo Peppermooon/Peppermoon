@@ -4,3 +4,11 @@
 @media(max-width:760px){.tt-intro{padding-top:24px;padding-bottom:20px}.tt-intro>p{font-size:15px}.tt-controls{padding:10px 0}.tt-media{width:100%;gap:4px}.tt-media a{flex:1;text-align:center;font-size:14px;padding:10px 8px}.tt-genres{gap:4px}.tt-genres a{font-size:13px;padding:9px 13px}.tt-genre-rail{gap:5px}.tt-genre-arrow{width:28px;height:40px;border-radius:10px}.tt-genre-arrow svg{width:16px}.tt-content{padding-top:23px;padding-bottom:115px}.tt-list-head{align-items:flex-start;gap:9px}.tt-list-head h2{font-size:24px}.tt-list-head p{font-size:12px}.tt-count{font-size:9px;padding:6px}.tt-cards{grid-template-columns:1fr;gap:15px}.tt-card{grid-template-columns:100px 1fr;min-height:230px;border-radius:19px}.tt-card-body{padding:18px 15px}.tt-card h3{font-size:17px}.tt-card p{font-size:13px}.tt-cover-fallback{padding-inline:8px}.tt-cover-fallback strong{font-size:10px}.tt-cover-fallback small{font-size:8px}.tt-rank{left:10px;top:11px;min-width:30px;width:30px;height:30px;font-size:15px}.tt-next{font-size:11px;align-items:flex-start}.tt-next a{font-size:12px}}
 /* Existing light-mode strong rules must not darken text on cover placeholders. */
 .tt-page .tt-cover-fallback strong{color:#fff!important;-webkit-text-fill-color:#fff!important}.tt-page .tt-cover-fallback small,.tt-page .tt-cover-type{color:#e7dfef!important;-webkit-text-fill-color:#e7dfef!important}
+
+
+/* Pepper Score badges, scoped to genre-list cards. */
+.tt-page .tt-pepper-score{display:inline-flex;align-items:baseline;gap:10px;max-width:100%;width:fit-content;margin-top:16px;padding:12px 16px;border-radius:15px;background:#9b2450;color:#fff!important;-webkit-text-fill-color:#fff!important;font-variant-numeric:tabular-nums}
+.tt-page .tt-pepper-score-value{font-size:32px;line-height:1;font-weight:850;color:#fff!important;-webkit-text-fill-color:#fff!important}
+.tt-page .tt-pepper-score-label{font-size:14px;line-height:1.4;font-weight:500;color:#fff!important;-webkit-text-fill-color:#fff!important}
+@media(max-width:760px){.tt-page .tt-pepper-score{gap:7px;padding:10px 12px;border-radius:13px}.tt-page .tt-pepper-score-value{font-size:27px}.tt-page .tt-pepper-score-label{font-size:12px}}
+@media(max-width:360px){.tt-page .tt-pepper-score{flex-wrap:wrap;gap:4px 7px}}
