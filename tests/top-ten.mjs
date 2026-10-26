@@ -11,6 +11,7 @@ assert.deepEqual(topTenLists.filter(l=>l.medium==='gaming').map(l=>l.genre).filt
 for(const list of topTenLists){
  assert.equal(list.items.length,10);assert.deepEqual(list.items.map(i=>i.rank),[1,2,3,4,5,6,7,8,9,10]);
  assert(list.items.every(i=>i.title&&i.description.length>60&&/^\d{4}$/.test(i.year)));
+ for(let n=1;n<list.items.length;n++)assert(list.items[n-1].pepperScore>=list.items[n].pepperScore, list.medium+'/'+list.slug+': scores must descend');
  for(const item of list.items){
   assert(Number.isFinite(item.pepperScore)&&item.pepperScore>=0&&item.pepperScore<=10);
   assert.equal(Math.round(item.pepperScore*10),item.pepperScore*10);
@@ -34,5 +35,6 @@ const cfg=JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url)));as
 const baseRoute=cfg.routes.find(r=>r.src==='/top-10/(movies|tv|gaming)/?');assert.equal(baseRoute.status,308);assert.equal(baseRoute.headers.Location,'/top-10/$1/action');
 for(const medium of ['movies','tv','gaming'])assert(new RegExp('^'+baseRoute.src+'$').test('/top-10/'+medium));
 assert.equal(sharedScores.size,390);
+assert([...sharedScores.values()].some(score=>score<8));
 console.log('Passed: 470 valid Pepper Scores, consistent scores for 390 titles, 47 lists, 470 descriptions, clean routes, schema, auth shell and invalid category handling.');
 
